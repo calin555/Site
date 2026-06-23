@@ -5,6 +5,10 @@ import { getAdminContext } from "@/lib/auth/require-admin";
 import { hasPermission } from "@/lib/auth/permissions";
 import { PERMISSIONS } from "@/config/permissions";
 import { importDescriptionFromPdf } from "@/lib/import/pdf-catalog-import";
+import {
+  isCloudStorageEnabled,
+  uploadFileToStorage,
+} from "@/lib/supabase/storage";
 
 const MAX_SIZE = 20 * 1024 * 1024;
 
@@ -57,11 +61,21 @@ export async function POST(request: Request) {
       .replace(/[^a-zA-Z0-9-_]/g, "-")
       .slice(0, 40);
     const filename = `${Date.now()}-${safeName || "catalog"}.pdf`;
-    const uploadDir = path.join(process.cwd(), "public", "uploads", "catalogs");
-    await mkdir(uploadDir, { recursive: true });
-    await writeFile(path.join(uploadDir, filename), Buffer.from(bytes));
+    let catalogPdfUrl: string;
 
-    const catalogPdfUrl = `/uploads/catalogs/${filename}`;
+    if (isCloudStorageEnabled()) {
+      catalogPdfUrl = await uploadFileToStorage({
+        folder: "catalogs",
+        filename,
+        bytes: Buffer.from(bytes),
+        contentType: "application/pdf",
+      });
+    } else {
+      const uploadDir = path.join(process.cwd(), "public", "uploads", "catalogs");
+      await mkdir(uploadDir, { recursive: true });
+      await writeFile(path.join(uploadDir, filename), Buffer.from(bytes));
+      catalogPdfUrl = `/uploads/catalogs/${filename}`;
+    }
 
     return NextResponse.json({
       success: true,

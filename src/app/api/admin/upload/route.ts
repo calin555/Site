@@ -4,6 +4,11 @@ import path from "path";
 import { getAdminContext } from "@/lib/auth/require-admin";
 import { hasPermission } from "@/lib/auth/permissions";
 import { PERMISSIONS } from "@/config/permissions";
+import {
+  isCloudStorageEnabled,
+  uploadFileToStorage,
+  type UploadFolder,
+} from "@/lib/supabase/storage";
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
 const ALLOWED_TYPES = new Set([
@@ -31,7 +36,8 @@ export async function POST(request: Request) {
   const formData = await request.formData();
   const file = formData.get("file");
   const folderRaw = formData.get("folder");
-  const folder = folderRaw === "categories" ? "categories" : "products";
+  const folder: UploadFolder =
+    folderRaw === "categories" ? "categories" : "products";
 
   if (!file || !(file instanceof File)) {
     return NextResponse.json({ error: "Niciun fișier trimis" }, { status: 400 });
@@ -58,12 +64,34 @@ export async function POST(request: Request) {
     .slice(0, 40);
   const filename = `${Date.now()}-${safeName || "imagine"}.${ext}`;
 
-  const uploadDir = path.join(process.cwd(), "public", "uploads", folder);
-  await mkdir(uploadDir, { recursive: true });
+  const bytes = Buffer.from(await file.arrayBuffer());
 
-  const bytes = await file.arrayBuffer();
-  await writeFile(path.join(uploadDir, filename), Buffer.from(bytes));
+  try {
+    if (isCloudStorageEnabled()) {
+      const url = await uploadFileToStorage({
+        folder,
+        filename,
+        bytes,
+        contentType: file.type,
+      });
+      return NextResponse.json({ success: true, url });
+    }
 
-  const url = `/uploads/${folder}/${filename}`;
-  return NextResponse.json({ success: true, url });
+    const uploadDir = path.join(process.cwd(), "public", "uploads", folder);
+    await mkdir(uploadDir, { recursive: true });
+    await writeFile(path.join(uploadDir, filename), bytes);
+
+    const url = `/uploads/${folder}/${filename}`;
+    return NextResponse.json({ success: true, url });
+  } catch (err) {
+    return NextResponse.json(
+      {
+        error:
+          err instanceof Error
+            ? err.message
+            : "Încărcarea imaginii a eșuat.",
+      },
+      { status: 500 }
+    );
+  }
 }
