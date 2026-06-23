@@ -1,0 +1,19 @@
+# Adaugă acest bloc în Caddyfile-ul de la /opt/cluj-press/
+# (același fișier folosit de containerul cluj-press-caddy)
+#
+# Din Docker, aplicația PM2 de pe host e accesibilă la 172.17.0.1:3001
+
+incarcareauto.ro, www.incarcareauto.ro {
+	encode gzip zstd
+
+	reverse_proxy 172.17.0.1:3001 {
+		header_up Host {host}
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+	}
+
+	log {
+		output file /var/log/caddy/incarcareauto.log
+	}
+}
