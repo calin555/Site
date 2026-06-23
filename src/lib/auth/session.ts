@@ -4,6 +4,14 @@ import { createHmac, timingSafeEqual } from "crypto";
 export const SESSION_COOKIE = "chargepro_session";
 const MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
+export const SESSION_COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax" as const,
+  maxAge: MAX_AGE,
+  path: "/",
+};
+
 export interface SessionPayload {
   userId: string;
   exp: number;
@@ -53,20 +61,21 @@ function decodeSession(token: string): SessionPayload | null {
   }
 }
 
-export async function createSession(userId: string): Promise<void> {
-  const cookieStore = await cookies();
+export function buildSessionToken(userId: string): string {
   const payload: SessionPayload = {
     userId,
     exp: Date.now() + MAX_AGE * 1000,
   };
+  return encodeSession(payload);
+}
 
-  cookieStore.set(SESSION_COOKIE, encodeSession(payload), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: MAX_AGE,
-    path: "/",
-  });
+export async function createSession(userId: string): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.set(
+    SESSION_COOKIE,
+    buildSessionToken(userId),
+    SESSION_COOKIE_OPTIONS
+  );
 }
 
 export async function getSession(): Promise<SessionPayload | null> {
