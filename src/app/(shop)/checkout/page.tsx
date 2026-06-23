@@ -12,19 +12,26 @@ import {
   getCartSummary,
   calculateOrderTotals,
 } from "@/lib/services/cart.service";
+import { getCheckoutPrefill } from "@/lib/checkout/get-checkout-prefill";
 
 export const metadata: Metadata = {
   title: "Checkout",
   description: "Finalizează comanda ta de stații de încărcare EV.",
 };
 
-export default async function CheckoutPage() {
+interface CheckoutPageProps {
+  searchParams: Promise<{ auth_error?: string; auth?: string }>;
+}
+
+export default async function CheckoutPage({ searchParams }: CheckoutPageProps) {
   const summary = await getCartSummary();
 
   if (summary.items.length === 0) {
     redirect("/cos");
   }
 
+  const params = await searchParams;
+  const prefill = await getCheckoutPrefill();
   const totals = calculateOrderTotals(
     summary.items,
     summary.couponError ? undefined : summary.couponCode
@@ -34,7 +41,7 @@ export default async function CheckoutPage() {
     <>
       <PageHeader
         title="Checkout"
-        description="Completează datele de livrare și plată pentru a finaliza comanda."
+        description="Conectează-te cu Google pentru date precompletate sau completează manual livrarea."
       />
       <Container className="py-8">
         <Breadcrumbs
@@ -47,7 +54,14 @@ export default async function CheckoutPage() {
 
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <CheckoutForm />
+            <CheckoutForm
+              initialForm={prefill.initialForm}
+              user={prefill.user}
+              addresses={prefill.addresses}
+              googleEnabled={prefill.googleEnabled}
+              authError={params.auth_error ?? null}
+              authSuccess={params.auth === "success"}
+            />
           </div>
 
           <div>

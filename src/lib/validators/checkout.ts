@@ -54,6 +54,7 @@ export const checkoutFormSchema = z.object({
   shipping: addressSchema,
   companyInvoice: companyInvoiceSchema,
   notes: z.string().max(500).optional(),
+  saveForFuture: z.boolean().optional(),
 });
 
 export type CheckoutFormInput = z.infer<typeof checkoutFormSchema>;

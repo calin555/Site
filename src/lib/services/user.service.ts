@@ -76,8 +76,9 @@ async function persistUser(user: UserRecord): Promise<void> {
         name: user.name,
         email: user.email,
         phone: user.phone ?? null,
-        passwordHash: user.passwordHash,
+        passwordHash: user.passwordHash ?? null,
         roleId: role.id,
+        image: user.image ?? null,
         isActive: true,
         updatedAt: now,
       },
@@ -102,15 +103,16 @@ export async function getUserById(id: string): Promise<UserRecord | null> {
 
       if (error) throw error;
 
-      if (dbUser?.passwordHash) {
+      if (dbUser) {
         const role = dbUser.role as { slug: string };
         const user: UserRecord = {
           id: dbUser.id,
           name: dbUser.name ?? "",
           email: dbUser.email,
           phone: dbUser.phone ?? undefined,
-          passwordHash: dbUser.passwordHash,
+          passwordHash: dbUser.passwordHash ?? undefined,
           roleSlug: role.slug,
+          image: dbUser.image ?? undefined,
           isActive: dbUser.isActive,
           createdAt: dbUser.createdAt,
           updatedAt: dbUser.updatedAt,
@@ -139,15 +141,16 @@ export async function getUserByEmail(email: string): Promise<UserRecord | null> 
 
       if (error) throw error;
 
-      if (dbUser?.passwordHash) {
+      if (dbUser) {
         const role = dbUser.role as { slug: string };
         const user: UserRecord = {
           id: dbUser.id,
           name: dbUser.name ?? "",
           email: dbUser.email,
           phone: dbUser.phone ?? undefined,
-          passwordHash: dbUser.passwordHash,
+          passwordHash: dbUser.passwordHash ?? undefined,
           roleSlug: role.slug,
+          image: dbUser.image ?? undefined,
           isActive: dbUser.isActive,
           createdAt: dbUser.createdAt,
           updatedAt: dbUser.updatedAt,
@@ -201,7 +204,7 @@ export async function authenticateUser(
   password: string
 ): Promise<UserRecord | null> {
   const user = await getUserByEmail(email);
-  if (!user) return null;
+  if (!user?.passwordHash) return null;
 
   const valid = await verifyPassword(password, user.passwordHash);
   return valid ? user : null;
@@ -253,8 +256,8 @@ export async function changeUserPassword(
   const user = userStore.getById(userId);
   if (!user) return { success: false, error: "Utilizator negăsit." };
 
-  const valid = await verifyPassword(currentPassword, user.passwordHash);
-  if (!valid) return { success: false, error: "Parola curentă este incorectă." };
+  const valid = await verifyPassword(currentPassword, user.passwordHash ?? "");
+  if (!user.passwordHash || !valid) return { success: false, error: "Parola curentă este incorectă." };
 
   const passwordHash = await hashPassword(newPassword);
   const updated = userStore.update(userId, { passwordHash });

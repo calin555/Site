@@ -7,30 +7,18 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { CompanyInvoiceFields } from "./CompanyInvoiceFields";
 import { StripePayment } from "./StripePayment";
+import { CheckoutAuthSection } from "./CheckoutAuthSection";
 import { initiateCheckoutAction } from "@/lib/actions/checkout.actions";
 import { ROMANIAN_COUNTIES } from "@/config/commerce";
+import { addressToCheckoutForm } from "@/lib/checkout/get-checkout-prefill";
 import type { CheckoutFormData, CompanyInvoice } from "@/types/checkout";
+import type { PublicUser } from "@/types/user";
+import type { SavedAddress } from "@/types/address";
 
 const defaultCompanyInvoice: CompanyInvoice = {
   enabled: false,
   companyName: "",
   cui: "",
-};
-
-const defaultForm: CheckoutFormData = {
-  email: "",
-  phone: "",
-  shipping: {
-    firstName: "",
-    lastName: "",
-    street: "",
-    city: "",
-    county: "",
-    postalCode: "",
-    country: "RO",
-  },
-  companyInvoice: defaultCompanyInvoice,
-  notes: "",
 };
 
 function goToPaymentConfirm(orderNumber: string, mock = false) {
@@ -39,8 +27,27 @@ function goToPaymentConfirm(orderNumber: string, mock = false) {
   window.location.assign(`/api/checkout/confirm?${params.toString()}`);
 }
 
-export function CheckoutForm() {
-  const [form, setForm] = useState<CheckoutFormData>(defaultForm);
+interface CheckoutFormProps {
+  initialForm: CheckoutFormData;
+  user: PublicUser | null;
+  addresses: SavedAddress[];
+  googleEnabled: boolean;
+  authError?: string | null;
+  authSuccess?: boolean;
+}
+
+export function CheckoutForm({
+  initialForm,
+  user,
+  addresses,
+  googleEnabled,
+  authError,
+  authSuccess,
+}: CheckoutFormProps) {
+  const [form, setForm] = useState<CheckoutFormData>(initialForm);
+  const [selectedAddressId, setSelectedAddressId] = useState<string>(
+    addresses.find((a) => a.isDefault)?.id ?? addresses[0]?.id ?? ""
+  );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [paymentStep, setPaymentStep] = useState<{
     orderNumber: string;
@@ -63,6 +70,16 @@ export function CheckoutForm() {
       ...prev,
       shipping: { ...prev.shipping, [field]: value },
     }));
+  }
+
+  function handleAddressSelect(addressId: string) {
+    setSelectedAddressId(addressId);
+    if (!user) return;
+
+    const address = addresses.find((a) => a.id === addressId);
+    if (!address) return;
+
+    setForm(addressToCheckoutForm(user, address));
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -102,12 +119,26 @@ export function CheckoutForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6"
+      autoComplete="on"
+      name="checkout"
+    >
       {errors._form && (
         <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {errors._form}
         </div>
       )}
+
+      <Card padding="lg">
+        <CheckoutAuthSection
+          user={user}
+          googleEnabled={googleEnabled}
+          authError={authError}
+          authSuccess={authSuccess}
+        />
+      </Card>
 
       <Card padding="lg">
         <h2 className="mb-5 text-lg font-bold text-surface-900">
@@ -117,15 +148,22 @@ export function CheckoutForm() {
           <Input
             label="Email *"
             type="email"
+            name="email"
+            autoComplete="email"
+            inputMode="email"
             placeholder="ion@exemplu.ro"
             value={form.email}
             onChange={(e) => updateField("email", e.target.value)}
             error={errors.email}
             required
+            readOnly={Boolean(user)}
           />
           <Input
             label="Telefon *"
             type="tel"
+            name="phone"
+            autoComplete="tel"
+            inputMode="tel"
             placeholder="07xxxxxxxx"
             value={form.phone}
             onChange={(e) => updateField("phone", e.target.value)}
@@ -142,9 +180,32 @@ export function CheckoutForm() {
             Adresă de livrare
           </h2>
         </div>
+
+        {user && addresses.length > 1 && (
+          <div className="mb-5 space-y-1.5">
+            <label className="block text-sm font-medium text-surface-800">
+              Adresă salvată
+            </label>
+            <select
+              value={selectedAddressId}
+              onChange={(e) => handleAddressSelect(e.target.value)}
+              className="h-11 w-full rounded-xl border border-surface-200 bg-white px-4 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            >
+              {addresses.map((address) => (
+                <option key={address.id} value={address.id}>
+                  {address.street}, {address.city} ({address.firstName}{" "}
+                  {address.lastName})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <div className="grid gap-5 sm:grid-cols-2">
           <Input
             label="Prenume *"
+            name="shipping-first-name"
+            autoComplete="given-name"
             value={form.shipping.firstName}
             onChange={(e) => updateShipping("firstName", e.target.value)}
             error={errors["shipping.firstName"]}
@@ -152,6 +213,8 @@ export function CheckoutForm() {
           />
           <Input
             label="Nume *"
+            name="shipping-last-name"
+            autoComplete="family-name"
             value={form.shipping.lastName}
             onChange={(e) => updateShipping("lastName", e.target.value)}
             error={errors["shipping.lastName"]}
@@ -159,6 +222,8 @@ export function CheckoutForm() {
           />
           <Input
             label="Stradă *"
+            name="shipping-street"
+            autoComplete="street-address"
             className="sm:col-span-2"
             value={form.shipping.street}
             onChange={(e) => updateShipping("street", e.target.value)}
@@ -167,16 +232,24 @@ export function CheckoutForm() {
           />
           <Input
             label="Oraș *"
+            name="shipping-city"
+            autoComplete="address-level2"
             value={form.shipping.city}
             onChange={(e) => updateShipping("city", e.target.value)}
             error={errors["shipping.city"]}
             required
           />
           <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-surface-800">
+            <label
+              htmlFor="shipping-county"
+              className="block text-sm font-medium text-surface-800"
+            >
               Județ *
             </label>
             <select
+              id="shipping-county"
+              name="shipping-county"
+              autoComplete="address-level1"
               value={form.shipping.county}
               onChange={(e) => updateShipping("county", e.target.value)}
               required
@@ -195,14 +268,36 @@ export function CheckoutForm() {
           </div>
           <Input
             label="Cod poștal *"
+            name="shipping-postal-code"
+            autoComplete="postal-code"
+            inputMode="numeric"
             placeholder="010101"
             value={form.shipping.postalCode}
             onChange={(e) => updateShipping("postalCode", e.target.value)}
             error={errors["shipping.postalCode"]}
             required
           />
-          <Input label="Țară" value="România" disabled />
+          <Input label="Țară" name="shipping-country" value="România" disabled />
         </div>
+
+        {user && (
+          <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-xl border border-surface-200 bg-surface-50/80 px-4 py-3">
+            <input
+              type="checkbox"
+              checked={form.saveForFuture !== false}
+              onChange={(e) => updateField("saveForFuture", e.target.checked)}
+              className="mt-0.5 h-4 w-4 rounded border-surface-300 text-brand-600 focus:ring-brand-500"
+            />
+            <span className="text-sm text-surface-700">
+              <span className="font-medium text-surface-900">
+                Salvează datele pentru comenzile viitoare
+              </span>
+              <span className="mt-0.5 block text-surface-500">
+                Actualizează profilul și adresa implicită din contul tău.
+              </span>
+            </span>
+          </label>
+        )}
       </Card>
 
       <Card padding="lg">
@@ -219,6 +314,7 @@ export function CheckoutForm() {
       <Card padding="lg">
         <Input
           label="Observații comandă (opțional)"
+          name="notes"
           placeholder="Instrucțiuni speciale de livrare..."
           value={form.notes ?? ""}
           onChange={(e) => updateField("notes", e.target.value)}

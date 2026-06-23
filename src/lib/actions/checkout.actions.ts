@@ -6,6 +6,8 @@ import { checkoutFormSchema } from "@/lib/validators/checkout";
 import { createCheckoutPayment, confirmPayment } from "@/lib/services/payment.service";
 import { getCartSummary } from "@/lib/services/cart.service";
 import { getOrderByNumber } from "@/lib/services/order.service";
+import { getCurrentUser } from "@/lib/auth/get-user";
+import { saveCheckoutDetailsForUser } from "@/lib/checkout/save-checkout-details";
 import type { OrderRecord } from "@/types/order";
 
 export async function initiateCheckoutAction(
@@ -30,6 +32,14 @@ export async function initiateCheckoutAction(
   }
 
   try {
+    const user = await getCurrentUser();
+
+    if (user && parsed.data.saveForFuture !== false) {
+      await saveCheckoutDetailsForUser(user.id, user.name, parsed.data);
+      revalidatePath("/checkout");
+      revalidatePath("/cont");
+    }
+
     const result = await createCheckoutPayment(parsed.data);
     return {
       success: true,

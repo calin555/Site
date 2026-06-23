@@ -25,6 +25,7 @@ export interface CheckoutFormData {
   shipping: CheckoutAddress;
   companyInvoice: CompanyInvoice;
   notes?: string;
+  saveForFuture?: boolean;
 }
 
 export interface OrderTotals {

@@ -3,8 +3,9 @@ export interface UserRecord {
   name: string;
   email: string;
   phone?: string;
-  passwordHash: string;
+  passwordHash?: string;
   roleSlug: string;
+  image?: string;
   isActive?: boolean;
   createdAt: string;
   updatedAt: string;
