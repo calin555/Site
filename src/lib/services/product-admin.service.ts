@@ -1,5 +1,6 @@
 import type { CatalogProduct } from "@/types/catalog";
 import { productStore, slugify } from "@/lib/catalog/product.store";
+import { dedupeImageUrls } from "@/lib/product-images";
 import { categories, brands } from "@/lib/mock-data";
 import { isDatabaseEnabled } from "@/lib/db/config";
 import {
@@ -17,7 +18,7 @@ export interface ProductInput {
   description?: string;
   price: number;
   compareAtPrice?: number;
-  image: string;
+  images: string[];
   categorySlug: string;
   brandSlug: string;
   powerKw: number;
@@ -46,6 +47,7 @@ function upsertInMemory(input: ProductInput): CatalogProduct {
   const brand = resolveBrand(input.brandSlug);
   const existing = input.id ? productStore.getById(input.id) : undefined;
   const slug = input.slug?.trim() || slugify(input.name);
+  const images = dedupeImageUrls(input.images);
 
   const product: CatalogProduct = {
     id: existing?.id ?? `prod_${Date.now()}`,
@@ -55,7 +57,8 @@ function upsertInMemory(input: ProductInput): CatalogProduct {
     description: input.description?.trim() || existing?.description,
     price: input.price,
     compareAtPrice: input.compareAtPrice,
-    image: input.image.trim(),
+    image: images[0] ?? "",
+    galleryImages: images,
     category: category.name,
     categorySlug: category.slug,
     brand: brand.name,

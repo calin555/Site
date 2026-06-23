@@ -1,5 +1,6 @@
 import { getSupabase } from "@/lib/supabase/server";
 import { isDatabaseEnabled } from "@/lib/db/config";
+import { dedupeImageUrls } from "@/lib/product-images";
 import {
   connectorsToDb,
   phasesToDb,
@@ -20,6 +21,77 @@ const PRODUCT_SELECT = `
 function mapProductRow(row: ProductWithRelations): CatalogProduct {
   const images = Array.isArray(row.images) ? row.images : [];
   return productFromDb({ ...row, images });
+}
+
+function generateProductId(): string {
+  return `prod_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+}
+
+function generateImageId(): string {
+  return `img_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+}
+
+async function syncProductImages(
+  productId: string,
+  urls: string[],
+  alt: string
+): Promise<void> {
+  const supabase = getSupabase();
+  const uniqueUrls = dedupeImageUrls(urls);
+  if (uniqueUrls.length === 0) {
+    throw new Error("Adaugă cel puțin o imagine.");
+  }
+
+  const { data: existing, error: fetchError } = await supabase
+    .from("product_images")
+    .select("id, url")
+    .eq("productId", productId);
+
+  if (fetchError) throw fetchError;
+
+  const existingByUrl = new Map(
+    (existing ?? []).map((row) => [row.url, row.id])
+  );
+  const urlSet = new Set(uniqueUrls);
+
+  for (const row of existing ?? []) {
+    if (!urlSet.has(row.url)) {
+      const { error } = await supabase
+        .from("product_images")
+        .delete()
+        .eq("id", row.id);
+      if (error) throw error;
+    }
+  }
+
+  for (let i = 0; i < uniqueUrls.length; i++) {
+    const url = uniqueUrls[i];
+    const existingId = existingByUrl.get(url);
+
+    if (existingId) {
+      const { error } = await supabase
+        .from("product_images")
+        .update({
+          sortOrder: i,
+          isPrimary: i === 0,
+          alt,
+        })
+        .eq("id", existingId);
+
+      if (error) throw error;
+    } else {
+      const { error } = await supabase.from("product_images").insert({
+        id: generateImageId(),
+        productId,
+        url,
+        alt,
+        isPrimary: i === 0,
+        sortOrder: i,
+      });
+
+      if (error) throw error;
+    }
+  }
 }
 
 export async function dbFindAllProducts(
@@ -139,39 +211,19 @@ export async function dbUpsertProduct(
       .from("products")
       .update(productData)
       .eq("id", existing.id)
-      .select("id, images:product_images(*)")
+      .select("id")
       .single();
 
     if (error) throw error;
     productId = updated.id;
-
-    const images = updated.images ?? [];
-    const primary = images.find(
-      (i: { isPrimary: boolean }) => i.isPrimary
-    );
-
-    if (primary) {
-      const { error: imageError } = await supabase
-        .from("product_images")
-        .update({ url: input.image.trim(), alt: input.name })
-        .eq("id", primary.id);
-
-      if (imageError) throw imageError;
-    } else {
-      const { error: imageError } = await supabase.from("product_images").insert({
-        productId,
-        url: input.image.trim(),
-        alt: input.name,
-        isPrimary: true,
-        sortOrder: 0,
-      });
-
-      if (imageError) throw imageError;
-    }
+    await syncProductImages(productId, input.images, input.name.trim());
   } else {
+    productId = generateProductId();
+
     const { data: created, error } = await supabase
       .from("products")
       .insert({
+        id: productId,
         ...productData,
         createdAt: now,
       })
@@ -180,16 +232,7 @@ export async function dbUpsertProduct(
 
     if (error) throw error;
     productId = created.id;
-
-    const { error: imageError } = await supabase.from("product_images").insert({
-      productId,
-      url: input.image.trim(),
-      alt: input.name,
-      isPrimary: true,
-      sortOrder: 0,
-    });
-
-    if (imageError) throw imageError;
+    await syncProductImages(productId, input.images, input.name.trim());
   }
 
   const refreshed = await dbFindProductById(productId);

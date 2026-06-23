@@ -9,6 +9,7 @@ import {
   deleteProduct,
   deleteAllProducts,
 } from "@/lib/services/product-admin.service";
+import { dedupeImageUrls } from "@/lib/product-images";
 
 const emptyToUndefined = (value: unknown) =>
   value === "" || value === null || value === undefined ? undefined : value;
@@ -27,7 +28,8 @@ const productSchema = z.object({
       .positive("Prețul vechi trebuie să fie mai mare decât 0")
       .optional()
   ),
-  image: z.string().min(1, "Imaginea este obligatorie"),
+  image: z.string().min(1).optional(),
+  images: z.array(z.string().min(1)).min(1, "Adaugă cel puțin o imagine").optional(),
   categorySlug: z.string().min(1),
   brandSlug: z.string().min(1),
   powerKw: z.coerce.number().positive("Puterea (kW) trebuie să fie mai mare decât 0"),
@@ -37,10 +39,30 @@ const productSchema = z.object({
   isFeatured: z.boolean().optional(),
   isNew: z.boolean().optional(),
   catalogPdfUrl: z.string().optional(),
+}).transform((data) => ({
+  ...data,
+  images: dedupeImageUrls(
+    data.images?.length
+      ? data.images
+      : data.image
+        ? [data.image]
+        : []
+  ),
+})).refine((data) => data.images.length > 0, {
+  message: "Adaugă cel puțin o imagine",
+  path: ["images"],
 });
 
+function errorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  if (typeof err === "object" && err !== null && "message" in err) {
+    return String((err as { message: unknown }).message);
+  }
+  return "";
+}
+
 function formatProductSaveError(err: unknown): string {
-  const message = err instanceof Error ? err.message : "";
+  const message = errorMessage(err);
 
   if (message.includes("product_price_positive")) {
     return "Prețul trebuie să fie mai mare decât 0.";
@@ -54,8 +76,14 @@ function formatProductSaveError(err: unknown): string {
   if (message.includes("Unique constraint") || message.includes("products_slug_key")) {
     return "Un produs cu acest slug există deja.";
   }
+  if (message.includes("JWT") || message.includes("Invalid API key")) {
+    return "Cheie Supabase invalidă pe server. Verifică SUPABASE_SERVICE_ROLE_KEY în Vercel.";
+  }
+  if (message.includes("row-level security") || message.includes("RLS")) {
+    return "Acces refuzat la baza de date. Folosește SUPABASE_SERVICE_ROLE_KEY (service_role), nu cheia publică.";
+  }
 
-  return err instanceof Error ? err.message : "Eroare la salvare";
+  return message || "Eroare la salvare";
 }
 
 export async function saveProductAction(

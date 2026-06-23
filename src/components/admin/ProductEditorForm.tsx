@@ -6,13 +6,22 @@ import { Loader2, Save, Link2 } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
-import { ImageUploadField } from "@/components/admin/ImageUploadField";
+import { ProductImagesField } from "@/components/admin/ProductImagesField";
 import type { CatalogProduct } from "@/types/catalog";
 import type { Category, Brand } from "@/lib/mock-data";
 import { saveProductAction } from "@/lib/actions/admin/product.actions";
 import { PdfCatalogImport } from "@/components/admin/PdfCatalogImport";
+import { dedupeImageUrls } from "@/lib/product-images";
 
 const CONNECTOR_OPTIONS = ["Type 2", "Type 1", "CCS2", "CHAdeMO", "Tesla"];
+
+function initialProductImages(product?: CatalogProduct): string[] {
+  if (product?.galleryImages?.length) {
+    return dedupeImageUrls(product.galleryImages);
+  }
+  if (product?.image) return [product.image];
+  return [];
+}
 
 interface ProductEditorFormProps {
   product?: CatalogProduct;
@@ -36,8 +45,7 @@ export function ProductEditorForm({
     product?.shortDescription ?? ""
   );
   const [description, setDescription] = useState(product?.description ?? "");
-  const [image, setImage] = useState(product?.image ?? "");
-  const [imageFieldKey, setImageFieldKey] = useState(0);
+  const [images, setImages] = useState<string[]>(() => initialProductImages(product));
   const [categorySlug, setCategorySlug] = useState(
     product?.categorySlug ?? categories[0]?.slug ?? ""
   );
@@ -84,9 +92,10 @@ export function ProductEditorForm({
       if (data.name) setName(data.name);
       if (data.shortDescription) setShortDescription(data.shortDescription);
       if (data.description) setDescription(data.description);
-      if (data.image) {
-        setImage(data.image);
-        setImageFieldKey((k) => k + 1);
+      if (data.images?.length) {
+        setImages(dedupeImageUrls(data.images));
+      } else if (data.image) {
+        setImages([data.image]);
       }
       if (data.suggestedCategorySlug) {
         setCategorySlug(data.suggestedCategorySlug);
@@ -124,7 +133,7 @@ export function ProductEditorForm({
         description: description || undefined,
         price: form.get("price"),
         compareAtPrice: form.get("compareAtPrice") || undefined,
-        image,
+        images,
         categorySlug,
         brandSlug: form.get("brandSlug"),
         powerKw,
@@ -238,13 +247,11 @@ export function ProductEditorForm({
         hint="Generată automat din catalog PDF și tradusă în română. Poți edita textul înainte de salvare."
       />
 
-      <ImageUploadField
-        key={imageFieldKey}
-        name="image"
-        defaultValue={image}
-        onValueChange={setImage}
-        error={errors.image}
-        required
+      <ProductImagesField
+        images={images}
+        onChange={setImages}
+        productName={name}
+        error={errors.images}
       />
 
       <div className="grid gap-5 sm:grid-cols-2">
