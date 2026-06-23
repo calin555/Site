@@ -28,10 +28,15 @@ export async function uploadFileToStorage(params: {
     });
 
   if (error) {
+    const hint =
+      error.message.includes("row-level security") ||
+      error.message.includes("Bucket not found")
+        ? ' Verifică SUPABASE_SERVICE_ROLE_KEY (cheia service_role, nu anon). Bucket-ul poate fi creat manual în Supabase → Storage → New bucket → "uploads" (public).'
+        : "";
     throw new Error(
       error.message.includes("Bucket not found")
-        ? 'Bucket-ul "uploads" lipsește în Supabase. Rulează migrarea storage sau creează bucket-ul manual.'
-        : error.message
+        ? `Bucket-ul "${BUCKET}" lipsește în Supabase.${hint}`
+        : `${error.message}${hint}`
     );
   }
 

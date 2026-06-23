@@ -31,9 +31,9 @@ export default async function AdminDashboardPage() {
   const ctx = await requireAdmin();
   const [stats, recentOrders, salesData, topProducts] = await Promise.all([
     getDashboardStats(),
-    Promise.resolve(getRecentOrders()),
-    Promise.resolve(getSalesChartData()),
-    Promise.resolve(getTopProducts()),
+    getRecentOrders(),
+    getSalesChartData(),
+    getTopProducts(),
   ]);
 
   return (

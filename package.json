@@ -9,6 +9,7 @@
     "lint": "next lint",
     "db:seed": "tsx scripts/seed.ts",
     "db:seed:market": "tsx scripts/seed-market.ts",
+    "db:storage": "tsx scripts/setup-storage.ts",
     "market:refresh": "tsx scripts/refresh-market.ts"
   },
   "dependencies": {

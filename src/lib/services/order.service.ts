@@ -1,4 +1,5 @@
 import { getSupabase } from "@/lib/supabase/server";
+import { isDatabaseEnabled } from "@/lib/db/config";
 import { orderStore } from "@/lib/orders/order.store";
 import type { CheckoutFormData, OrderTotals } from "@/types/checkout";
 import type { CartLineItem } from "@/types/cart";
@@ -10,6 +11,10 @@ import {
 
 function generateId(): string {
   return `ord_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+}
+
+function generateOrderItemId(): string {
+  return `oi_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 }
 
 function mapBilling(formData: CheckoutFormData) {
@@ -188,6 +193,7 @@ async function persistOrderToDb(order: OrderRecord): Promise<void> {
     const { data: created, error: orderError } = await supabase
       .from("orders")
       .insert({
+        id: order.id,
         orderNumber: order.orderNumber,
         userId: order.userId ?? null,
         status: order.status,
@@ -219,7 +225,9 @@ async function persistOrderToDb(order: OrderRecord): Promise<void> {
     if (orderError) throw orderError;
 
     const orderItems = order.items.map((item) => ({
+      id: generateOrderItemId(),
       orderId: created.id,
+      productId: item.productId || null,
       sku: item.sku,
       name: item.name,
       price: item.price,
@@ -276,6 +284,39 @@ const ORDER_SELECT = `
   *,
   items:order_items(*)
 `;
+
+export async function listAllOrders(): Promise<OrderRecord[]> {
+  if (!isDatabaseEnabled()) {
+    return orderStore.list();
+  }
+
+  try {
+    const supabase = getSupabase();
+    const { data: dbOrders, error } = await supabase
+      .from("orders")
+      .select(ORDER_SELECT)
+      .order("createdAt", { ascending: false });
+
+    if (error) throw error;
+
+    const fromDb = (dbOrders ?? []).map(mapDbOrderToRecord);
+    for (const order of fromDb) {
+      orderStore.save(order);
+    }
+
+    const dbNumbers = new Set(fromDb.map((o) => o.orderNumber));
+    const memoryOnly = orderStore
+      .list()
+      .filter((o) => !dbNumbers.has(o.orderNumber));
+
+    return [...memoryOnly, ...fromDb].sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  } catch {
+    return orderStore.list();
+  }
+}
 
 export async function getOrderByNumber(
   orderNumber: string

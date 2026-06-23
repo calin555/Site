@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function AdminOrderDetailPage({ params }: Props) {
   const { orderNumber } = await params;
   const ctx = await requirePermission(PERMISSIONS.ORDERS_READ);
-  const order = getAdminOrder(orderNumber);
+  const order = await getAdminOrder(orderNumber);
   if (!order) notFound();
 
   return (

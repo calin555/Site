@@ -1,4 +1,4 @@
-import { orderStore } from "@/lib/orders/order.store";
+import { listAllOrders } from "@/lib/services/order.service";
 import { getAllCatalogProducts } from "@/lib/services/catalog.service";
 import { listAllUsers } from "@/lib/services/user.service";
 import { getAdminReviews } from "@/lib/admin/review-store";
@@ -36,8 +36,12 @@ function isPaidOrder(order: OrderRecord): boolean {
   );
 }
 
+async function loadOrders(): Promise<OrderRecord[]> {
+  return listAllOrders();
+}
+
 export async function getDashboardStats(): Promise<DashboardStats> {
-  const orders = orderStore.list();
+  const orders = await loadOrders();
   const paidOrders = orders.filter(isPaidOrder);
   const revenue = paidOrders.reduce((s, o) => s + o.totals.total, 0);
 
@@ -68,12 +72,13 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   };
 }
 
-export function getRecentOrders(limit = 5): OrderRecord[] {
-  return orderStore.list().slice(0, limit);
+export async function getRecentOrders(limit = 5): Promise<OrderRecord[]> {
+  const orders = await loadOrders();
+  return orders.slice(0, limit);
 }
 
-export function getSalesChartData(): SalesDataPoint[] {
-  const orders = orderStore.list().filter(isPaidOrder);
+export async function getSalesChartData(): Promise<SalesDataPoint[]> {
+  const orders = (await loadOrders()).filter(isPaidOrder);
   const days: SalesDataPoint[] = [];
 
   for (let i = 6; i >= 0; i--) {
@@ -89,8 +94,8 @@ export function getSalesChartData(): SalesDataPoint[] {
   return days;
 }
 
-export function getTopProducts(limit = 5): TopProduct[] {
-  const orders = orderStore.list().filter(isPaidOrder);
+export async function getTopProducts(limit = 5): Promise<TopProduct[]> {
+  const orders = (await loadOrders()).filter(isPaidOrder);
   const map = new Map<string, TopProduct>();
 
   for (const order of orders) {

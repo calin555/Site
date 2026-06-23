@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default async function AdminOrdersPage() {
   const ctx = await requirePermission(PERMISSIONS.ORDERS_READ);
-  const orders = listAdminOrders();
+  const orders = await listAdminOrders();
 
   return (
     <AdminShell

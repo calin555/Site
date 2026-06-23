@@ -10,8 +10,11 @@ import {
 import { brands } from "@/lib/mock-data";
 import { getAllArticles } from "@/lib/services/blog.service";
 import type { Category, Brand } from "@/lib/mock-data";
-import { orderStore } from "@/lib/orders/order.store";
-import { updateOrderStatus } from "@/lib/services/order.service";
+import {
+  listAllOrders,
+  getOrderByNumber,
+  updateOrderStatus,
+} from "@/lib/services/order.service";
 import { listAllUsers } from "@/lib/services/user.service";
 import {
   getAdminReviews,
@@ -87,12 +90,14 @@ export function updateAdminBrand(id: string, patch: Partial<Brand>): Brand | nul
   return brands[idx];
 }
 
-export function listAdminOrders(): OrderRecord[] {
-  return orderStore.list();
+export async function listAdminOrders(): Promise<OrderRecord[]> {
+  return listAllOrders();
 }
 
-export function getAdminOrder(orderNumber: string): OrderRecord | null {
-  return orderStore.getByNumber(orderNumber);
+export async function getAdminOrder(
+  orderNumber: string
+): Promise<OrderRecord | null> {
+  return getOrderByNumber(orderNumber);
 }
 
 export async function updateAdminOrderStatus(
