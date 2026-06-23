@@ -12,11 +12,11 @@ export interface GoogleUserProfile {
   email_verified?: boolean;
 }
 
-export function getGoogleOAuthConfig(): GoogleOAuthConfig | null {
+export function getGoogleOAuthConfig(origin?: string): GoogleOAuthConfig | null {
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
   const appUrl = (
-    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
+    origin ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
   ).replace(/\/$/, "");
 
   if (!clientId || !clientSecret) return null;
@@ -32,8 +32,8 @@ export function isGoogleOAuthEnabled(): boolean {
   return getGoogleOAuthConfig() !== null;
 }
 
-export function buildGoogleAuthUrl(state: string): string {
-  const config = getGoogleOAuthConfig();
+export function buildGoogleAuthUrl(state: string, origin?: string): string {
+  const config = getGoogleOAuthConfig(origin);
   if (!config) {
     throw new Error("Google OAuth nu este configurat.");
   }
@@ -52,9 +52,10 @@ export function buildGoogleAuthUrl(state: string): string {
 }
 
 export async function fetchGoogleUserProfile(
-  code: string
+  code: string,
+  origin?: string
 ): Promise<GoogleUserProfile> {
-  const config = getGoogleOAuthConfig();
+  const config = getGoogleOAuthConfig(origin);
   if (!config) {
     throw new Error("Google OAuth nu este configurat.");
   }

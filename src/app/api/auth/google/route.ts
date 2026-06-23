@@ -37,5 +37,5 @@ export async function GET(request: Request) {
     path: "/",
   });
 
-  return NextResponse.redirect(buildGoogleAuthUrl(state));
+  return NextResponse.redirect(buildGoogleAuthUrl(state, new URL(request.url).origin));
 }

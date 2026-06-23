@@ -37,7 +37,8 @@ export async function GET(request: Request) {
   }
 
   try {
-    const profile = await fetchGoogleUserProfile(code);
+    const origin = new URL(request.url).origin;
+    const profile = await fetchGoogleUserProfile(code, origin);
     const user = await findOrCreateGoogleUser(profile);
     await createSession(user.id);
 
