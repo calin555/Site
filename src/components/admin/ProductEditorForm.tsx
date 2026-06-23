@@ -108,9 +108,11 @@ export function ProductEditorForm({
       }
 
       setImportMessage(
-        data.source === "alibaba"
-          ? "Import reușit de pe Alibaba. Verifică datele și completează prețul înainte de salvare."
-          : "Import reușit. Verifică datele și completează prețul înainte de salvare."
+        data.translationWarning
+          ? `Import reușit, dar traducerea a eșuat: ${data.translationWarning}`
+          : data.source === "alibaba"
+            ? "Import reușit de pe Alibaba — text tradus automat în română. Verifică datele și completează prețul."
+            : "Import reușit. Verifică datele și completează prețul înainte de salvare."
       );
     } catch {
       setImportMessage("Eroare la import. Încearcă din nou.");
@@ -165,8 +167,9 @@ export function ProductEditorForm({
           Import automat din link (opțional)
         </p>
         <p className="mb-3 text-xs text-surface-500">
-          Lipește un link Alibaba și apasă import — se completează automat titlul,
-          descrierea, imaginea și câteva specificații.
+          Lipește un link Alibaba (preferabil www.alibaba.com în engleză) — se
+          completează automat titlul, descrierea tradusă în română, imaginile
+          și câteva specificații.
         </p>
         <div className="flex flex-col gap-3 sm:flex-row">
           <Input
@@ -186,7 +189,7 @@ export function ProductEditorForm({
             ) : (
               <Link2 className="h-4 w-4" />
             )}
-            Importă de pe link
+            {importing ? "Se importă și traduce..." : "Importă de pe link"}
           </Button>
         </div>
         {importMessage && (

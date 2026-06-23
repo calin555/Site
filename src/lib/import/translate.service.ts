@@ -1,56 +1,82 @@
-const MAX_CHUNK_CHARS = 420;
+/** MyMemory free API — max 500 chars per request */
+const MYMEMORY_MAX_CHARS = 450;
 
-function splitIntoChunks(text: string): string[] {
-  const normalized = text.replace(/\r\n/g, "\n").trim();
-  if (!normalized) return [];
+function hasChinese(text: string): boolean {
+  return /[\u4e00-\u9fff]/.test(text);
+}
 
-  if (normalized.length <= MAX_CHUNK_CHARS) {
-    return [normalized];
+function sourceLangPair(text: string): string {
+  return hasChinese(text) ? "zh-CN|ro" : "en|ro";
+}
+
+function hardSplit(text: string, maxLen: number): string[] {
+  const result: string[] = [];
+  let remaining = text.trim();
+
+  while (remaining.length > maxLen) {
+    let cut = remaining.lastIndexOf(" ", maxLen);
+    if (cut < maxLen * 0.4) cut = maxLen;
+    result.push(remaining.slice(0, cut).trim());
+    remaining = remaining.slice(cut).trim();
   }
 
-  const paragraphs = normalized.split(/\n{2,}/);
+  if (remaining) result.push(remaining);
+  return result;
+}
+
+function splitIntoChunks(text: string, maxLen = MYMEMORY_MAX_CHARS): string[] {
+  const normalized = text.replace(/\r\n/g, "\n").trim();
+  if (!normalized) return [];
+  if (normalized.length <= maxLen) return [normalized];
+
+  const lines = normalized.split("\n");
   const chunks: string[] = [];
   let current = "";
 
-  for (const paragraph of paragraphs) {
-    const piece = paragraph.trim();
-    if (!piece) continue;
-
-    if (piece.length > MAX_CHUNK_CHARS) {
-      if (current) {
-        chunks.push(current.trim());
-        current = "";
-      }
-
-      const sentences = piece.split(/(?<=[.!?])\s+/);
-      for (const sentence of sentences) {
-        if (`${current} ${sentence}`.trim().length > MAX_CHUNK_CHARS) {
-          if (current.trim()) chunks.push(current.trim());
-          current = sentence;
-        } else {
-          current = `${current} ${sentence}`.trim();
-        }
-      }
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) {
+      if (current && !current.endsWith("\n")) current += "\n";
       continue;
     }
 
-    if (`${current}\n\n${piece}`.length > MAX_CHUNK_CHARS) {
+    if (line.length > maxLen) {
+      if (current.trim()) {
+        chunks.push(current.trim());
+        current = "";
+      }
+      chunks.push(...hardSplit(line, maxLen));
+      continue;
+    }
+
+    const candidate = current ? `${current}\n${line}` : line;
+    if (candidate.length > maxLen) {
       if (current.trim()) chunks.push(current.trim());
-      current = piece;
+      current = line;
     } else {
-      current = current ? `${current}\n\n${piece}` : piece;
+      current = candidate;
     }
   }
 
   if (current.trim()) chunks.push(current.trim());
-  return chunks;
+
+  return chunks.flatMap((chunk) =>
+    chunk.length > maxLen ? hardSplit(chunk, maxLen) : [chunk]
+  );
 }
 
-async function translateWithMyMemory(text: string): Promise<string> {
+function isMyMemoryLimitError(text: string): boolean {
+  return /QUERY LENGTH LIMIT EXCEEDED/i.test(text);
+}
+
+async function translateWithMyMemory(
+  text: string,
+  langpair = "en|ro"
+): Promise<string> {
   const email = process.env.MYMEMORY_EMAIL;
   const params = new URLSearchParams({
     q: text,
-    langpair: "en|ro",
+    langpair,
   });
   if (email) params.set("de", email);
 
@@ -63,7 +89,8 @@ async function translateWithMyMemory(text: string): Promise<string> {
     quotaFinished?: boolean;
   };
 
-  if (!res.ok || !data.responseData?.translatedText) {
+  const translated = data.responseData?.translatedText?.trim();
+  if (!res.ok || !translated) {
     throw new Error("Traducerea automată nu este disponibilă momentan.");
   }
 
@@ -73,7 +100,35 @@ async function translateWithMyMemory(text: string): Promise<string> {
     );
   }
 
-  return data.responseData.translatedText;
+  if (isMyMemoryLimitError(translated)) {
+    throw new Error("MYMEMORY_QUERY_TOO_LONG");
+  }
+
+  return translated;
+}
+
+async function translateChunkWithMyMemory(
+  text: string,
+  langpair: string
+): Promise<string> {
+  try {
+    return await translateWithMyMemory(text, langpair);
+  } catch (err) {
+    if (
+      err instanceof Error &&
+      err.message === "MYMEMORY_QUERY_TOO_LONG" &&
+      text.length > 200
+    ) {
+      const smaller = hardSplit(text, Math.floor(text.length / 2));
+      const parts: string[] = [];
+      for (const part of smaller) {
+        parts.push(await translateChunkWithMyMemory(part, langpair));
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      }
+      return parts.join("\n");
+    }
+    throw err;
+  }
 }
 
 async function translateWithOpenAI(text: string): Promise<string> {
@@ -93,7 +148,7 @@ async function translateWithOpenAI(text: string): Promise<string> {
         {
           role: "system",
           content:
-            "Tradu textul în română pentru un site e-commerce de stații de încărcare EV. Păstrează formatarea, listele și specificațiile tehnice. Nu adăuga informații noi.",
+            "Tradu textul în română pentru un site e-commerce de stații de încărcare EV. Sursa poate fi în chineză, engleză sau altă limbă. Păstrează formatarea, listele, bullet points și specificațiile tehnice (kW, V, Type 2, etc.). Nu adăuga informații noi.",
         },
         { role: "user", content: text },
       ],
@@ -113,7 +168,22 @@ async function translateWithOpenAI(text: string): Promise<string> {
   return translated;
 }
 
-export async function translateEnglishToRomanian(text: string): Promise<string> {
+async function translateWithMyMemoryChunked(
+  text: string,
+  langpair: string
+): Promise<string> {
+  const chunks = splitIntoChunks(text);
+  const translated: string[] = [];
+
+  for (const chunk of chunks) {
+    translated.push(await translateChunkWithMyMemory(chunk, langpair));
+    await new Promise((resolve) => setTimeout(resolve, 350));
+  }
+
+  return translated.join("\n");
+}
+
+export async function translateToRomanian(text: string): Promise<string> {
   const input = text.trim();
   if (!input) return "";
 
@@ -122,7 +192,7 @@ export async function translateEnglishToRomanian(text: string): Promise<string> 
       return translateWithOpenAI(input);
     }
 
-    const chunks = splitIntoChunks(input);
+    const chunks = splitIntoChunks(input, 4000);
     const translated: string[] = [];
     for (const chunk of chunks) {
       translated.push(await translateWithOpenAI(chunk));
@@ -130,13 +200,11 @@ export async function translateEnglishToRomanian(text: string): Promise<string> 
     return translated.join("\n\n");
   }
 
-  const chunks = splitIntoChunks(input);
-  const translated: string[] = [];
+  const langpair = sourceLangPair(input);
+  return translateWithMyMemoryChunked(input, langpair);
+}
 
-  for (const chunk of chunks) {
-    translated.push(await translateWithMyMemory(chunk));
-    await new Promise((resolve) => setTimeout(resolve, 350));
-  }
-
-  return translated.join("\n\n");
+/** @deprecated Folosește translateToRomanian */
+export async function translateEnglishToRomanian(text: string): Promise<string> {
+  return translateToRomanian(text);
 }

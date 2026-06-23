@@ -9,6 +9,7 @@ export interface ImportedProductData {
   suggestedCategorySlug?: string;
   source: "alibaba" | "generic";
   sourceUrl: string;
+  translationWarning?: string;
 }
 
 const USER_AGENT =
@@ -253,6 +254,49 @@ function isAlibabaUrl(url: string): boolean {
   }
 }
 
+function normalizeAlibabaUrl(sourceUrl: string): string {
+  try {
+    const parsed = new URL(sourceUrl);
+    if (!parsed.hostname.toLowerCase().includes("alibaba.com")) {
+      return sourceUrl;
+    }
+
+    parsed.hostname = "www.alibaba.com";
+    return parsed.toString();
+  } catch {
+    return sourceUrl;
+  }
+}
+
+async function translateImportedProduct(
+  data: ImportedProductData
+): Promise<ImportedProductData> {
+  const { translateToRomanian } = await import("@/lib/import/translate.service");
+
+  const translated = { ...data };
+
+  try {
+    if (translated.name) {
+      translated.name = await translateToRomanian(translated.name);
+    }
+    if (translated.shortDescription) {
+      translated.shortDescription = await translateToRomanian(
+        translated.shortDescription
+      );
+    }
+    if (translated.description) {
+      translated.description = await translateToRomanian(translated.description);
+    }
+  } catch (err) {
+    translated.translationWarning =
+      err instanceof Error
+        ? err.message
+        : "Traducerea automată a eșuat. Editează manual textul.";
+  }
+
+  return translated;
+}
+
 export async function importProductFromUrl(
   rawUrl: string
 ): Promise<ImportedProductData> {
@@ -272,7 +316,11 @@ export async function importProductFromUrl(
     throw new Error("URL-ul trebuie să înceapă cu http sau https.");
   }
 
-  const response = await fetch(sourceUrl, {
+  const fetchUrl = isAlibabaUrl(sourceUrl)
+    ? normalizeAlibabaUrl(sourceUrl)
+    : sourceUrl;
+
+  const response = await fetch(fetchUrl, {
     headers: {
       "User-Agent": USER_AGENT,
       Accept: "text/html,application/xhtml+xml",
@@ -291,7 +339,7 @@ export async function importProductFromUrl(
     throw new Error("Pagina nu conține date suficiente pentru import.");
   }
 
-  const result = isAlibabaUrl(sourceUrl)
+  let result = isAlibabaUrl(sourceUrl)
     ? parseAlibaba(html, sourceUrl)
     : parseGeneric(html, sourceUrl);
 
@@ -299,6 +347,10 @@ export async function importProductFromUrl(
     throw new Error(
       "Nu am găsit titlu, descriere sau imagine pe această pagină."
     );
+  }
+
+  if (result.source === "alibaba") {
+    result = await translateImportedProduct(result);
   }
 
   return result;
