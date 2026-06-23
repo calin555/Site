@@ -10,7 +10,7 @@ import { StripePayment } from "./StripePayment";
 import { CheckoutAuthSection } from "./CheckoutAuthSection";
 import { initiateCheckoutAction } from "@/lib/actions/checkout.actions";
 import { ROMANIAN_COUNTIES } from "@/config/commerce";
-import { addressToCheckoutForm } from "@/lib/checkout/get-checkout-prefill";
+import { addressToCheckoutForm } from "@/lib/checkout/checkout-form-utils";
 import type { CheckoutFormData, CompanyInvoice } from "@/types/checkout";
 import type { PublicUser } from "@/types/user";
 import type { SavedAddress } from "@/types/address";
