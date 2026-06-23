@@ -36,7 +36,7 @@ const BUCKET_OPTIONS = {
     "image/gif",
     "application/pdf",
   ],
-} as const;
+};
 
 async function main(): Promise<void> {
   loadEnvFile();
