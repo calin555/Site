@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart, Zap } from "lucide-react";
+import { Zap } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
 import { PriceDisplay } from "@/components/shared/PriceDisplay";
+import { ProductCardAddButton } from "@/components/shop/ProductCardAddButton";
 import { isExternalImageUrl } from "@/lib/utils";
 import type { CatalogProduct } from "@/types/catalog";
 
@@ -57,9 +57,11 @@ export function ProductCard({ product }: ProductCardProps) {
             compareAtPrice={product.compareAtPrice}
             size="sm"
           />
-          <Button size="sm" aria-label={`Adaugă ${product.name} în coș`}>
-            <ShoppingCart className="h-4 w-4" />
-          </Button>
+          <ProductCardAddButton
+            productId={product.id}
+            productName={product.name}
+            stock={product.stock}
+          />
         </div>
       </div>
     </article>
