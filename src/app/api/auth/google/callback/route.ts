@@ -11,15 +11,25 @@ import {
 const STATE_COOKIE = "google_oauth_state";
 const RETURN_COOKIE = "google_oauth_return";
 
-function redirectWithError(origin: string, message: string): NextResponse {
+function redirectWithError(
+  origin: string,
+  returnTo: string,
+  message: string
+): NextResponse {
+  const safeReturn =
+    returnTo.startsWith("/") && !returnTo.startsWith("//")
+      ? returnTo.split("?")[0]
+      : "/autentificare";
+
   return NextResponse.redirect(
-    `${origin}/checkout?auth_error=${encodeURIComponent(message)}`
+    `${origin}${safeReturn}?auth_error=${encodeURIComponent(message)}`
   );
 }
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const origin = requestUrl.origin;
+  let returnTo = "/cont";
 
   try {
     const { searchParams } = requestUrl;
@@ -29,30 +39,30 @@ export async function GET(request: Request) {
 
     const cookieStore = await cookies();
     const savedState = cookieStore.get(STATE_COOKIE)?.value;
-    const returnTo = cookieStore.get(RETURN_COOKIE)?.value ?? "/checkout";
+    returnTo = cookieStore.get(RETURN_COOKIE)?.value ?? "/cont";
 
     cookieStore.delete(STATE_COOKIE);
     cookieStore.delete(RETURN_COOKIE);
 
     if (oauthError) {
-      return redirectWithError(origin, oauthError);
+      return redirectWithError(origin, returnTo, oauthError);
     }
 
     if (!code || !state || !savedState || state !== savedState) {
-      return redirectWithError(origin, "invalid_state");
+      return redirectWithError(origin, returnTo, "invalid_state");
     }
 
     const profile = await fetchGoogleUserProfile(code, origin);
     const user = await findOrCreateGoogleUser(profile);
 
     if (!user?.id) {
-      return redirectWithError(origin, "Nu am putut crea contul utilizator.");
+      return redirectWithError(origin, returnTo, "Nu am putut crea contul utilizator.");
     }
 
     const safeReturn =
       returnTo.startsWith("/") && !returnTo.startsWith("//")
         ? returnTo
-        : "/checkout";
+        : "/cont";
 
     const response = NextResponse.redirect(
       `${origin}${safeReturn}?auth=success`
@@ -68,6 +78,6 @@ export async function GET(request: Request) {
     const message =
       err instanceof Error ? err.message : "Autentificare eșuată";
     console.error("[google/callback]", err);
-    return redirectWithError(origin, message);
+    return redirectWithError(origin, returnTo, message);
   }
 }

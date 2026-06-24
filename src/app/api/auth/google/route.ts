@@ -6,16 +6,19 @@ const STATE_COOKIE = "google_oauth_state";
 const RETURN_COOKIE = "google_oauth_return";
 
 export async function GET(request: Request) {
-  if (!isGoogleOAuthEnabled()) {
-    return NextResponse.redirect(
-      new URL("/checkout?auth_error=google_not_configured", request.url)
-    );
+  const { searchParams } = new URL(request.url);
+  let returnTo = searchParams.get("returnTo") ?? "/autentificare";
+  if (!returnTo.startsWith("/") || returnTo.startsWith("//")) {
+    returnTo = "/autentificare";
   }
 
-  const { searchParams } = new URL(request.url);
-  let returnTo = searchParams.get("returnTo") ?? "/checkout";
-  if (!returnTo.startsWith("/") || returnTo.startsWith("//")) {
-    returnTo = "/checkout";
+  if (!isGoogleOAuthEnabled()) {
+    return NextResponse.redirect(
+      new URL(
+        `${returnTo.split("?")[0]}?auth_error=google_not_configured`,
+        request.url
+      )
+    );
   }
 
   const state = crypto.randomUUID();

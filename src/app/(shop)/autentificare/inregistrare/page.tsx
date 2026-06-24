@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { RegisterForm } from "@/components/account/RegisterForm";
+import { isGoogleOAuthEnabled } from "@/lib/auth/google-oauth";
 
 export const metadata: Metadata = {
   title: "Înregistrare",
@@ -7,5 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function RegisterPage() {
-  return <RegisterForm />;
+  const googleEnabled = isGoogleOAuthEnabled();
+
+  return (
+    <Suspense>
+      <RegisterForm googleEnabled={googleEnabled} />
+    </Suspense>
+  );
 }

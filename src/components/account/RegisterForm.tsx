@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Zap, Loader2 } from "lucide-react";
 import { Container } from "@/components/shared/Container";
@@ -10,11 +10,25 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { siteConfig } from "@/config/site";
 import { registerAction } from "@/lib/actions/auth.actions";
+import { AuthDivider, SocialAuthSection } from "@/components/account/SocialAuthSection";
 
-export function RegisterForm() {
+interface RegisterFormProps {
+  googleEnabled: boolean;
+}
+
+export function RegisterForm({ googleEnabled }: RegisterFormProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const authError = searchParams.get("auth_error");
+  const authSuccess = searchParams.get("auth") === "success";
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (!authSuccess) return;
+    router.replace("/cont");
+    router.refresh();
+  }, [authSuccess, router]);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -59,6 +73,13 @@ export function RegisterForm() {
               {errors._form}
             </div>
           )}
+
+          <SocialAuthSection
+            returnTo="/autentificare/inregistrare"
+            googleEnabled={googleEnabled}
+            authError={authError}
+          />
+          <AuthDivider label="sau completează formularul" />
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <Input

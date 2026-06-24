@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Zap, Loader2 } from "lucide-react";
@@ -10,13 +10,27 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { siteConfig } from "@/config/site";
 import { loginAction } from "@/lib/actions/auth.actions";
+import { AuthDivider, SocialAuthSection } from "@/components/account/SocialAuthSection";
 
-export function LoginForm() {
+interface LoginFormProps {
+  googleEnabled: boolean;
+}
+
+export function LoginForm({ googleEnabled }: LoginFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/cont";
+  const authError = searchParams.get("auth_error");
+  const authSuccess = searchParams.get("auth") === "success";
+  const returnTo = `/autentificare?next=${encodeURIComponent(next)}`;
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (!authSuccess) return;
+    router.replace(next);
+    router.refresh();
+  }, [authSuccess, next, router]);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -58,12 +72,19 @@ export function LoginForm() {
             </div>
           )}
 
+          <SocialAuthSection
+            returnTo={returnTo}
+            googleEnabled={googleEnabled}
+            authError={authError}
+          />
+          <AuthDivider />
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <Input
               label="Email"
               name="email"
               type="email"
-              placeholder="demo@chargepro.ro"
+              placeholder="email@exemplu.ro"
               error={errors.email}
               required
             />
@@ -75,11 +96,6 @@ export function LoginForm() {
               error={errors.password}
               required
             />
-            <p className="text-xs text-surface-400">
-              Demo: demo@chargepro.ro / Demo1234
-              <br />
-              Admin: admin@chargepro.ro / Admin1234
-            </p>
             <Button type="submit" fullWidth size="lg" disabled={isPending}>
               {isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { LoginForm } from "@/components/account/LoginForm";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+import { isGoogleOAuthEnabled } from "@/lib/auth/google-oauth";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Autentificare",
@@ -11,9 +12,11 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function LoginPage() {
+  const googleEnabled = isGoogleOAuthEnabled();
+
   return (
     <Suspense>
-      <LoginForm />
+      <LoginForm googleEnabled={googleEnabled} />
     </Suspense>
   );
 }
