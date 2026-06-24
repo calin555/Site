@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Zap, Phone, Mail, MapPin, Facebook, Linkedin, Instagram } from "lucide-react";
 import { siteConfig } from "@/config/site";
+import { legalPaths } from "@/config/legal";
 import { Container } from "@/components/shared/Container";
 import { phoneToTel, type SiteContactSettings } from "@/types/site-contact";
 
@@ -132,16 +133,24 @@ export function Footer({ contact }: FooterProps) {
             © {new Date().getFullYear()} {siteConfig.name}. Toate drepturile
             rezervate.
           </p>
-          <div className="flex gap-6 text-xs text-surface-500">
-            <Link href="#" className="hover:text-brand-400">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-surface-500">
+            <Link href={legalPaths.terms} className="hover:text-brand-400">
               Termeni și condiții
             </Link>
-            <Link href="#" className="hover:text-brand-400">
+            <Link href={legalPaths.privacy} className="hover:text-brand-400">
               Politica de confidențialitate
             </Link>
-            <Link href="#" className="hover:text-brand-400">
-              ANPC
+            <Link href={legalPaths.gdpr} className="hover:text-brand-400">
+              Informare GDPR
             </Link>
+            <a
+              href="https://anpc.ro/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-brand-400"
+            >
+              ANPC
+            </a>
           </div>
         </Container>
       </div>

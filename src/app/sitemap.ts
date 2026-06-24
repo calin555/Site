@@ -6,6 +6,7 @@ import { getPublishedArticles, getBlogCategories, getBlogTags } from "@/lib/serv
 import { brands } from "@/lib/mock-data";
 import { TOOLS } from "@/config/tools";
 import { getAllCityPages } from "@/lib/seo/local/city-pages";
+import { legalPaths } from "@/config/legal";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
@@ -20,6 +21,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: absoluteUrl("/despre"), lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: absoluteUrl("/contact"), lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: absoluteUrl("/faq"), lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: absoluteUrl(legalPaths.terms), lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: absoluteUrl(legalPaths.privacy), lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: absoluteUrl(legalPaths.gdpr), lastModified: now, changeFrequency: "yearly", priority: 0.3 },
   ];
 
   const [products, categories] = await Promise.all([

@@ -1,5 +1,9 @@
 "use client";
 
+import { useState } from "react";
+import { LegalConsentCheckbox } from "@/components/legal/LegalConsentCheckbox";
+import { cn } from "@/lib/utils";
+
 function GoogleIcon() {
   return (
     <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
@@ -58,7 +62,15 @@ export function SocialAuthSection({
   googleEnabled,
   authError,
 }: SocialAuthSectionProps) {
+  const [consentAccepted, setConsentAccepted] = useState(false);
+  const [consentError, setConsentError] = useState(false);
   const googleHref = `/api/auth/google?returnTo=${encodeURIComponent(returnTo)}`;
+
+  function handleGoogleClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    if (consentAccepted) return;
+    e.preventDefault();
+    setConsentError(true);
+  }
 
   return (
     <div className="space-y-3">
@@ -68,8 +80,31 @@ export function SocialAuthSection({
         </div>
       ) : null}
 
+      <LegalConsentCheckbox
+        id="social-auth-consent"
+        checked={consentAccepted}
+        onCheckedChange={(checked) => {
+          setConsentAccepted(checked);
+          if (checked) setConsentError(false);
+        }}
+        required={false}
+        error={
+          consentError
+            ? "Acceptă termenii, politica de confidențialitate și informarea GDPR pentru a continua."
+            : undefined
+        }
+      />
+
       {googleEnabled ? (
-        <a href={googleHref} className={socialButtonClass}>
+        <a
+          href={googleHref}
+          onClick={handleGoogleClick}
+          aria-disabled={!consentAccepted}
+          className={cn(
+            socialButtonClass,
+            !consentAccepted && "pointer-events-auto opacity-60"
+          )}
+        >
           <GoogleIcon />
           Continuă cu Google
         </a>

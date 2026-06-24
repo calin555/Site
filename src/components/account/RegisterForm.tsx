@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/Card";
 import { siteConfig } from "@/config/site";
 import { registerAction } from "@/lib/actions/auth.actions";
 import { AuthDivider, SocialAuthSection } from "@/components/account/SocialAuthSection";
+import { LegalConsentCheckbox } from "@/components/legal/LegalConsentCheckbox";
 
 interface RegisterFormProps {
   googleEnabled: boolean;
@@ -120,18 +121,7 @@ export function RegisterForm({ googleEnabled }: RegisterFormProps) {
               error={errors.confirmPassword}
               required
             />
-            <label className="flex items-start gap-2 text-sm text-surface-600">
-              <input
-                type="checkbox"
-                name="acceptTerms"
-                className="mt-0.5 h-4 w-4 rounded border-surface-300 text-brand-600"
-                required
-              />
-              Accept termenii și condițiile și politica de confidențialitate
-            </label>
-            {errors.acceptTerms && (
-              <p className="text-xs text-red-600">{errors.acceptTerms}</p>
-            )}
+            <LegalConsentCheckbox error={errors.acceptTerms} />
             <Button type="submit" fullWidth size="lg" disabled={isPending}>
               {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {isPending ? "Se creează..." : "Creează contul"}

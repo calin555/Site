@@ -126,9 +126,15 @@ export async function findOrCreateGoogleUser(
 ): Promise<UserRecord> {
   const byAccount = await findUserByGoogleAccount(profile.sub);
   if (byAccount) {
-    userStore.save(byAccount);
-    await linkGoogleAccount(byAccount.id, profile, accessToken);
-    return byAccount;
+    const updated =
+      userStore.update(byAccount.id, {
+        name: profile.name || byAccount.name,
+        image: profile.picture,
+      }) ?? { ...byAccount, image: profile.picture, name: profile.name || byAccount.name };
+    userStore.save(updated);
+    await persistGoogleUser(updated, profile.picture);
+    await linkGoogleAccount(updated.id, profile, accessToken);
+    return updated;
   }
 
   const { getUserByEmail } = await import("@/lib/services/user.service");

@@ -21,7 +21,10 @@ export const registerSchema = z
       .regex(/[A-Z]/, "Cel puțin o literă mare")
       .regex(/[0-9]/, "Cel puțin o cifră"),
     confirmPassword: z.string(),
-    acceptTerms: z.literal(true, { message: "Acceptă termenii și condițiile" }),
+    acceptTerms: z.literal(true, {
+      message:
+        "Acceptă termenii, politica de confidențialitate și informarea GDPR",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Parolele nu coincid",

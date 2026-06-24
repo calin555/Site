@@ -8,7 +8,6 @@ import {
   X,
   ShoppingCart,
   User,
-  Search,
   Phone,
   Mail,
   Clock,
@@ -17,6 +16,7 @@ import {
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/shared/Container";
+import { HeaderSearch } from "@/components/layout/HeaderSearch";
 import { phoneToTel, type SiteContactSettings } from "@/types/site-contact";
 import type { PublicUser } from "@/types/user";
 
@@ -101,20 +101,19 @@ export function Header({ cartCount = 0, contact, user = null }: HeaderProps) {
 
             {/* Actions */}
             <div className="flex items-center gap-1 sm:gap-2">
-              <button
-                type="button"
-                aria-label="Căutare"
-                className="hidden rounded-xl p-2.5 text-surface-600 transition-colors hover:bg-surface-100 sm:flex"
-              >
-                <Search className="h-5 w-5" />
-              </button>
+              <HeaderSearch />
               <Link
                 href={isLoggedIn ? "/cont" : "/autentificare"}
                 className={cn(
-                  "hidden rounded-xl p-2.5 transition-colors sm:flex",
-                  isLoggedIn
-                    ? "bg-brand-50 text-brand-700 ring-2 ring-brand-200 hover:bg-brand-100"
-                    : "text-surface-600 hover:bg-surface-100"
+                  "flex items-center justify-center transition-colors",
+                  isLoggedIn && user!.image
+                    ? "h-9 w-9 overflow-hidden rounded-full ring-2 ring-brand-300 hover:ring-brand-500"
+                    : cn(
+                        "rounded-xl p-2.5",
+                        isLoggedIn
+                          ? "bg-brand-50 text-brand-700 ring-2 ring-brand-200 hover:bg-brand-100"
+                          : "text-surface-600 hover:bg-surface-100"
+                      )
                 )}
                 aria-label={
                   isLoggedIn ? `Contul lui ${user!.name}` : "Autentificare"
@@ -125,8 +124,9 @@ export function Header({ cartCount = 0, contact, user = null }: HeaderProps) {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={user!.image}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
+                    alt={user!.name}
+                    referrerPolicy="no-referrer"
+                    className="h-full w-full object-cover"
                   />
                 ) : (
                   <User className="h-5 w-5" />
@@ -185,8 +185,17 @@ export function Header({ cartCount = 0, contact, user = null }: HeaderProps) {
                   <Link
                     href="/cont"
                     onClick={() => setMobileOpen(false)}
-                    className="rounded-xl px-4 py-3 text-sm font-medium text-brand-700 hover:bg-brand-50"
+                    className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-brand-700 hover:bg-brand-50"
                   >
+                    {user!.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={user!.image}
+                        alt=""
+                        referrerPolicy="no-referrer"
+                        className="h-8 w-8 rounded-full object-cover ring-2 ring-brand-200"
+                      />
+                    ) : null}
                     Contul meu ({user!.name})
                   </Link>
                 ) : (
