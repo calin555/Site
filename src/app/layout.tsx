@@ -19,8 +19,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ro">
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <head>
         <GoogleAnalytics />
+      </head>
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
