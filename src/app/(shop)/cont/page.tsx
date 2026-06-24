@@ -5,11 +5,14 @@ import { AccountShell } from "@/components/account/AccountShell";
 import { OrderList } from "@/components/account/OrderList";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { getAccountData } from "@/lib/account/get-account-data";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Contul meu",
-  description: "Dashboard cont client ChargePro.",
-};
+  description: "Dashboard cont client.",
+  path: "/cont",
+  noIndex: true,
+});
 
 export default async function AccountDashboardPage() {
   const { user, orders, addresses, counts } = await getAccountData();

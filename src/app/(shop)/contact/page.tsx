@@ -9,11 +9,14 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { getSiteContactSettings } from "@/lib/services/site-contact.service";
 import { phoneToTel } from "@/types/site-contact";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: "Contactează echipa ChargePro pentru comenzi, consultanță tehnică sau oferte personalizate.",
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: "Contact — consultanță stații încărcare EV",
+  description:
+    "Contactează echipa noastră pentru oferte stații încărcare mașini electrice, instalare ANRE și suport tehnic încărcătoare EV în România.",
+  path: "/contact",
+});
 
 export default async function ContactPage() {
   const contact = await getSiteContactSettings();

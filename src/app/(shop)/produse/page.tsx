@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { ProductCatalog } from "@/components/shop/catalog/ProductCatalog";
 import { getCatalogProducts } from "@/lib/services/catalog.service";
 import { parseCatalogSearchParams, getCatalogBasePath } from "@/lib/catalog/urls";
-import { siteConfig } from "@/config/site";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
 interface ProductsPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -24,19 +24,26 @@ export async function generateMetadata({
     catalogParams.priceMax;
 
   if (hasFilters) {
-    return {
+    return buildPageMetadata({
       title: "Produse filtrate",
-      description: "Rezultate căutare în catalogul ChargePro.",
-      robots: { index: false, follow: true },
-    };
+      description: "Rezultate căutare în catalogul de stații încărcare EV.",
+      path: "/produse",
+      noIndex: true,
+    });
   }
 
-  return {
-    title: "Produse — Stații de încărcare EV",
+  return buildPageMetadata({
+    title: "Stații încărcare EV — catalog AC & DC România",
     description:
-      "Catalog complet de stații de încărcare AC și DC, accesorii și soluții smart pentru orice aplicație.",
-    alternates: { canonical: `${siteConfig.url}/produse` },
-  };
+      "Catalog complet stații încărcare mașini electrice: wallbox AC, stații rapide DC, încărcătoare EV și accesorii. Livrare în România.",
+    path: "/produse",
+    keywords: [
+      "stații încărcare EV",
+      "încărcătoare EV România",
+      "stații rapide DC",
+      "stații AC wallbox",
+    ],
+  });
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {

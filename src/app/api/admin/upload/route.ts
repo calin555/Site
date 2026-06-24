@@ -10,13 +10,42 @@ import {
   type UploadFolder,
 } from "@/lib/supabase/storage";
 
-const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
-const ALLOWED_TYPES = new Set([
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
+
+const IMAGE_TYPES = new Set([
   "image/jpeg",
   "image/png",
   "image/webp",
   "image/gif",
 ]);
+
+const VIDEO_TYPES = new Set([
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+]);
+
+function extensionForType(type: string): string {
+  switch (type) {
+    case "image/jpeg":
+      return "jpg";
+    case "image/png":
+      return "png";
+    case "image/webp":
+      return "webp";
+    case "image/gif":
+      return "gif";
+    case "video/mp4":
+      return "mp4";
+    case "video/webm":
+      return "webm";
+    case "video/quicktime":
+      return "mov";
+    default:
+      return "bin";
+  }
+}
 
 export async function POST(request: Request) {
   const ctx = await getAdminContext();
@@ -28,7 +57,7 @@ export async function POST(request: Request) {
   }
   if (!hasPermission(ctx.permissions, PERMISSIONS.PRODUCTS_WRITE)) {
     return NextResponse.json(
-      { error: "Nu ai permisiunea de a încărca imagini." },
+      { error: "Nu ai permisiunea de a încărca fișiere." },
       { status: 403 }
     );
   }
@@ -36,33 +65,55 @@ export async function POST(request: Request) {
   const formData = await request.formData();
   const file = formData.get("file");
   const folderRaw = formData.get("folder");
+  const mediaTypeRaw = formData.get("mediaType");
+  const isVideoRequest = mediaTypeRaw === "video";
+
   const folder: UploadFolder =
-    folderRaw === "categories" ? "categories" : "products";
+    folderRaw === "categories"
+      ? "categories"
+      : isVideoRequest
+        ? "products/videos"
+        : "products";
 
   if (!file || !(file instanceof File)) {
     return NextResponse.json({ error: "Niciun fișier trimis" }, { status: 400 });
   }
 
-  if (!ALLOWED_TYPES.has(file.type)) {
+  const isVideo = VIDEO_TYPES.has(file.type);
+  const isImage = IMAGE_TYPES.has(file.type);
+
+  if (isVideoRequest && !isVideo) {
+    return NextResponse.json(
+      { error: "Format video invalid. Folosește MP4, WebM sau MOV." },
+      { status: 400 }
+    );
+  }
+
+  if (!isVideoRequest && !isImage) {
     return NextResponse.json(
       { error: "Format invalid. Folosește JPG, PNG, WebP sau GIF." },
       { status: 400 }
     );
   }
 
-  if (file.size > MAX_SIZE) {
+  const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
+  if (file.size > maxSize) {
     return NextResponse.json(
-      { error: "Fișierul depășește 5 MB." },
+      {
+        error: isVideo
+          ? "Videoclipul depășește 50 MB."
+          : "Fișierul depășește 5 MB.",
+      },
       { status: 400 }
     );
   }
 
-  const ext = file.type.split("/")[1].replace("jpeg", "jpg");
+  const ext = extensionForType(file.type);
   const safeName = file.name
     .replace(/\.[^.]+$/, "")
     .replace(/[^a-zA-Z0-9-_]/g, "-")
     .slice(0, 40);
-  const filename = `${Date.now()}-${safeName || "imagine"}.${ext}`;
+  const filename = `${Date.now()}-${safeName || (isVideo ? "video" : "imagine")}.${ext}`;
 
   const bytes = Buffer.from(await file.arrayBuffer());
 
@@ -89,7 +140,7 @@ export async function POST(request: Request) {
         error:
           err instanceof Error
             ? err.message
-            : "Încărcarea imaginii a eșuat.",
+            : "Încărcarea fișierului a eșuat.",
       },
       { status: 500 }
     );

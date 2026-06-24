@@ -3,12 +3,14 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { Container } from "@/components/shared/Container";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { ToolsGrid } from "@/components/tools/ToolsGrid";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "Instrumente EV",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Instrumente EV — calculatoare stații încărcare",
   description:
-    "Calculatoare, wizard-uri și generatoare de oferte pentru stații de încărcare electrică — AFM, Electric Up, Solar+EV, ROI și marketplace instalatori.",
-};
+    "Calculatoare gratuite pentru stații încărcare EV: AFM, Electric Up, ROI, recomandare putere AC/DC și comparator tehnic OCPP.",
+  path: "/tools",
+});
 
 export default function ToolsPage() {
   return (

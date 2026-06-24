@@ -1,6 +1,7 @@
 import type { ConnectorType, PhaseType, ProductWithRelations } from "@/types/database";
 import type { CatalogProduct } from "@/types/catalog";
 import { normalizeStockStatus } from "@/lib/catalog/stock-status";
+import { normalizeVideoUrls } from "@/lib/product-videos";
 
 const CONNECTOR_TO_APP: Record<ConnectorType, string> = {
   TYPE1: "Type 1",
@@ -44,6 +45,7 @@ export function productFromDb(row: ProductWithRelations): CatalogProduct {
     isNew?: boolean;
     catalogPdfUrl?: string;
     stockStatus?: unknown;
+    videoUrls?: unknown;
   } | null;
 
   const createdAtDate = toDate(row.createdAt);
@@ -73,6 +75,7 @@ export function productFromDb(row: ProductWithRelations): CatalogProduct {
     isNew: smart?.isNew ?? isRecent,
     stock: row.stock,
     stockStatus: normalizeStockStatus(smart?.stockStatus),
+    videoUrls: normalizeVideoUrls(smart?.videoUrls),
     createdAt,
     catalogPdfUrl: smart?.catalogPdfUrl,
   };

@@ -8,11 +8,14 @@ import { BlogCategoryFilter } from "@/components/blog/BlogCategoryFilter";
 import { getPublishedArticles, getBlogCategories } from "@/lib/services/blog.service";
 import { toLegacyPost } from "@/types/blog";
 
-export const metadata: Metadata = {
-  title: "Blog",
+import { buildPageMetadata } from "@/lib/seo/metadata";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Blog — ghiduri încărcare vehicule electrice",
   description:
-    "Ghiduri, noutăți și articole tehnice despre încărcarea vehiculelor electrice.",
-};
+    "Articole despre stații încărcare EV, cost încărcare, conectori, finanțări AFM și infrastructură de reîncărcare electrică în România.",
+  path: "/blog",
+});
 
 export default function BlogPage() {
   const posts = getPublishedArticles();

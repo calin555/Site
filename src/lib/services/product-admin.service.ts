@@ -2,6 +2,7 @@ import type { CatalogProduct } from "@/types/catalog";
 import type { StockStatus } from "@/lib/catalog/stock-status";
 import { productStore, slugify } from "@/lib/catalog/product.store";
 import { dedupeImageUrls } from "@/lib/product-images";
+import { dedupeVideoUrls } from "@/lib/product-videos";
 import { categories, brands } from "@/lib/mock-data";
 import { isDatabaseEnabled } from "@/lib/db/config";
 import {
@@ -30,6 +31,7 @@ export interface ProductInput {
   isFeatured?: boolean;
   isNew?: boolean;
   catalogPdfUrl?: string;
+  videos?: string[];
 }
 
 function resolveCategory(slug: string) {
@@ -74,6 +76,10 @@ function upsertInMemory(input: ProductInput): CatalogProduct {
     isNew: input.isNew ?? false,
     createdAt: existing?.createdAt ?? new Date().toISOString().split("T")[0],
     catalogPdfUrl: input.catalogPdfUrl ?? existing?.catalogPdfUrl,
+    videoUrls:
+      input.videos !== undefined
+        ? dedupeVideoUrls(input.videos)
+        : existing?.videoUrls,
   };
 
   return productStore.save(product);

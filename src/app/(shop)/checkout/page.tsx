@@ -13,11 +13,14 @@ import {
   calculateOrderTotals,
 } from "@/lib/services/cart.service";
 import { getCheckoutPrefill } from "@/lib/checkout/get-checkout-prefill";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Checkout",
-  description: "Finalizează comanda ta de stații de încărcare EV.",
-};
+  description: "Finalizează comanda de stații încărcare EV.",
+  path: "/checkout",
+  noIndex: true,
+});
 
 interface CheckoutPageProps {
   searchParams: Promise<{ auth_error?: string; auth?: string }>;

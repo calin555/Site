@@ -32,6 +32,7 @@ export interface CatalogProduct {
   isNew?: boolean;
   stock: number;
   stockStatus: StockStatus;
+  videoUrls?: string[];
   createdAt: string;
   catalogPdfUrl?: string;
   galleryImages?: string[];

@@ -159,6 +159,7 @@ function enrichProduct(product: CatalogProduct): ProductDetail {
     sku: `CP-${product.id.padStart(4, "0")}`,
     description: buildDescription(product),
     images: buildImages(product),
+    videos: product.videoUrls ?? [],
     warrantyYears: getWarrantyYears(product),
     ipRating: getIpRating(product),
     installationRequired: product.categorySlug !== "accesorii" && product.powerKw > 0,

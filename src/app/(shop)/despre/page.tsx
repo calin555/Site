@@ -7,12 +7,14 @@ import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { CTABanner } from "@/components/shop/CTABanner";
 import { Card } from "@/components/ui/Card";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "Despre noi",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Despre noi — infrastructură încărcare electrică România",
   description:
-    "ChargePro — partenerul tău de încredere pentru infrastructura de încărcare electrică în România.",
-};
+    "ChargePro / IncarcAuto.ro — partenerul tău pentru stații încărcare EV, rețele de încărcare electrică și soluții AC/DC pentru acasă, afaceri și flote.",
+  path: "/despre",
+});
 
 const values = [
   {
@@ -83,7 +85,7 @@ export default function AboutPage() {
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
             <Image
               src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=800&h=600&fit=crop"
-              alt="Echipa ChargePro"
+              alt="Stație de încărcare vehicule electrice — echipă ChargePro România"
               fill
               className="object-cover"
             />

@@ -28,13 +28,16 @@ function loadEnvFile(): void {
 const BUCKET = "uploads";
 const BUCKET_OPTIONS = {
   public: true,
-  fileSizeLimit: 5242880,
+  fileSizeLimit: 52428800,
   allowedMimeTypes: [
     "image/jpeg",
     "image/png",
     "image/webp",
     "image/gif",
     "application/pdf",
+    "video/mp4",
+    "video/webm",
+    "video/quicktime",
   ],
 };
 

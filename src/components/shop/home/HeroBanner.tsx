@@ -45,17 +45,16 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
             </div>
 
             <h1 className="animate-slide-up stagger-1 text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.5rem] text-balance">
-              Încărcare electrică{" "}
+              Stații încărcare EV{" "}
               <span className="bg-gradient-to-r from-brand-400 via-brand-300 to-accent bg-clip-text text-transparent animate-shimmer">
-                premium
+                România
               </span>
-              , livrată cu expertiză
+              — AC & DC rapid
             </h1>
 
             <p className="animate-slide-up stagger-2 max-w-lg text-lg leading-relaxed text-surface-300">
-              Stații AC & DC, accesorii și soluții smart pentru acasă, afaceri
-              și flote. Consultanță gratuită, instalare ANRE și garanție până
-              la 5 ani.
+              Încărcătoare EV, stații rapide DC și wallbox AC pentru încărcare auto
+              electrică acasă, afaceri și flote. Consultanță gratuită, instalare ANRE.
             </p>
 
             <div className="animate-slide-up stagger-3 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -125,7 +124,11 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
                 {heroProduct?.image ? (
                   <Image
                     src={heroProduct.image}
-                    alt={heroProduct.name}
+                    alt={
+                      heroProduct.name
+                        ? `Stație încărcare EV ${heroProduct.name} — ${heroProduct.powerKw} kW`
+                        : "Stație de încărcare vehicule electrice România"
+                    }
                     fill
                     className="object-cover"
                     priority
@@ -151,7 +154,11 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
                     <div className="relative h-14 w-14 overflow-hidden rounded-xl">
                       <Image
                         src={heroProduct.image}
-                        alt={heroProduct.name}
+                        alt={
+                      heroProduct.name
+                        ? `Stație încărcare EV ${heroProduct.name} — ${heroProduct.powerKw} kW`
+                        : "Stație de încărcare vehicule electrice România"
+                    }
                         fill
                         className="object-cover"
                         unoptimized={isExternalImageUrl(heroProduct.image)}

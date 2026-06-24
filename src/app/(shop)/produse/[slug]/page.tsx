@@ -5,6 +5,7 @@ import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { ProductGrid } from "@/components/shop/ProductGrid";
 import { ProductGallery } from "@/components/shop/product/ProductGallery";
+import { ProductVideos } from "@/components/shop/product/ProductVideos";
 import { ProductInfo } from "@/components/shop/product/ProductInfo";
 import { ProductTabs } from "@/components/shop/product/ProductTabs";
 import {
@@ -13,7 +14,7 @@ import {
   getAllProductSlugs,
 } from "@/lib/services/product.service";
 import { getSchemaAvailability } from "@/lib/catalog/stock-status";
-import { siteConfig } from "@/config/site";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
 interface ProductDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -26,19 +27,23 @@ export async function generateMetadata({
   const product = await getProductDetail(slug);
   if (!product) return { title: "Produs negăsit" };
 
-  return {
-    title: product.name,
-    description: product.shortDescription,
-    alternates: {
-      canonical: `${siteConfig.url}/produse/${slug}`,
-    },
-    openGraph: {
-      title: product.name,
-      description: product.shortDescription,
-      images: [{ url: product.image }],
-      type: "website",
-    },
-  };
+  const powerLabel = product.powerKw > 0 ? `${product.powerKw} kW` : "";
+  const title = `${product.name}${powerLabel ? ` — ${powerLabel}` : ""}`;
+  const description = `${product.shortDescription} Stație încărcare EV ${product.brand}. Livrare România, consultanță tehnică.`;
+
+  return buildPageMetadata({
+    title,
+    description,
+    path: `/produse/${slug}`,
+    ogImage: product.image,
+    keywords: [
+      product.name,
+      "stații încărcare EV",
+      product.category,
+      product.brand,
+      "încărcare auto electrică",
+    ],
+  });
 }
 
 export async function generateStaticParams() {
@@ -98,7 +103,10 @@ export default async function ProductDetailPage({
 
       <Container className="pb-8">
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-          <ProductGallery images={product.images} productName={product.name} />
+          <div className="space-y-6">
+            <ProductGallery images={product.images} productName={product.name} />
+            <ProductVideos videos={product.videos} productName={product.name} />
+          </div>
           <ProductInfo product={product} />
         </div>
       </Container>

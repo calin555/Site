@@ -3,7 +3,7 @@ import { isDatabaseEnabled } from "@/lib/db/config";
 
 const BUCKET = "uploads";
 
-export type UploadFolder = "products" | "categories" | "catalogs";
+export type UploadFolder = "products" | "products/videos" | "categories" | "catalogs";
 
 export function isCloudStorageEnabled(): boolean {
   return (

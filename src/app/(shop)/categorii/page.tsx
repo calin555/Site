@@ -7,10 +7,14 @@ import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { CategoryCard } from "@/components/shop/CategoryCard";
 import { getShopCategories } from "@/lib/services/category.service";
 
-export const metadata: Metadata = {
-  title: "Categorii",
-  description: "Explorează categoriile de stații de încărcare EV și accesorii.",
-};
+import { buildPageMetadata } from "@/lib/seo/metadata";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Categorii stații încărcare EV — AC, DC, accesorii",
+  description:
+    "Explorează categoriile de stații încărcare mașini electrice: AC wallbox, stații rapide DC și accesorii pentru rețea încărcare electrică.",
+  path: "/categorii",
+});
 
 export default async function CategoriesPage() {
   const categories = await getShopCategories();

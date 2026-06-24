@@ -8,11 +8,14 @@ import {
   getCartSummary,
   calculateOrderTotals,
 } from "@/lib/services/cart.service";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Coș de cumpărături",
-  description: "Revizuiește produsele din coșul tău și continuă spre checkout.",
-};
+  description: "Revizuiește produsele din coșul tău.",
+  path: "/cos",
+  noIndex: true,
+});
 
 export default async function CartPage() {
   const summary = await getCartSummary();

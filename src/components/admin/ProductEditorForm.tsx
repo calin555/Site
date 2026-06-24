@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { ProductImagesField } from "@/components/admin/ProductImagesField";
+import { ProductVideosField } from "@/components/admin/ProductVideosField";
 import type { CatalogProduct } from "@/types/catalog";
 import type { StockStatus } from "@/lib/catalog/stock-status";
 import { STOCK_STATUS_OPTIONS } from "@/lib/catalog/stock-status";
@@ -14,6 +15,7 @@ import type { Category, Brand } from "@/lib/mock-data";
 import { saveProductAction } from "@/lib/actions/admin/product.actions";
 import { PdfCatalogImport } from "@/components/admin/PdfCatalogImport";
 import { dedupeImageUrls } from "@/lib/product-images";
+import { dedupeVideoUrls } from "@/lib/product-videos";
 
 const CONNECTOR_OPTIONS = ["Type 2", "Type 1", "CCS2", "CHAdeMO", "Tesla"];
 
@@ -48,6 +50,9 @@ export function ProductEditorForm({
   );
   const [description, setDescription] = useState(product?.description ?? "");
   const [images, setImages] = useState<string[]>(() => initialProductImages(product));
+  const [videos, setVideos] = useState<string[]>(() =>
+    dedupeVideoUrls(product?.videoUrls ?? [])
+  );
   const [categorySlug, setCategorySlug] = useState(
     product?.categorySlug ?? categories[0]?.slug ?? ""
   );
@@ -141,6 +146,7 @@ export function ProductEditorForm({
         price: form.get("price"),
         compareAtPrice: form.get("compareAtPrice") || undefined,
         images,
+        videos,
         categorySlug,
         brandSlug: form.get("brandSlug"),
         powerKw,
@@ -261,6 +267,13 @@ export function ProductEditorForm({
         onChange={setImages}
         productName={name}
         error={errors.images}
+      />
+
+      <ProductVideosField
+        videos={videos}
+        onChange={setVideos}
+        productName={name}
+        error={errors.videos}
       />
 
       <div className="grid gap-5 sm:grid-cols-2">

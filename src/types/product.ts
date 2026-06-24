@@ -57,6 +57,7 @@ export interface ProductDetail {
   installationRequired: boolean;
   specs: ProductSpec[];
   documents: ProductDocument[];
+  videos: string[];
   reviews: ProductReview[];
   averageRating: number;
   reviewCount: number;

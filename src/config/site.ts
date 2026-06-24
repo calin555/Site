@@ -17,6 +17,7 @@ export const siteConfig = {
     { label: "Categorii", href: "/categorii" },
     { label: "Instrumente", href: "/tools" },
     { label: "Blog", href: "/blog" },
+    { label: "FAQ", href: "/faq" },
     { label: "Despre noi", href: "/despre" },
     { label: "Contact", href: "/contact" },
   ],
@@ -28,6 +29,7 @@ export const siteConfig = {
       { label: "Accesorii", href: "/categorii/accesorii" },
     ],
     company: [
+      { label: "FAQ încărcare EV", href: "/faq" },
       { label: "Despre noi", href: "/despre" },
       { label: "Instrumente EV", href: "/tools" },
       { label: "Blog", href: "/blog" },

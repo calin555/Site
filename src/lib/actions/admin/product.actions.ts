@@ -10,6 +10,7 @@ import {
   deleteAllProducts,
 } from "@/lib/services/product-admin.service";
 import { dedupeImageUrls } from "@/lib/product-images";
+import { dedupeVideoUrls } from "@/lib/product-videos";
 
 const emptyToUndefined = (value: unknown) =>
   value === "" || value === null || value === undefined ? undefined : value;
@@ -40,6 +41,7 @@ const productSchema = z.object({
   isFeatured: z.boolean().optional(),
   isNew: z.boolean().optional(),
   catalogPdfUrl: z.string().optional(),
+  videos: z.array(z.string().min(1)).optional(),
 }).transform((data) => ({
   ...data,
   images: dedupeImageUrls(
@@ -49,6 +51,7 @@ const productSchema = z.object({
         ? [data.image]
         : []
   ),
+  videos: dedupeVideoUrls(data.videos ?? []),
 })).refine((data) => data.images.length > 0, {
   message: "Adaugă cel puțin o imagine",
   path: ["images"],

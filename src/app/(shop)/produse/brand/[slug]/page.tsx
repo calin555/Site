@@ -5,7 +5,7 @@ import { ProductCatalog } from "@/components/shop/catalog/ProductCatalog";
 import { getCatalogProducts } from "@/lib/services/catalog.service";
 import { parseCatalogSearchParams, getCatalogBasePath } from "@/lib/catalog/urls";
 import { brands } from "@/lib/mock-data";
-import { siteConfig } from "@/config/site";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
 interface BrandCatalogPageProps {
   params: Promise<{ slug: string }>;
@@ -27,14 +27,13 @@ export async function generateMetadata({
   const rawParams = await searchParams;
   const hasExtraFilters = Object.keys(rawParams).length > 0;
 
-  return {
-    title: `${brand.name} — Stații de încărcare EV`,
-    description: `Produse ${brand.name} — stații de încărcare electrică premium disponibile la ${siteConfig.name}.`,
-    alternates: {
-      canonical: `${siteConfig.url}/produse/brand/${slug}`,
-    },
-    robots: hasExtraFilters ? { index: false, follow: true } : undefined,
-  };
+  return buildPageMetadata({
+    title: `${brand.name} — stații încărcare EV România`,
+    description: `Produse ${brand.name}: stații încărcare mașini electrice, wallbox AC și stații DC. Livrare România.`,
+    path: `/produse/brand/${slug}`,
+    noIndex: hasExtraFilters,
+    keywords: [brand.name, "stații încărcare EV", "încărcătoare EV România"],
+  });
 }
 
 export function generateStaticParams() {

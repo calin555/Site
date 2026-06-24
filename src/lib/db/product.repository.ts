@@ -210,6 +210,14 @@ export async function dbUpsertProduct(
     }
   }
 
+  if (input.videos !== undefined) {
+    if (input.videos.length > 0) {
+      features.videoUrls = input.videos;
+    } else {
+      delete features.videoUrls;
+    }
+  }
+
   const now = new Date().toISOString();
   const productId = existing?.id ?? generateProductId();
   const sku = await resolveProductSku(productId, slug, existing?.sku);
