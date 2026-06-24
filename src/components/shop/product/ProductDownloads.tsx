@@ -36,8 +36,9 @@ export function ProductDownloads({ documents, productName }: ProductDownloadsPro
             <a
               key={doc.id}
               href={doc.url}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group flex items-start gap-4 rounded-2xl border border-surface-200 bg-white p-5 transition-all hover:border-brand-200 hover:shadow-md hover:shadow-brand-500/5"
-              download
             >
               <div
                 className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${config.color}`}
@@ -54,9 +55,6 @@ export function ProductDownloads({ documents, productName }: ProductDownloadsPro
                 <div className="mt-2 flex items-center gap-2 text-xs font-medium text-brand-600">
                   <Download className="h-3.5 w-3.5" />
                   Descarcă PDF
-                  {doc.fileSize && (
-                    <span className="text-surface-400">· {doc.fileSize}</span>
-                  )}
                 </div>
               </div>
             </a>

@@ -4,13 +4,17 @@ import type {
   ProductDocument,
   ProductImage,
   ProductReview,
-  ProductSpec,
 } from "@/types/product";
 import {
   getCatalogProductBySlug,
   getAllCatalogProducts,
 } from "@/lib/services/catalog.service";
 import { dedupeImageUrls } from "@/lib/product-images";
+import {
+  buildProductSpecs,
+  getIpRating,
+  getWarrantyYears,
+} from "@/lib/catalog/product-specs";
 
 const DEFAULT_REVIEWS: ProductReview[] = [
   {
@@ -64,67 +68,34 @@ const GALLERY_IMAGES: Record<string, ProductImage[]> = {
   ],
 };
 
-function buildSpecs(product: CatalogProduct): ProductSpec[] {
-  const specs: ProductSpec[] = [
-    { label: "SKU", value: `CP-${product.id.padStart(4, "0")}`, group: "General" },
-    { label: "Brand", value: product.brand, group: "General" },
-    { label: "Categorie", value: product.category, group: "General" },
+function buildDocuments(product: CatalogProduct): ProductDocument[] {
+  const base = `/api/products/${product.slug}/documents`;
+  const docs: ProductDocument[] = [
+    {
+      id: `${product.slug}-datasheet`,
+      title: "Fișă tehnică",
+      description: "Specificații complete și catalog fotografic",
+      url: `${base}/datasheet`,
+      type: "datasheet",
+    },
+    {
+      id: `${product.slug}-manual`,
+      title: "Manual de instalare",
+      description: "Ghid conform SR EN IEC 61851-1 și normelor ANRE",
+      url: `${base}/manual`,
+      type: "manual",
+    },
   ];
 
-  if (product.powerKw > 0) {
-    specs.push(
-      { label: "Putere nominală", value: `${product.powerKw} kW`, group: "Performanță" },
-      { label: "Fază", value: product.phases === "SINGLE" ? "Monofazat" : "Trifazat", group: "Performanță" }
-    );
-  }
-
-  if (product.connectorTypes.length > 0) {
-    specs.push({
-      label: "Tip conector",
-      value: product.connectorTypes.join(", "),
-      group: "Performanță",
+  if (product.categorySlug !== "accesorii") {
+    docs.push({
+      id: `${product.slug}-ce`,
+      title: "Certificat CE",
+      description: "Declarație de conformitate europeană",
+      url: `${base}/certificate`,
+      type: "certificate",
     });
   }
-
-  const ipRating = getIpRating(product);
-  if (ipRating) {
-    specs.push({ label: "Protecție IP", value: ipRating, group: "Construcție" });
-  }
-
-  specs.push(
-    { label: "Garanție", value: `${getWarrantyYears(product)} ani`, group: "Construcție" },
-    { label: "Certificare", value: "CE, RoHS", group: "Construcție" },
-    { label: "Temperatură operare", value: "-25°C ~ +50°C", group: "Mediu" },
-    { label: "Umiditate relativă", value: "5% ~ 95% (fără condens)", group: "Mediu" }
-  );
-
-  if (product.powerKw >= 11) {
-    specs.push({ label: "Protocol OCPP", value: "1.6J (opțional 2.0.1)", group: "Smart" });
-  }
-
-  if (product.categorySlug !== "accesorii") {
-    specs.push(
-      { label: "Conectivitate", value: "WiFi / Ethernet / 4G (opțional)", group: "Smart" },
-      { label: "Aplicație mobilă", value: "iOS & Android", group: "Smart" }
-    );
-  }
-
-  return specs;
-}
-
-function getIpRating(product: CatalogProduct): string | undefined {
-  if (product.categorySlug === "accesorii") return undefined;
-  return product.powerKw >= 22 ? "IP54" : "IP65";
-}
-
-function getWarrantyYears(product: CatalogProduct): number {
-  if (product.price >= 50000) return 5;
-  if (product.price >= 5000) return 3;
-  return 2;
-}
-
-function buildDocuments(product: CatalogProduct): ProductDocument[] {
-  const docs: ProductDocument[] = [];
 
   if (product.catalogPdfUrl) {
     docs.push({
@@ -134,52 +105,9 @@ function buildDocuments(product: CatalogProduct): ProductDocument[] {
       url: product.catalogPdfUrl,
       type: "brochure",
     });
-    return docs;
   }
 
-  const base = product.slug;
-  const fallbackDocs: ProductDocument[] = [
-    {
-      id: `${base}-datasheet`,
-      title: "Fișă tehnică",
-      description: "Specificații complete și dimensiuni",
-      url: `#datasheet-${base}`,
-      type: "datasheet",
-      fileSize: "1.2 MB",
-    },
-    {
-      id: `${base}-manual`,
-      title: "Manual de instalare",
-      description: "Ghid pas cu pas pentru montaj",
-      url: `#manual-${base}`,
-      type: "manual",
-      fileSize: "3.4 MB",
-    },
-  ];
-
-  if (product.categorySlug !== "accesorii") {
-    fallbackDocs.push({
-      id: `${base}-ce`,
-      title: "Certificat CE",
-      description: "Declarație de conformitate europeană",
-      url: `#ce-${base}`,
-      type: "certificate",
-      fileSize: "0.5 MB",
-    });
-  }
-
-  if (product.price >= 5000) {
-    fallbackDocs.push({
-      id: `${base}-brochure`,
-      title: "Broșură comercială",
-      description: "Prezentare produs pentru proiecte B2B",
-      url: `#brochure-${base}`,
-      type: "brochure",
-      fileSize: "2.8 MB",
-    });
-  }
-
-  return fallbackDocs;
+  return docs;
 }
 
 function buildImages(product: CatalogProduct): ProductImage[] {
@@ -234,7 +162,7 @@ function enrichProduct(product: CatalogProduct): ProductDetail {
     warrantyYears: getWarrantyYears(product),
     ipRating: getIpRating(product),
     installationRequired: product.categorySlug !== "accesorii" && product.powerKw > 0,
-    specs: buildSpecs(product),
+    specs: buildProductSpecs(product),
     documents: buildDocuments(product),
     reviews,
     averageRating: Math.round(averageRating * 10) / 10,
