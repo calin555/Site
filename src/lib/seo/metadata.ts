@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
+import { getSiteBaseUrl } from "@/lib/site-url";
 import { defaultKeywords, seoConfig } from "@/config/seo";
 
-const BASE_URL = siteConfig.url.replace(/\/$/, "");
+function baseUrl(): string {
+  return getSiteBaseUrl().replace(/\/$/, "");
+}
 
 export function absoluteUrl(path = ""): string {
+  const BASE_URL = baseUrl();
   if (!path) return BASE_URL;
   return `${BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }
@@ -69,6 +73,7 @@ export function buildPageMetadata(input: PageSeoInput): Metadata {
 }
 
 export function buildRootMetadata(): Metadata {
+  const BASE_URL = baseUrl();
   return {
     metadataBase: new URL(BASE_URL),
     title: {

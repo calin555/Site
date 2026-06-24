@@ -1,3 +1,5 @@
+import { getSiteBaseUrl } from "@/lib/site-url";
+
 export interface GoogleOAuthConfig {
   clientId: string;
   clientSecret: string;
@@ -15,9 +17,7 @@ export interface GoogleUserProfile {
 export function getGoogleOAuthConfig(origin?: string): GoogleOAuthConfig | null {
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  const appUrl = (
-    origin ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-  ).replace(/\/$/, "");
+  const appUrl = (origin ?? getSiteBaseUrl()).replace(/\/$/, "");
 
   if (!clientId || !clientSecret) return null;
 

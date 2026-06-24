@@ -1,9 +1,11 @@
+import { getSiteBaseUrl } from "@/lib/site-url";
+
 export const siteConfig = {
   name: "ChargePro",
   tagline: "Soluții premium de încărcare electrică",
   description:
     "Stații de încărcare EV pentru acasă și afaceri. Consultanță tehnică, instalare și suport dedicat în România.",
-  url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+  url: getSiteBaseUrl(),
   contact: {
     phone: "0773 985 486",
     phoneTechnical: "0759 046 201",

@@ -1,3 +1,5 @@
+import { getSiteBaseUrl } from "@/lib/site-url";
+
 export interface UrlVerifyResult {
   ok: boolean;
   status?: number;
@@ -15,9 +17,7 @@ export async function verifySourceUrl(
 
   let target = url;
   if (url.startsWith("/")) {
-    const base = (
-      process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-    ).replace(/\/$/, "");
+    const base = getSiteBaseUrl().replace(/\/$/, "");
     target = `${base}${url}`;
   }
 
