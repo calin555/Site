@@ -4,9 +4,7 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { Container } from "@/components/shared/Container";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { Card } from "@/components/ui/Card";
-import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
-import { Button } from "@/components/ui/Button";
+import { ContactForm } from "@/components/shop/contact/ContactForm";
 import { getSiteContactSettings } from "@/lib/services/site-contact.service";
 import { phoneToTel } from "@/types/site-contact";
 import { buildPageMetadata } from "@/lib/seo/metadata";
@@ -18,8 +16,16 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/contact",
 });
 
-export default async function ContactPage() {
+interface ContactPageProps {
+  searchParams: Promise<{ oferta?: string; produs?: string }>;
+}
+
+export default async function ContactPage({ searchParams }: ContactPageProps) {
   const contact = await getSiteContactSettings();
+  const params = await searchParams;
+  const defaultSubject = params.produs
+    ? `Solicitare ofertă: ${params.produs}`
+    : "";
 
   const contactMethods = [
     {
@@ -94,33 +100,7 @@ export default async function ContactPage() {
                 Trimite-ne un mesaj
               </h2>
             </div>
-            <form className="space-y-5">
-              <div className="grid gap-5 sm:grid-cols-2">
-                <Input label="Prenume" placeholder="Ion" required />
-                <Input label="Nume" placeholder="Popescu" required />
-              </div>
-              <Input
-                label="Email"
-                type="email"
-                placeholder="ion@exemplu.ro"
-                required
-              />
-              <Input
-                label="Telefon"
-                type="tel"
-                placeholder="07xx xxx xxx"
-              />
-              <Input label="Subiect" placeholder="Solicitare ofertă stație 22kW" />
-              <Textarea
-                label="Mesaj"
-                placeholder="Descrie-ne nevoia ta: tip vehicul, locație instalare, putere dorită..."
-                rows={5}
-                required
-              />
-              <Button type="submit" size="lg">
-                Trimite mesajul
-              </Button>
-            </form>
+            <ContactForm defaultSubject={defaultSubject} />
           </Card>
         </div>
       </Container>
