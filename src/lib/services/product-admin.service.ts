@@ -26,6 +26,7 @@ export interface ProductInput {
   phases: "SINGLE" | "THREE";
   connectorTypes: string[];
   stock: number;
+  stockStatus: StockStatus;
   isFeatured?: boolean;
   isNew?: boolean;
   catalogPdfUrl?: string;
