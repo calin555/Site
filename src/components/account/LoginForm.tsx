@@ -11,6 +11,10 @@ import { Card } from "@/components/ui/Card";
 import { siteConfig } from "@/config/site";
 import { loginAction } from "@/lib/actions/auth.actions";
 import { AuthDivider, SocialAuthSection } from "@/components/account/SocialAuthSection";
+import { LegalConsentCheckbox } from "@/components/legal/LegalConsentCheckbox";
+
+const CONSENT_ERROR =
+  "Acceptă termenii, politica de confidențialitate și informarea GDPR pentru a continua.";
 
 interface LoginFormProps {
   googleEnabled: boolean;
@@ -24,6 +28,8 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
   const authSuccess = searchParams.get("auth") === "success";
   const returnTo = next;
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [consentAccepted, setConsentAccepted] = useState(false);
+  const [consentError, setConsentError] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
@@ -34,6 +40,11 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!consentAccepted) {
+      setConsentError(true);
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
     const data = {
       email: formData.get("email"),
@@ -76,6 +87,8 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
             returnTo={returnTo}
             googleEnabled={googleEnabled}
             authError={authError}
+            consentAccepted={consentAccepted}
+            onConsentRequired={() => setConsentError(true)}
           />
           <AuthDivider />
 
@@ -95,6 +108,16 @@ export function LoginForm({ googleEnabled }: LoginFormProps) {
               placeholder="••••••••"
               error={errors.password}
               required
+            />
+            <LegalConsentCheckbox
+              id="login-consent"
+              checked={consentAccepted}
+              onCheckedChange={(checked) => {
+                setConsentAccepted(checked);
+                if (checked) setConsentError(false);
+              }}
+              required={false}
+              error={consentError ? CONSENT_ERROR : undefined}
             />
             <Button type="submit" fullWidth size="lg" disabled={isPending}>
               {isPending ? (

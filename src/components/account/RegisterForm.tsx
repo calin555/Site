@@ -13,6 +13,9 @@ import { registerAction } from "@/lib/actions/auth.actions";
 import { AuthDivider, SocialAuthSection } from "@/components/account/SocialAuthSection";
 import { LegalConsentCheckbox } from "@/components/legal/LegalConsentCheckbox";
 
+const CONSENT_ERROR =
+  "Acceptă termenii, politica de confidențialitate și informarea GDPR pentru a continua.";
+
 interface RegisterFormProps {
   googleEnabled: boolean;
 }
@@ -23,6 +26,8 @@ export function RegisterForm({ googleEnabled }: RegisterFormProps) {
   const authError = searchParams.get("auth_error");
   const authSuccess = searchParams.get("auth") === "success";
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [consentAccepted, setConsentAccepted] = useState(false);
+  const [consentError, setConsentError] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
@@ -33,6 +38,11 @@ export function RegisterForm({ googleEnabled }: RegisterFormProps) {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!consentAccepted) {
+      setConsentError(true);
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
     const data = {
       name: formData.get("name"),
@@ -40,7 +50,7 @@ export function RegisterForm({ googleEnabled }: RegisterFormProps) {
       phone: formData.get("phone"),
       password: formData.get("password"),
       confirmPassword: formData.get("confirmPassword"),
-      acceptTerms: formData.get("acceptTerms") === "on",
+      acceptTerms: true,
     };
 
     setErrors({});
@@ -79,6 +89,8 @@ export function RegisterForm({ googleEnabled }: RegisterFormProps) {
             returnTo="/"
             googleEnabled={googleEnabled}
             authError={authError}
+            consentAccepted={consentAccepted}
+            onConsentRequired={() => setConsentError(true)}
           />
           <AuthDivider label="sau completează formularul" />
 
@@ -121,7 +133,20 @@ export function RegisterForm({ googleEnabled }: RegisterFormProps) {
               error={errors.confirmPassword}
               required
             />
-            <LegalConsentCheckbox error={errors.acceptTerms} />
+            <LegalConsentCheckbox
+              id="register-consent"
+              checked={consentAccepted}
+              onCheckedChange={(checked) => {
+                setConsentAccepted(checked);
+                if (checked) setConsentError(false);
+              }}
+              required={false}
+              error={
+                consentError || errors.acceptTerms
+                  ? errors.acceptTerms ?? CONSENT_ERROR
+                  : undefined
+              }
+            />
             <Button type="submit" fullWidth size="lg" disabled={isPending}>
               {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {isPending ? "Se creează..." : "Creează contul"}
