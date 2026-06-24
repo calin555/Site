@@ -80,21 +80,6 @@ export function SocialAuthSection({
         </div>
       ) : null}
 
-      <LegalConsentCheckbox
-        id="social-auth-consent"
-        checked={consentAccepted}
-        onCheckedChange={(checked) => {
-          setConsentAccepted(checked);
-          if (checked) setConsentError(false);
-        }}
-        required={false}
-        error={
-          consentError
-            ? "Acceptă termenii, politica de confidențialitate și informarea GDPR pentru a continua."
-            : undefined
-        }
-      />
-
       {googleEnabled ? (
         <a
           href={googleHref}
@@ -114,6 +99,21 @@ export function SocialAuthSection({
           Continuă cu Google
         </button>
       )}
+
+      <LegalConsentCheckbox
+        id="social-auth-consent"
+        checked={consentAccepted}
+        onCheckedChange={(checked) => {
+          setConsentAccepted(checked);
+          if (checked) setConsentError(false);
+        }}
+        required={false}
+        error={
+          consentError
+            ? "Acceptă termenii, politica de confidențialitate și informarea GDPR pentru a continua."
+            : undefined
+        }
+      />
 
       <button
         type="button"
