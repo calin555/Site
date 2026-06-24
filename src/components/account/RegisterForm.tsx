@@ -26,7 +26,7 @@ export function RegisterForm({ googleEnabled }: RegisterFormProps) {
 
   useEffect(() => {
     if (!authSuccess) return;
-    router.replace("/cont");
+    router.replace("/");
     router.refresh();
   }, [authSuccess, router]);
 
@@ -75,7 +75,7 @@ export function RegisterForm({ googleEnabled }: RegisterFormProps) {
           )}
 
           <SocialAuthSection
-            returnTo="/autentificare/inregistrare"
+            returnTo="/"
             googleEnabled={googleEnabled}
             authError={authError}
           />

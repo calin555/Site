@@ -19,10 +19,10 @@ interface LoginFormProps {
 export function LoginForm({ googleEnabled }: LoginFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") ?? "/cont";
+  const next = searchParams.get("next") ?? "/";
   const authError = searchParams.get("auth_error");
   const authSuccess = searchParams.get("auth") === "success";
-  const returnTo = `/autentificare?next=${encodeURIComponent(next)}`;
+  const returnTo = next;
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isPending, startTransition] = useTransition();
 

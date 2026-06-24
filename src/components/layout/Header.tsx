@@ -18,13 +18,16 @@ import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/shared/Container";
 import { phoneToTel, type SiteContactSettings } from "@/types/site-contact";
+import type { PublicUser } from "@/types/user";
 
 interface HeaderProps {
   cartCount?: number;
   contact: SiteContactSettings;
+  user?: PublicUser | null;
 }
 
-export function Header({ cartCount = 0, contact }: HeaderProps) {
+export function Header({ cartCount = 0, contact, user = null }: HeaderProps) {
+  const isLoggedIn = Boolean(user);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
@@ -106,11 +109,28 @@ export function Header({ cartCount = 0, contact }: HeaderProps) {
                 <Search className="h-5 w-5" />
               </button>
               <Link
-                href="/cont"
-                className="hidden rounded-xl p-2.5 text-surface-600 transition-colors hover:bg-surface-100 sm:flex"
-                aria-label="Cont"
+                href={isLoggedIn ? "/cont" : "/autentificare"}
+                className={cn(
+                  "hidden rounded-xl p-2.5 transition-colors sm:flex",
+                  isLoggedIn
+                    ? "bg-brand-50 text-brand-700 ring-2 ring-brand-200 hover:bg-brand-100"
+                    : "text-surface-600 hover:bg-surface-100"
+                )}
+                aria-label={
+                  isLoggedIn ? `Contul lui ${user!.name}` : "Autentificare"
+                }
+                title={isLoggedIn ? user!.name : "Autentificare"}
               >
-                <User className="h-5 w-5" />
+                {isLoggedIn && user!.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={user!.image}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                ) : (
+                  <User className="h-5 w-5" />
+                )}
               </Link>
               <Link
                 href="/cos"
@@ -161,20 +181,32 @@ export function Header({ cartCount = 0, contact }: HeaderProps) {
                   </Link>
                 ))}
                 <hr className="my-2 border-surface-200" />
-                <Link
-                  href="/cont"
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-xl px-4 py-3 text-sm font-medium text-surface-700 hover:bg-surface-50"
-                >
-                  Contul meu
-                </Link>
-                <Link
-                  href="/autentificare"
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-xl px-4 py-3 text-sm font-medium text-surface-700 hover:bg-surface-50"
-                >
-                  Autentificare
-                </Link>
+                {isLoggedIn ? (
+                  <Link
+                    href="/cont"
+                    onClick={() => setMobileOpen(false)}
+                    className="rounded-xl px-4 py-3 text-sm font-medium text-brand-700 hover:bg-brand-50"
+                  >
+                    Contul meu ({user!.name})
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      href="/cont"
+                      onClick={() => setMobileOpen(false)}
+                      className="rounded-xl px-4 py-3 text-sm font-medium text-surface-700 hover:bg-surface-50"
+                    >
+                      Contul meu
+                    </Link>
+                    <Link
+                      href="/autentificare"
+                      onClick={() => setMobileOpen(false)}
+                      className="rounded-xl px-4 py-3 text-sm font-medium text-surface-700 hover:bg-surface-50"
+                    >
+                      Autentificare
+                    </Link>
+                  </>
+                )}
               </nav>
             </Container>
           </div>

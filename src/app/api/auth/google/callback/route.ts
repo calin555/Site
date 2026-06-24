@@ -29,7 +29,7 @@ function redirectWithError(
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const origin = requestUrl.origin;
-  let returnTo = "/cont";
+  let returnTo = "/";
 
   try {
     const { searchParams } = requestUrl;
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
 
     const cookieStore = await cookies();
     const savedState = cookieStore.get(STATE_COOKIE)?.value;
-    returnTo = cookieStore.get(RETURN_COOKIE)?.value ?? "/cont";
+    returnTo = cookieStore.get(RETURN_COOKIE)?.value ?? "/";
 
     cookieStore.delete(STATE_COOKIE);
     cookieStore.delete(RETURN_COOKIE);
@@ -62,7 +62,7 @@ export async function GET(request: Request) {
     const safeReturn =
       returnTo.startsWith("/") && !returnTo.startsWith("//")
         ? returnTo
-        : "/cont";
+        : "/";
 
     const response = NextResponse.redirect(
       `${origin}${safeReturn}?auth=success`
