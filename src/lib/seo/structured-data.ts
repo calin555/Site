@@ -10,7 +10,7 @@ export function buildOrganizationSchema() {
     name: seoConfig.legalName,
     alternateName: seoConfig.siteName,
     url: absoluteUrl(),
-    logo: absoluteUrl("/favicon.ico"),
+    logo: absoluteUrl("/icon"),
     description: siteConfig.description,
     email: siteConfig.contact.email,
     telephone: siteConfig.contact.phone,
