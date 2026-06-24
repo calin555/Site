@@ -1,3 +1,5 @@
+import type { StockStatus } from "@/lib/catalog/stock-status";
+
 export interface ProductImage {
   url: string;
   alt: string;
@@ -49,6 +51,7 @@ export interface ProductDetail {
   isFeatured?: boolean;
   isNew?: boolean;
   stock: number;
+  stockStatus: StockStatus;
   warrantyYears: number;
   ipRating?: string;
   installationRequired: boolean;

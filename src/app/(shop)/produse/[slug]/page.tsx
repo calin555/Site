@@ -12,6 +12,7 @@ import {
   getRelatedProducts,
   getAllProductSlugs,
 } from "@/lib/services/product.service";
+import { getSchemaAvailability } from "@/lib/catalog/stock-status";
 import { siteConfig } from "@/config/site";
 
 interface ProductDetailPageProps {
@@ -66,10 +67,7 @@ export default async function ProductDetailPage({
       "@type": "Offer",
       price: product.price,
       priceCurrency: "RON",
-      availability:
-        product.stock > 0
-          ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
+      availability: getSchemaAvailability(product.stockStatus, product.stock),
     },
     aggregateRating: {
       "@type": "AggregateRating",

@@ -8,6 +8,8 @@ export interface Cart {
   couponCode?: string;
 }
 
+import type { StockStatus } from "@/lib/catalog/stock-status";
+
 export interface CartLineItem {
   productId: string;
   slug: string;
@@ -19,6 +21,7 @@ export interface CartLineItem {
   quantity: number;
   lineTotal: number;
   stock: number;
+  stockStatus: StockStatus;
   sku: string;
 }
 

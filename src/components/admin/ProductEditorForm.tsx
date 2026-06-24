@@ -8,6 +8,8 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { ProductImagesField } from "@/components/admin/ProductImagesField";
 import type { CatalogProduct } from "@/types/catalog";
+import type { StockStatus } from "@/lib/catalog/stock-status";
+import { STOCK_STATUS_OPTIONS } from "@/lib/catalog/stock-status";
 import type { Category, Brand } from "@/lib/mock-data";
 import { saveProductAction } from "@/lib/actions/admin/product.actions";
 import { PdfCatalogImport } from "@/components/admin/PdfCatalogImport";
@@ -56,6 +58,9 @@ export function ProductEditorForm({
     product?.connectorTypes ?? ["Type 2"]
   );
   const [catalogPdfUrl, setCatalogPdfUrl] = useState(product?.catalogPdfUrl ?? "");
+  const [stockStatus, setStockStatus] = useState<StockStatus>(
+    product?.stockStatus ?? "IN_STOCK"
+  );
   const [isPending, startTransition] = useTransition();
 
   function toggleConnector(c: string) {
@@ -142,6 +147,7 @@ export function ProductEditorForm({
         phases: form.get("phases"),
         connectorTypes: connectors,
         stock: form.get("stock"),
+        stockStatus,
         isFeatured: form.get("isFeatured") === "on",
         isNew: form.get("isNew") === "on",
         catalogPdfUrl: catalogPdfUrl || undefined,
@@ -308,14 +314,44 @@ export function ProductEditorForm({
           defaultValue={product?.compareAtPrice}
           error={errors.compareAtPrice}
         />
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-surface-700">
+            Tip stoc
+          </label>
+          <select
+            name="stockStatus"
+            value={stockStatus}
+            onChange={(e) => setStockStatus(e.target.value as StockStatus)}
+            className="h-11 w-full rounded-xl border border-surface-200 bg-white px-4 text-sm"
+          >
+            {STOCK_STATUS_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-surface-500">
+            {STOCK_STATUS_OPTIONS.find((o) => o.value === stockStatus)?.hint}
+          </p>
+          {errors.stockStatus && (
+            <p className="mt-1 text-xs text-red-600">{errors.stockStatus}</p>
+          )}
+        </div>
+      </div>
+
+      <div className="grid gap-5 sm:grid-cols-3">
         <Input
-          label="Stoc"
+          label={
+            stockStatus === "IN_STOCK"
+              ? "Cantitate în stoc"
+              : "Cantitate estimată (opțional)"
+          }
           name="stock"
           type="number"
           min={0}
           defaultValue={product?.stock ?? 0}
           error={errors.stock}
-          required
+          required={stockStatus === "IN_STOCK"}
         />
       </div>
 

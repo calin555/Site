@@ -1,4 +1,5 @@
 import type { CatalogProduct } from "@/types/catalog";
+import type { StockStatus } from "@/lib/catalog/stock-status";
 import { productStore, slugify } from "@/lib/catalog/product.store";
 import { dedupeImageUrls } from "@/lib/product-images";
 import { categories, brands } from "@/lib/mock-data";
@@ -67,6 +68,7 @@ function upsertInMemory(input: ProductInput): CatalogProduct {
     phases: input.phases,
     connectorTypes: input.connectorTypes,
     stock: input.stock,
+    stockStatus: input.stockStatus,
     isFeatured: input.isFeatured ?? false,
     isNew: input.isNew ?? false,
     createdAt: existing?.createdAt ?? new Date().toISOString().split("T")[0],

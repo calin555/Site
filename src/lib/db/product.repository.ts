@@ -173,6 +173,7 @@ export async function dbUpsertProduct(
   const features: Record<string, unknown> = {
     ...existingSmart,
     isNew: input.isNew ?? false,
+    stockStatus: input.stockStatus,
   };
 
   if (input.catalogPdfUrl !== undefined) {

@@ -3,6 +3,10 @@ import type { OrderTotals } from "@/types/checkout";
 import { VAT_RATE, SHIPPING_CONFIG } from "@/config/commerce";
 import { getAllCatalogProducts } from "@/lib/services/catalog.service";
 import {
+  getMaxOrderQuantity,
+  isProductPurchasable,
+} from "@/lib/catalog/stock-status";
+import {
   validateCoupon,
   calculateDiscount,
   getCouponByCode,
@@ -18,8 +22,11 @@ async function resolveLineItems(cart: Cart): Promise<CartLineItem[]> {
       const product = productMap.get(item.productId);
       if (!product) return null;
 
-      const quantity = Math.min(item.quantity, product.stock, 10);
-      if (quantity <= 0) return null;
+      const maxQty = getMaxOrderQuantity(product.stockStatus, product.stock);
+      const quantity = Math.min(item.quantity, maxQty);
+      if (!isProductPurchasable(product.stockStatus, product.stock) || quantity <= 0) {
+        return null;
+      }
 
       const line: CartLineItem = {
         productId: product.id,
@@ -31,6 +38,7 @@ async function resolveLineItems(cart: Cart): Promise<CartLineItem[]> {
         quantity,
         lineTotal: product.price * quantity,
         stock: product.stock,
+        stockStatus: product.stockStatus,
         sku: `CP-${product.id.padStart(4, "0")}`,
       };
       if (product.compareAtPrice !== undefined) {
@@ -136,7 +144,11 @@ export async function addToCart(
   const product = products.find((p) => p.id === productId);
   if (!product) throw new Error("Produsul nu a fost găsit.");
 
-  const maxQty = Math.min(product.stock, 10);
+  if (!isProductPurchasable(product.stockStatus, product.stock)) {
+    throw new Error("Produsul nu este disponibil pentru comandă.");
+  }
+
+  const maxQty = getMaxOrderQuantity(product.stockStatus, product.stock);
   const existing = cart.items.find((i) => i.productId === productId);
   const newQty = Math.min(
     (existing?.quantity ?? 0) + quantity,
@@ -166,7 +178,9 @@ export async function updateCartQuantity(
   } else {
     const products = await getAllCatalogProducts();
     const product = products.find((p) => p.id === productId);
-    const maxQty = product ? Math.min(product.stock, 10) : 10;
+    const maxQty = product
+      ? getMaxOrderQuantity(product.stockStatus, product.stock)
+      : 10;
     const item = cart.items.find((i) => i.productId === productId);
     if (item) {
       item.quantity = Math.min(quantity, maxQty);

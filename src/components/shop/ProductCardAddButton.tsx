@@ -4,27 +4,33 @@ import { useState, useTransition } from "react";
 import { Check, Loader2, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { addToCartAction } from "@/lib/actions/cart.actions";
+import {
+  isProductPurchasable,
+  type StockStatus,
+} from "@/lib/catalog/stock-status";
 
 interface ProductCardAddButtonProps {
   productId: string;
   productName: string;
   stock: number;
+  stockStatus: StockStatus;
 }
 
 export function ProductCardAddButton({
   productId,
   productName,
   stock,
+  stockStatus,
 }: ProductCardAddButtonProps) {
   const [added, setAdded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
-  const inStock = stock > 0;
+  const canPurchase = isProductPurchasable(stockStatus, stock);
 
   function handleClick(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    if (!inStock || isPending) return;
+    if (!canPurchase || isPending) return;
 
     setError(null);
     startTransition(async () => {
@@ -38,14 +44,20 @@ export function ProductCardAddButton({
     });
   }
 
+  const title = canPurchase
+    ? stockStatus === "PREORDER"
+      ? "Precomandă"
+      : "Adaugă în coș"
+    : "Indisponibil";
+
   return (
     <div className="relative">
       <Button
         type="button"
         size="sm"
-        disabled={!inStock || isPending}
+        disabled={!canPurchase || isPending}
         aria-label={`Adaugă ${productName} în coș`}
-        title={inStock ? "Adaugă în coș" : "Stoc epuizat"}
+        title={title}
         onClick={handleClick}
       >
         {isPending ? (

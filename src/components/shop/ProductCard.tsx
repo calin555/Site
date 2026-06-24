@@ -61,6 +61,7 @@ export function ProductCard({ product }: ProductCardProps) {
             productId={product.id}
             productName={product.name}
             stock={product.stock}
+            stockStatus={product.stockStatus}
           />
         </div>
       </div>

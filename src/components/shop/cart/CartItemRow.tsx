@@ -11,6 +11,7 @@ import {
   updateQuantityAction,
   removeItemAction,
 } from "@/lib/actions/cart.actions";
+import { getMaxOrderQuantity } from "@/lib/catalog/stock-status";
 import type { CartLineItem } from "@/types/cart";
 
 interface CartItemRowProps {
@@ -19,6 +20,7 @@ interface CartItemRowProps {
 
 export function CartItemRow({ item }: CartItemRowProps) {
   const [isPending, startTransition] = useTransition();
+  const maxQty = getMaxOrderQuantity(item.stockStatus, item.stock);
 
   function updateQty(qty: number) {
     startTransition(async () => {
@@ -92,7 +94,7 @@ export function CartItemRow({ item }: CartItemRowProps) {
           <button
             type="button"
             onClick={() => updateQty(item.quantity + 1)}
-            disabled={isPending || item.quantity >= Math.min(item.stock, 10)}
+            disabled={isPending || item.quantity >= maxQty}
             className="flex h-9 w-9 items-center justify-center text-surface-500 hover:text-surface-900 disabled:opacity-40"
             aria-label="Crește cantitatea"
           >

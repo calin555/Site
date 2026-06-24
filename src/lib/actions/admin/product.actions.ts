@@ -36,6 +36,7 @@ const productSchema = z.object({
   phases: z.enum(["SINGLE", "THREE"]),
   connectorTypes: z.array(z.string()).default([]),
   stock: z.coerce.number().min(0, "Stocul nu poate fi negativ"),
+  stockStatus: z.enum(["IN_STOCK", "MANUFACTURER", "PREORDER"]).default("IN_STOCK"),
   isFeatured: z.boolean().optional(),
   isNew: z.boolean().optional(),
   catalogPdfUrl: z.string().optional(),

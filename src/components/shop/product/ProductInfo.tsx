@@ -6,18 +6,36 @@ import {
   Wrench,
   Star,
   Check,
+  Clock,
+  Package,
 } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { PriceDisplay } from "@/components/shared/PriceDisplay";
 import { ProductActions } from "./ProductActions";
+import { getStockStatusMessage } from "@/lib/catalog/stock-status";
 import type { ProductDetail } from "@/types/product";
 
 interface ProductInfoProps {
   product: ProductDetail;
 }
 
+const TONE_STYLES = {
+  success: "text-brand-600",
+  warning: "text-amber-600",
+  info: "text-blue-600",
+  error: "text-red-600",
+} as const;
+
+const TONE_ICONS = {
+  success: Check,
+  warning: Package,
+  info: Clock,
+  error: Check,
+} as const;
+
 export function ProductInfo({ product }: ProductInfoProps) {
-  const inStock = product.stock > 0;
+  const stockMessage = getStockStatusMessage(product.stockStatus, product.stock);
+  const StockIcon = TONE_ICONS[stockMessage.tone];
 
   return (
     <div className="space-y-6">
@@ -70,16 +88,12 @@ export function ProductInfo({ product }: ProductInfoProps) {
         size="lg"
       />
 
-      {inStock ? (
-        <p className="flex items-center gap-2 text-sm font-medium text-brand-600">
-          <Check className="h-4 w-4" />
-          În stoc ({product.stock} buc.) — livrare 24–48h
-        </p>
-      ) : (
-        <p className="text-sm font-medium text-red-600">
-          Stoc epuizat — contactează-ne pentru disponibilitate
-        </p>
-      )}
+      <p
+        className={`flex items-center gap-2 text-sm font-medium ${TONE_STYLES[stockMessage.tone]}`}
+      >
+        <StockIcon className="h-4 w-4" />
+        {stockMessage.text}
+      </p>
 
       <ProductActions product={product} />
 

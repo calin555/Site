@@ -5,12 +5,16 @@ import Link from "next/link";
 import { Minus, Plus, ShoppingCart, FileText, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { addToCartAction } from "@/lib/actions/cart.actions";
+import {
+  getMaxOrderQuantity,
+  isProductPurchasable,
+} from "@/lib/catalog/stock-status";
 import type { ProductDetail } from "@/types/product";
 
 interface ProductActionsProps {
   product: Pick<
     ProductDetail,
-    "id" | "slug" | "name" | "price" | "stock" | "sku"
+    "id" | "slug" | "name" | "price" | "stock" | "stockStatus" | "sku"
   >;
 }
 
@@ -19,8 +23,8 @@ export function ProductActions({ product }: ProductActionsProps) {
   const [added, setAdded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
-  const inStock = product.stock > 0;
-  const maxQty = Math.min(product.stock, 10);
+  const canPurchase = isProductPurchasable(product.stockStatus, product.stock);
+  const maxQty = getMaxOrderQuantity(product.stockStatus, product.stock);
 
   function decrement() {
     setQuantity((q) => Math.max(1, q - 1));
@@ -52,7 +56,7 @@ export function ProductActions({ product }: ProductActionsProps) {
           <button
             type="button"
             onClick={decrement}
-            disabled={!inStock || quantity <= 1}
+            disabled={!canPurchase || quantity <= 1}
             className="flex h-12 w-12 items-center justify-center text-surface-500 transition-colors hover:text-surface-900 disabled:opacity-40"
             aria-label="Scade cantitatea"
           >
@@ -64,7 +68,7 @@ export function ProductActions({ product }: ProductActionsProps) {
           <button
             type="button"
             onClick={increment}
-            disabled={!inStock || quantity >= maxQty}
+            disabled={!canPurchase || quantity >= maxQty}
             className="flex h-12 w-12 items-center justify-center text-surface-500 transition-colors hover:text-surface-900 disabled:opacity-40"
             aria-label="Crește cantitatea"
           >
@@ -75,7 +79,7 @@ export function ProductActions({ product }: ProductActionsProps) {
         <Button
           size="lg"
           className="flex-1"
-          disabled={!inStock || isPending}
+          disabled={!canPurchase || isPending}
           onClick={handleAddToCart}
         >
           {isPending ? (
@@ -91,7 +95,7 @@ export function ProductActions({ product }: ProductActionsProps) {
           ) : (
             <>
               <ShoppingCart className="h-5 w-5" />
-              Adaugă în coș
+              {product.stockStatus === "PREORDER" ? "Precomandă" : "Adaugă în coș"}
             </>
           )}
         </Button>

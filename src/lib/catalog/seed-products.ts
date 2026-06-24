@@ -1,6 +1,8 @@
 import type { CatalogProduct } from "@/types/catalog";
 
-export const SEED_CATALOG_PRODUCTS: CatalogProduct[] = [
+type SeedProduct = Omit<CatalogProduct, "stockStatus">;
+
+const SEED_PRODUCTS: SeedProduct[] = [
   {
     id: "1",
     name: "ChargePro Home 7.4 kW",
@@ -320,3 +322,10 @@ export const SEED_CATALOG_PRODUCTS: CatalogProduct[] = [
     createdAt: "2026-01-08",
   },
 ];
+
+export const SEED_CATALOG_PRODUCTS: CatalogProduct[] = SEED_PRODUCTS.map(
+  (product) => ({
+    ...product,
+    stockStatus: "IN_STOCK",
+  })
+);

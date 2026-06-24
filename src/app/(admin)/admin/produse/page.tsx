@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/Badge";
 import { ProductDeleteButton } from "@/components/admin/ProductDeleteButton";
 import { DeleteAllProductsButton } from "@/components/admin/DeleteAllProductsButton";
 import { listAdminProducts } from "@/lib/services/admin/admin.service";
+import { STOCK_STATUS_LABELS } from "@/lib/catalog/stock-status";
 import { formatPrice } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -76,9 +77,20 @@ export default async function AdminProductsPage() {
             key: "stock",
             header: "Stoc",
             render: (p) => (
-              <Badge variant={p.stock <= 5 ? "accent" : "outline"}>
-                {p.stock}
-              </Badge>
+              <div className="space-y-1">
+                <Badge
+                  variant={
+                    p.stockStatus === "IN_STOCK" && p.stock <= 5
+                      ? "accent"
+                      : "outline"
+                  }
+                >
+                  {STOCK_STATUS_LABELS[p.stockStatus]}
+                </Badge>
+                {p.stock > 0 && (
+                  <p className="text-xs text-surface-500">{p.stock} buc.</p>
+                )}
+              </div>
             ),
           },
           {

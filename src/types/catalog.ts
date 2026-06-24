@@ -1,3 +1,5 @@
+import type { StockStatus } from "@/lib/catalog/stock-status";
+
 export type SortOption =
   | "popular"
   | "pret-asc"
@@ -29,6 +31,7 @@ export interface CatalogProduct {
   isFeatured?: boolean;
   isNew?: boolean;
   stock: number;
+  stockStatus: StockStatus;
   createdAt: string;
   catalogPdfUrl?: string;
   galleryImages?: string[];
