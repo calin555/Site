@@ -78,8 +78,28 @@ export function productFromDb(row: ProductWithRelations): CatalogProduct {
   };
 }
 
+const SKU_MAX_LENGTH = 50;
+
+/** SKU unic derivat din slug + id produs (evită coliziuni products_sku_key). */
+export function skuForProduct(productId: string, slug: string): string {
+  const slugPart =
+    slug
+      .replace(/-/g, "")
+      .replace(/[^a-z0-9]/gi, "")
+      .slice(0, 10)
+      .toUpperCase() || "PROD";
+  const idPart =
+    productId
+      .replace(/[^a-z0-9]/gi, "")
+      .slice(-10)
+      .toUpperCase() || "001";
+
+  return `CP-${slugPart}-${idPart}`.slice(0, SKU_MAX_LENGTH);
+}
+
+/** @deprecated Folosește skuForProduct(productId, slug) */
 export function skuFromSlug(slug: string): string {
-  return `CP-${slug.replace(/-/g, "").slice(0, 12).toUpperCase()}`;
+  return skuForProduct(`tmp_${Date.now()}`, slug);
 }
 
 export function phasesToDb(phases: "SINGLE" | "THREE"): PhaseType {

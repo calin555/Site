@@ -5,7 +5,7 @@ import {
   connectorsToDb,
   phasesToDb,
   productFromDb,
-  skuFromSlug,
+  skuForProduct,
 } from "@/lib/db/product.mapper";
 import type { ProductWithRelations } from "@/types/database";
 import type { CatalogProduct } from "@/types/catalog";
@@ -29,6 +29,32 @@ function generateProductId(): string {
 
 function generateImageId(): string {
   return `img_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+}
+
+async function resolveProductSku(
+  productId: string,
+  slug: string,
+  existingSku?: string | null
+): Promise<string> {
+  if (existingSku) return existingSku;
+
+  const supabase = getSupabase();
+  let sku = skuForProduct(productId, slug);
+
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const { data, error } = await supabase
+      .from("products")
+      .select("id")
+      .eq("sku", sku)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data || data.id === productId) return sku;
+
+    sku = skuForProduct(`${productId}_${attempt + 1}`, slug);
+  }
+
+  return `CP-${Date.now().toString(36).toUpperCase()}`.slice(0, 50);
 }
 
 async function syncProductImages(
@@ -185,12 +211,15 @@ export async function dbUpsertProduct(
   }
 
   const now = new Date().toISOString();
+  const productId = existing?.id ?? generateProductId();
+  const sku = await resolveProductSku(productId, slug, existing?.sku);
+
   const productData = {
     name: input.name.trim(),
     slug,
     shortDescription: input.shortDescription.trim(),
     description: input.description?.trim() || input.shortDescription.trim(),
-    sku: existing?.sku ?? skuFromSlug(slug),
+    sku,
     price: input.price,
     compareAtPrice: input.compareAtPrice ?? null,
     stock: input.stock,
@@ -205,7 +234,7 @@ export async function dbUpsertProduct(
     updatedAt: now,
   };
 
-  let productId: string;
+  let savedProductId: string;
 
   if (existing) {
     const { data: updated, error } = await supabase
@@ -216,11 +245,9 @@ export async function dbUpsertProduct(
       .single();
 
     if (error) throw error;
-    productId = updated.id;
-    await syncProductImages(productId, input.images, input.name.trim());
+    savedProductId = updated.id;
+    await syncProductImages(savedProductId, input.images, input.name.trim());
   } else {
-    productId = generateProductId();
-
     const { data: created, error } = await supabase
       .from("products")
       .insert({
@@ -232,11 +259,11 @@ export async function dbUpsertProduct(
       .single();
 
     if (error) throw error;
-    productId = created.id;
-    await syncProductImages(productId, input.images, input.name.trim());
+    savedProductId = created.id;
+    await syncProductImages(savedProductId, input.images, input.name.trim());
   }
 
-  const refreshed = await dbFindProductById(productId);
+  const refreshed = await dbFindProductById(savedProductId);
   if (!refreshed) throw new Error("Produs negăsit după actualizare");
   return refreshed;
 }

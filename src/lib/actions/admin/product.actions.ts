@@ -77,6 +77,9 @@ function formatProductSaveError(err: unknown): string {
   if (message.includes("Unique constraint") || message.includes("products_slug_key")) {
     return "Un produs cu acest slug există deja.";
   }
+  if (message.includes("products_sku_key")) {
+    return "SKU duplicat — reîncearcă salvarea.";
+  }
   if (message.includes("JWT") || message.includes("Invalid API key")) {
     return "Cheie Supabase invalidă pe server. Verifică SUPABASE_SERVICE_ROLE_KEY în Vercel.";
   }
