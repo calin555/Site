@@ -17,16 +17,19 @@ import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/shared/Container";
 import { HeaderSearch } from "@/components/layout/HeaderSearch";
+import { HeaderAccountMenu } from "@/components/layout/HeaderAccountMenu";
 import { phoneToTel, type SiteContactSettings } from "@/types/site-contact";
 import type { PublicUser } from "@/types/user";
+import type { AccountNavCounts } from "@/config/account-nav";
 
 interface HeaderProps {
   cartCount?: number;
   contact: SiteContactSettings;
   user?: PublicUser | null;
+  accountCounts?: AccountNavCounts;
 }
 
-export function Header({ cartCount = 0, contact, user = null }: HeaderProps) {
+export function Header({ cartCount = 0, contact, user = null, accountCounts }: HeaderProps) {
   const isLoggedIn = Boolean(user);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -102,36 +105,18 @@ export function Header({ cartCount = 0, contact, user = null }: HeaderProps) {
             {/* Actions */}
             <div className="flex items-center gap-1 sm:gap-2">
               <HeaderSearch />
-              <Link
-                href={isLoggedIn ? "/cont" : "/autentificare"}
-                className={cn(
-                  "flex items-center justify-center transition-colors",
-                  isLoggedIn && user!.image
-                    ? "h-9 w-9 overflow-hidden rounded-full ring-2 ring-brand-300 hover:ring-brand-500"
-                    : cn(
-                        "rounded-xl p-2.5",
-                        isLoggedIn
-                          ? "bg-brand-50 text-brand-700 ring-2 ring-brand-200 hover:bg-brand-100"
-                          : "text-surface-600 hover:bg-surface-100"
-                      )
-                )}
-                aria-label={
-                  isLoggedIn ? `Contul lui ${user!.name}` : "Autentificare"
-                }
-                title={isLoggedIn ? user!.name : "Autentificare"}
-              >
-                {isLoggedIn && user!.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={user!.image}
-                    alt={user!.name}
-                    referrerPolicy="no-referrer"
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
+              {isLoggedIn ? (
+                <HeaderAccountMenu user={user!} counts={accountCounts} />
+              ) : (
+                <Link
+                  href="/autentificare"
+                  className="flex items-center justify-center rounded-xl p-2.5 text-surface-600 transition-colors hover:bg-surface-100"
+                  aria-label="Autentificare"
+                  title="Autentificare"
+                >
                   <User className="h-5 w-5" />
-                )}
-              </Link>
+                </Link>
+              )}
               <Link
                 href="/cos"
                 className="relative rounded-xl p-2.5 text-surface-600 transition-colors hover:bg-surface-100"

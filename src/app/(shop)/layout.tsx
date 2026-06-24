@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { WhatsAppFloatingButton } from "@/components/layout/WhatsAppFloatingButton";
 import { AuthSessionHandler } from "@/components/auth/AuthSessionHandler";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
@@ -9,6 +10,7 @@ import {
   buildWebSiteSchema,
 } from "@/lib/seo/structured-data";
 import { getCurrentUser } from "@/lib/auth/get-user";
+import { getAccountNavCounts } from "@/lib/account/get-account-data";
 import { getCartSummary } from "@/lib/services/cart.service";
 import { getSiteContactSettings } from "@/lib/services/site-contact.service";
 
@@ -23,6 +25,10 @@ export default async function ShopLayout({
     getCurrentUser(),
   ]);
 
+  const accountCounts = user
+    ? await getAccountNavCounts(user.id, user.email)
+    : undefined;
+
   return (
     <>
       <Suspense fallback={null}>
@@ -36,9 +42,15 @@ export default async function ShopLayout({
         ]}
       />
       <div className="flex min-h-screen flex-col">
-        <Header cartCount={summary.itemCount} contact={contact} user={user} />
+        <Header
+          cartCount={summary.itemCount}
+          contact={contact}
+          user={user}
+          accountCounts={accountCounts}
+        />
         <main className="flex-1">{children}</main>
         <Footer contact={contact} />
+        <WhatsAppFloatingButton phone={contact.phoneOrders} />
       </div>
     </>
   );

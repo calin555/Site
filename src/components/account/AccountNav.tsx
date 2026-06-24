@@ -3,34 +3,18 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTransition } from "react";
-import {
-  LayoutDashboard,
-  Package,
-  MapPin,
-  User,
-  Lock,
-  FileText,
-  LogOut,
-  Loader2,
-} from "lucide-react";
+import { LogOut, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { ACCOUNT_NAV_ITEMS, type AccountNavCounts } from "@/config/account-nav";
 import { logoutAction } from "@/lib/actions/auth.actions";
 import type { PublicUser } from "@/types/user";
-
-const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/cont" },
-  { icon: Package, label: "Comenzile mele", href: "/cont/comenzi", countKey: "orders" as const },
-  { icon: MapPin, label: "Adrese salvate", href: "/cont/adrese", countKey: "addresses" as const },
-  { icon: User, label: "Profil", href: "/cont/profil" },
-  { icon: Lock, label: "Schimbă parola", href: "/cont/parola" },
-  { icon: FileText, label: "Facturi", href: "/cont/facturi", countKey: "invoices" as const },
-];
+import { User } from "lucide-react";
 
 interface AccountNavProps {
   user: PublicUser;
-  counts?: { orders?: number; addresses?: number; invoices?: number };
+  counts?: AccountNavCounts;
 }
 
 export function AccountNav({ user, counts }: AccountNavProps) {
@@ -58,7 +42,7 @@ export function AccountNav({ user, counts }: AccountNavProps) {
       </Card>
 
       <nav className="space-y-1">
-        {navItems.map(({ icon: Icon, label, href, countKey }) => {
+        {ACCOUNT_NAV_ITEMS.map(({ icon: Icon, label, href, countKey }) => {
           const isActive =
             href === "/cont"
               ? pathname === "/cont"
