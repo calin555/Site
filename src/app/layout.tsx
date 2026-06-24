@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { buildRootMetadata } from "@/lib/seo/metadata";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -18,7 +19,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ro">
-      <body className={`${inter.variable} font-sans antialiased`}>{children}</body>
+      <body className={`${inter.variable} font-sans antialiased`}>
+        <GoogleAnalytics />
+        {children}
+      </body>
     </html>
   );
 }
