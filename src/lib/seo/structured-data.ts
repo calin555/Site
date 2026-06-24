@@ -149,3 +149,59 @@ export function buildBreadcrumbSchema(
     })),
   };
 }
+
+export function buildCityLocalBusinessSchema(city: {
+  cityName: string;
+  county: string;
+  slug: string;
+  latitude: number;
+  longitude: number;
+  metaDescription: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": `${absoluteUrl(`/${city.slug}`)}#localbusiness`,
+    name: `${seoConfig.siteName} — Stații încărcare EV ${city.cityName}`,
+    alternateName: seoConfig.legalName,
+    url: absoluteUrl(`/${city.slug}`),
+    image: seoConfig.defaultOgImage,
+    description: city.metaDescription,
+    telephone: siteConfig.contact.phone,
+    email: siteConfig.contact.email,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: city.cityName,
+      addressRegion: city.county,
+      addressCountry: "RO",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: city.latitude,
+      longitude: city.longitude,
+    },
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "08:30",
+        closes: "17:00",
+      },
+    ],
+    priceRange: "$$",
+    areaServed: {
+      "@type": "City",
+      name: city.cityName,
+      containedInPlace: {
+        "@type": "AdministrativeArea",
+        name: city.county,
+      },
+    },
+    knowsAbout: [
+      "Stații încărcare vehicule electrice",
+      "Wallbox AC",
+      "Stații rapide DC",
+      "Instalare ANRE",
+    ],
+  };
+}

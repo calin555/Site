@@ -14,6 +14,8 @@ import {
   getRelatedArticles,
   generateStaticArticleParams,
 } from "@/lib/services/blog.service";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { FaqSection } from "@/components/seo/FaqSection";
 import {
   buildArticleJsonLd,
   buildArticleMetadata,
@@ -52,10 +54,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={jsonLd} />
       <Container className="py-8">
         <Breadcrumbs
           items={[
@@ -110,6 +109,16 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           </p>
 
           <BlogContent html={post.content} className="mt-6" />
+
+          {post.faq?.length ? (
+            <div className="mt-12">
+              <FaqSection
+                title="Întrebări frecvente"
+                subtitle=""
+                items={post.faq}
+              />
+            </div>
+          ) : null}
 
           <RelatedArticles articles={related} />
 

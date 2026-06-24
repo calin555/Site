@@ -5,6 +5,7 @@ import { getShopCategories } from "@/lib/services/category.service";
 import { getPublishedArticles, getBlogCategories, getBlogTags } from "@/lib/services/blog.service";
 import { brands } from "@/lib/mock-data";
 import { TOOLS } from "@/config/tools";
+import { getAllCityPages } from "@/lib/seo/local/city-pages";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
@@ -87,8 +88,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ];
 
+  const cityPages: MetadataRoute.Sitemap = getAllCityPages().map((city) => ({
+    url: absoluteUrl(`/${city.slug}`),
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.85,
+  }));
+
   return [
     ...staticPages,
+    ...cityPages,
     ...productPages,
     ...categoryPages,
     ...brandPages,

@@ -1,3 +1,5 @@
+import type { FaqItem } from "@/lib/seo/faq-content";
+
 export interface BlogCategory {
   id: string;
   name: string;
@@ -33,6 +35,7 @@ export interface BlogArticle {
   readTime: number;
   isPublished: boolean;
   seo: BlogSeo;
+  faq?: FaqItem[];
 }
 
 export interface BlogArticleWithRelations extends BlogArticle {

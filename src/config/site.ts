@@ -31,6 +31,9 @@ export const siteConfig = {
       { label: "Accesorii", href: "/categorii/accesorii" },
     ],
     company: [
+      { label: "Stații EV București", href: "/statii-incarcare-bucuresti" },
+      { label: "Stații EV Cluj", href: "/statii-incarcare-cluj-napoca" },
+      { label: "Stații EV Timișoara", href: "/statii-incarcare-timisoara" },
       { label: "FAQ încărcare EV", href: "/faq" },
       { label: "Despre noi", href: "/despre" },
       { label: "Instrumente EV", href: "/tools" },

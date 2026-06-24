@@ -1,4 +1,6 @@
 import type { BlogCategory, BlogTag } from "@/types/blog";
+import { SEO_ARTICLES } from "@/lib/blog/seo-articles";
+import { SEO_ARTICLE_TAGS } from "@/lib/blog/seo-articles/tags";
 
 export const BLOG_CATEGORIES: BlogCategory[] = [
   {
@@ -25,7 +27,24 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
     slug: "tehnic",
     description: "Articole tehnice despre infrastructură, protocoale și integrări.",
   },
+  {
+    id: "cat_comparatii",
+    name: "Comparații",
+    slug: "comparatii",
+    description: "Comparații între tehnologii, echipamente și soluții de încărcare EV.",
+  },
+  {
+    id: "cat_costuri",
+    name: "Costuri",
+    slug: "costuri",
+    description: "Analize de cost, ROI, tarife și bugete pentru infrastructura EV.",
+  },
 ];
+
+const EXISTING_TAG_IDS = new Set([
+  "tag_afm", "tag_electric_up", "tag_acasa", "tag_business", "tag_solar",
+  "tag_flote", "tag_subventii", "tag_instalare",
+]);
 
 export const BLOG_TAGS: BlogTag[] = [
   { id: "tag_afm", name: "AFM", slug: "afm" },
@@ -36,6 +55,7 @@ export const BLOG_TAGS: BlogTag[] = [
   { id: "tag_flote", name: "Flote", slug: "flote" },
   { id: "tag_subventii", name: "Subvenții", slug: "subventii" },
   { id: "tag_instalare", name: "Instalare", slug: "instalare" },
+  ...SEO_ARTICLE_TAGS.filter((t) => !EXISTING_TAG_IDS.has(t.id)),
 ];
 
 function estimateReadTime(html: string): number {
@@ -298,7 +318,9 @@ const TEMPLATES: ArticleTemplate[] = [
 
 export function buildInitialArticles() {
   const now = new Date().toISOString();
-  return TEMPLATES.map((t) => ({
+  const templateSlugs = new Set(TEMPLATES.map((t) => t.slug));
+
+  const fromTemplates = TEMPLATES.map((t) => ({
     id: t.id,
     title: t.title,
     slug: t.slug,
@@ -319,4 +341,29 @@ export function buildInitialArticles() {
       keywords: t.seo.keywords,
     },
   }));
+
+  const fromSeo = SEO_ARTICLES.filter((a) => !templateSlugs.has(a.slug)).map((a) => ({
+    id: a.id,
+    title: a.title,
+    slug: a.slug,
+    excerpt: a.excerpt,
+    content: a.content.trim(),
+    coverImage: a.coverImage,
+    categoryId: a.categoryId,
+    tagIds: a.tagIds,
+    author: a.author,
+    publishedAt: a.publishedAt,
+    updatedAt: now,
+    readTime: estimateReadTime(a.content),
+    isPublished: true,
+    seo: {
+      metaTitle: a.seo.metaTitle,
+      metaDescription: a.seo.metaDescription,
+      ogImage: a.coverImage,
+      keywords: a.seo.keywords ?? a.targetKeywords,
+    },
+    faq: a.faq,
+  }));
+
+  return [...fromTemplates, ...fromSeo];
 }

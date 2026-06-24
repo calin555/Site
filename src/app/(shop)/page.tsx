@@ -13,6 +13,7 @@ import { BrandsSection } from "@/components/shop/home/BrandsSection";
 import { BenefitsSection } from "@/components/shop/home/BenefitsSection";
 import { TestimonialsSection } from "@/components/shop/home/TestimonialsSection";
 import { BlogSection } from "@/components/shop/home/BlogSection";
+import { LocalCitiesGrid } from "@/components/seo/LocalCitiesGrid";
 import { ContactCTA } from "@/components/shop/home/ContactCTA";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { Container } from "@/components/shared/Container";
@@ -59,6 +60,9 @@ export default async function HomePage() {
       <BenefitsSection />
       <TestimonialsSection testimonials={testimonials} />
       <BlogSection posts={latestPosts} />
+      <Container className="py-16">
+        <LocalCitiesGrid />
+      </Container>
       <Container className="py-16">
         <FaqSection
           items={EV_FAQ_ITEMS.slice(0, 4)}
