@@ -1,6 +1,7 @@
 import type { BlogCategory, BlogTag } from "@/types/blog";
 import { SEO_ARTICLES } from "@/lib/blog/seo-articles";
 import { SEO_ARTICLE_TAGS } from "@/lib/blog/seo-articles/tags";
+import { getBlogCoverImage } from "@/lib/blog/blog-cover-images";
 
 export const BLOG_CATEGORIES: BlogCategory[] = [
   {
@@ -320,13 +321,15 @@ export function buildInitialArticles() {
   const now = new Date().toISOString();
   const templateSlugs = new Set(TEMPLATES.map((t) => t.slug));
 
-  const fromTemplates = TEMPLATES.map((t) => ({
+  const fromTemplates = TEMPLATES.map((t) => {
+    const coverImage = getBlogCoverImage(t.slug, t.coverImage);
+    return {
     id: t.id,
     title: t.title,
     slug: t.slug,
     excerpt: t.excerpt,
     content: t.content.trim(),
-    coverImage: t.coverImage,
+    coverImage,
     categoryId: t.categoryId,
     tagIds: t.tagIds,
     author: t.author,
@@ -337,18 +340,21 @@ export function buildInitialArticles() {
     seo: {
       metaTitle: t.seo.metaTitle,
       metaDescription: t.seo.metaDescription,
-      ogImage: t.coverImage,
+      ogImage: coverImage,
       keywords: t.seo.keywords,
     },
-  }));
+  };
+  });
 
-  const fromSeo = SEO_ARTICLES.filter((a) => !templateSlugs.has(a.slug)).map((a) => ({
+  const fromSeo = SEO_ARTICLES.filter((a) => !templateSlugs.has(a.slug)).map((a) => {
+    const coverImage = getBlogCoverImage(a.slug, a.coverImage);
+    return {
     id: a.id,
     title: a.title,
     slug: a.slug,
     excerpt: a.excerpt,
     content: a.content.trim(),
-    coverImage: a.coverImage,
+    coverImage,
     categoryId: a.categoryId,
     tagIds: a.tagIds,
     author: a.author,
@@ -359,11 +365,12 @@ export function buildInitialArticles() {
     seo: {
       metaTitle: a.seo.metaTitle,
       metaDescription: a.seo.metaDescription,
-      ogImage: a.coverImage,
+      ogImage: coverImage,
       keywords: a.seo.keywords ?? a.targetKeywords,
     },
     faq: a.faq,
-  }));
+  };
+  });
 
   return [...fromTemplates, ...fromSeo];
 }

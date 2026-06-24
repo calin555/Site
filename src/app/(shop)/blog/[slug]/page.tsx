@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BlogCoverImage } from "@/components/blog/BlogCoverImage";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
@@ -94,13 +94,13 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             <BlogTags tags={post.tags} />
           </div>
 
-          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-2xl">
-            <Image
+          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-2xl bg-surface-100">
+            <BlogCoverImage
+              slug={post.slug}
               src={post.coverImage}
               alt={post.title}
-              fill
-              className="object-cover"
               priority
+              className="object-cover"
             />
           </div>
 

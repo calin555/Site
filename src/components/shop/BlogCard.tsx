@@ -1,7 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
+import { getBlogCoverImage } from "@/lib/blog/blog-cover-images";
 import type { BlogPost } from "@/lib/mock-data";
 
 interface BlogCardProps {
@@ -9,6 +13,9 @@ interface BlogCardProps {
 }
 
 export function BlogCard({ post }: BlogCardProps) {
+  const fallback = getBlogCoverImage(post.slug, post.coverImage);
+  const [imgSrc, setImgSrc] = useState(fallback);
+
   const date = new Date(post.publishedAt).toLocaleDateString("ro-RO", {
     day: "numeric",
     month: "long",
@@ -18,12 +25,14 @@ export function BlogCard({ post }: BlogCardProps) {
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-surface-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-500/5">
       <Link href={`/blog/${post.slug}`} className="relative">
-        <div className="relative aspect-[16/9] overflow-hidden">
+        <div className="relative aspect-[16/9] overflow-hidden bg-surface-100">
           <Image
-            src={post.coverImage}
+            src={imgSrc}
             alt={post.title}
             fill
+            sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
+            onError={() => setImgSrc(getBlogCoverImage(post.slug))}
           />
         </div>
       </Link>
