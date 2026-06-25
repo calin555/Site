@@ -32,11 +32,11 @@ export default function RootLayout({
     <html lang="ro">
       <head>
         <GoogleAnalytics />
+        <MobileWebViewFix />
       </head>
       <body
         className={`${inter.variable} w-full max-w-full overflow-x-hidden font-sans antialiased`}
       >
-        <MobileWebViewFix />
         {children}
       </body>
     </html>

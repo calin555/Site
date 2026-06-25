@@ -50,7 +50,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
         {product.isFeatured && <Badge variant="dark">Popular</Badge>}
       </div>
 
-      <h1 className="text-3xl font-bold leading-tight text-surface-900 sm:text-4xl">
+      <h1 className="break-anywhere text-3xl font-bold leading-tight text-surface-900 sm:text-4xl">
         {product.name}
       </h1>
 
@@ -97,7 +97,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
       <ProductActions product={product} />
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid min-w-0 grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
         {[
           { icon: Shield, label: "Garanție inclusă" },
           { icon: Truck, label: "Livrare rapidă" },
@@ -108,10 +108,10 @@ export function ProductInfo({ product }: ProductInfoProps) {
         ].map(({ icon: Icon, label }) => (
           <div
             key={label}
-            className="rounded-xl border border-surface-200 bg-surface-50 p-3 text-center"
+            className="min-w-0 rounded-xl border border-surface-200 bg-surface-50 p-2.5 text-center sm:p-3"
           >
             <Icon className="mx-auto h-5 w-5 text-brand-600" />
-            <p className="mt-1.5 text-[11px] font-medium leading-tight text-surface-600">
+            <p className="mt-1.5 break-words text-[10px] font-medium leading-tight text-surface-600 sm:text-[11px]">
               {label}
             </p>
           </div>

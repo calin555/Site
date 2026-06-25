@@ -31,11 +31,11 @@ export function ProductTabs({ product }: ProductTabsProps) {
   }, []);
 
   return (
-    <div>
+    <div className="min-w-0 max-w-full">
       <div
         role="tablist"
         aria-label="Detalii produs"
-        className="flex gap-1 overflow-x-auto border-b border-surface-200"
+        className="-mx-1 flex max-w-full gap-1 overflow-x-auto border-b border-surface-200 px-1 [-webkit-overflow-scrolling:touch]"
       >
         {TABS.map((tab) => (
           <button

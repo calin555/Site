@@ -50,9 +50,9 @@ export function ProductActions({ product }: ProductActionsProps) {
   const quoteUrl = `/contact?oferta=${encodeURIComponent(product.slug)}&produs=${encodeURIComponent(product.name)}`;
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="flex items-center rounded-xl border border-surface-200">
+    <div className="min-w-0 max-w-full space-y-4">
+      <div className="flex w-full min-w-0 flex-col gap-3">
+        <div className="flex w-full min-w-0 items-center rounded-xl border border-surface-200">
           <button
             type="button"
             onClick={decrement}
@@ -78,7 +78,7 @@ export function ProductActions({ product }: ProductActionsProps) {
 
         <Button
           size="lg"
-          className="flex-1"
+          className="w-full min-w-0 sm:flex-1"
           disabled={!canPurchase || isPending}
           onClick={handleAddToCart}
         >

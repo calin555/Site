@@ -299,18 +299,47 @@ html.in-app-browser,
 html.in-app-browser body {
   width: 100% !important;
   max-width: 100% !important;
+  min-width: 0 !important;
   overflow-x: hidden !important;
-  margin-inline: auto;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-html.in-app-browser .site-shell {
+html.in-app-browser .site-shell,
+html.in-app-browser main,
+html.in-app-browser header,
+html.in-app-browser footer {
   width: 100%;
   max-width: 100%;
+  min-width: 0;
   margin-inline: auto;
   overflow-x: hidden;
 }
 
+html.in-app-browser .site-shell > * {
+  max-width: 100%;
+}
+
 html.in-app-browser [class*="blur-"] {
+  max-width: 100%;
+}
+
+/* Android Facebook WebView: fill visible width (fixes left gap on foldables) */
+html.in-app-browser-android body {
+  min-width: 100% !important;
+}
+
+html.in-app-browser-android .site-shell,
+html.in-app-browser-android main {
+  width: 100% !important;
+  min-width: 100% !important;
+}
+
+html.in-app-browser-android [class*="max-w-7xl"],
+html.in-app-browser-android [class*="max-w-6xl"],
+html.in-app-browser-android [class*="max-w-5xl"],
+html.in-app-browser-android [class*="max-w-3xl"] {
+  width: 100%;
   max-width: 100%;
 }
 
