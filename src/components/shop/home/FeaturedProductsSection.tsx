@@ -15,8 +15,10 @@ export function FeaturedProductsSection({
   products,
 }: FeaturedProductsSectionProps) {
   return (
-    <section className="relative overflow-hidden bg-surface-50 py-20 sm:py-24">
-      <div className="pointer-events-none absolute right-0 top-0 h-96 w-96 rounded-full bg-brand-100/50 blur-3xl" />
+    <section className="relative isolate overflow-hidden bg-surface-50 py-20 sm:py-24">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-20 top-0 h-96 w-96 rounded-full bg-brand-100/50 blur-3xl" />
+      </div>
 
       <Container className="relative">
         <AnimateIn>

@@ -35,13 +35,17 @@
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    overflow-x: clip;
+    width: 100%;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-white text-surface-900 antialiased;
-    overflow-x: clip;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
     min-width: 0;
+    overscroll-behavior-x: none;
   }
 
   *,
@@ -135,6 +139,18 @@
 
   .safe-right {
     right: max(1.25rem, env(safe-area-inset-right, 0px));
+  }
+
+  .site-shell {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-inline: auto;
+    overflow-x: hidden;
+  }
+
+  .contain-paint {
+    contain: layout paint;
   }
 }
 
@@ -276,6 +292,26 @@
     padding: 0.35rem 0.5rem;
     font-size: 0.8125rem;
   }
+}
+
+/* Facebook / Instagram in-app browser: wrong viewport width + horizontal drift */
+html.in-app-browser,
+html.in-app-browser body {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  margin-inline: auto;
+}
+
+html.in-app-browser .site-shell {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+  overflow-x: hidden;
+}
+
+html.in-app-browser [class*="blur-"] {
+  max-width: 100%;
 }
 
 [contenteditable][data-placeholder]:empty::before {

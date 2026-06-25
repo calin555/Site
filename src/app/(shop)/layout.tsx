@@ -41,7 +41,7 @@ export default async function ShopLayout({
           buildWebSiteSchema(),
         ]}
       />
-      <div className="flex min-h-screen min-w-0 flex-col overflow-x-clip">
+      <div className="site-shell flex min-h-screen min-w-0 flex-col overflow-x-hidden">
         <Header
           cartCount={summary.itemCount}
           contact={contact}

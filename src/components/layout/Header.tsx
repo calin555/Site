@@ -35,7 +35,7 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full min-w-0 max-w-full overflow-x-clip">
+    <header className="sticky inset-x-0 top-0 z-50 w-full min-w-0 max-w-full overflow-x-hidden">
       {/* Top bar */}
       <div className="hidden border-b border-brand-800/30 bg-surface-900 text-sm text-surface-300 lg:block">
         <Container>

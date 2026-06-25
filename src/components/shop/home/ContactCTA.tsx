@@ -11,11 +11,13 @@ interface ContactCTAProps {
 
 export function ContactCTA({ contact }: ContactCTAProps) {
   return (
-    <section className="relative overflow-hidden py-20 sm:py-24">
+    <section className="relative isolate overflow-hidden py-20 sm:py-24">
       <div className="gradient-brand absolute inset-0" />
       <div className="absolute inset-0 pattern-dots opacity-20" />
-      <div className="pointer-events-none absolute -right-20 top-0 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
-      <div className="pointer-events-none absolute -left-20 bottom-0 h-80 w-80 rounded-full bg-white/5 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-20 top-0 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
+        <div className="absolute -left-20 bottom-0 h-80 w-80 rounded-full bg-white/5 blur-3xl" />
+      </div>
 
       <Container className="relative">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
