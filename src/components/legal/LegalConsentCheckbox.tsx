@@ -41,7 +41,7 @@ export function LegalConsentCheckbox({
           required={required}
           className="mt-0.5 h-4 w-4 shrink-0 rounded border-surface-300 text-brand-600 focus:ring-brand-500"
         />
-        <span>
+        <span className="min-w-0 break-words">
           Accept{" "}
           <Link
             href={legalPaths.terms}

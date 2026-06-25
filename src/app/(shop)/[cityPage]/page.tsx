@@ -95,12 +95,9 @@ export default async function CityLandingPage({ params }: CityLandingPageProps) 
           className="mb-8"
         />
 
-        <div className="grid gap-10 lg:grid-cols-3">
-          <article className="blog-content lg:col-span-2">
-            <div
-              className="prose prose-surface max-w-none"
-              dangerouslySetInnerHTML={{ __html: bodyHtml }}
-            />
+        <div className="grid min-w-0 gap-10 lg:grid-cols-3">
+          <article className="blog-content min-w-0 lg:col-span-2">
+            <div dangerouslySetInnerHTML={{ __html: bodyHtml }} />
           </article>
 
           <aside className="space-y-6">

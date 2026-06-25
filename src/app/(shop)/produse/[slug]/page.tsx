@@ -102,7 +102,7 @@ export default async function ProductDetailPage({
       </Container>
 
       <Container className="pb-8">
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="grid min-w-0 gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-6">
             <ProductGallery images={product.images} productName={product.name} />
             <ProductVideos videos={product.videos} productName={product.name} />

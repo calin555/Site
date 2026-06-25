@@ -53,7 +53,8 @@ export function CatalogPagination({
         </span>
       </p>
 
-      <div className="flex items-center gap-1">
+      <div className="max-w-full overflow-x-auto [-webkit-overflow-scrolling:touch]">
+        <div className="flex w-max min-w-full items-center gap-1 px-0.5 sm:w-auto sm:min-w-0">
         {page > 1 ? (
           <Link
             href={buildCatalogUrl(basePath, params, { page: page - 1 })}
@@ -107,6 +108,7 @@ export function CatalogPagination({
             <ChevronRight className="h-4 w-4" />
           </span>
         )}
+      </div>
       </div>
     </nav>
   );

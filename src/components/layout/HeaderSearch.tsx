@@ -67,9 +67,12 @@ export function HeaderSearch() {
             className="absolute inset-0 bg-surface-900/50 backdrop-blur-sm"
             onClick={close}
           />
-          <div className="relative border-b border-surface-200 bg-white shadow-xl">
+          <div className="relative max-w-full border-b border-surface-200 bg-white shadow-xl">
             <Container className="py-4">
-              <form onSubmit={submit} className="relative flex items-center gap-3">
+              <form
+                onSubmit={submit}
+                className="flex flex-col gap-3 sm:flex-row sm:items-center"
+              >
                 <div className="relative min-w-0 flex-1">
                   <Search className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-surface-400" />
                   <input
@@ -77,8 +80,8 @@ export function HeaderSearch() {
                     type="search"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Caută stații, branduri, accesorii..."
-                    className="h-12 w-full rounded-xl border border-surface-200 bg-surface-50 pl-11 pr-11 text-base text-surface-900 placeholder:text-surface-400 transition-colors focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                    placeholder="Caută stații, branduri..."
+                    className="h-12 w-full max-w-full rounded-xl border border-surface-200 bg-surface-50 pl-11 pr-11 text-base text-surface-900 placeholder:text-surface-400 transition-colors focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                     autoComplete="off"
                   />
                   {query ? (
@@ -92,28 +95,30 @@ export function HeaderSearch() {
                     </button>
                   ) : null}
                 </div>
-                <button
-                  type="submit"
-                  disabled={!query.trim() || isPending}
-                  className={cn(
-                    "shrink-0 rounded-xl px-5 py-3 text-sm font-semibold transition-colors",
-                    query.trim()
-                      ? "bg-brand-600 text-white hover:bg-brand-700"
-                      : "cursor-not-allowed bg-surface-100 text-surface-400"
-                  )}
-                >
-                  {isPending ? "..." : "Caută"}
-                </button>
-                <button
-                  type="button"
-                  onClick={close}
-                  className="shrink-0 rounded-xl p-2.5 text-surface-500 transition-colors hover:bg-surface-100 hover:text-surface-800"
-                  aria-label="Închide"
-                >
-                  <X className="h-5 w-5" />
-                </button>
+                <div className="flex shrink-0 items-center gap-2">
+                  <button
+                    type="submit"
+                    disabled={!query.trim() || isPending}
+                    className={cn(
+                      "flex-1 rounded-xl px-5 py-3 text-sm font-semibold transition-colors sm:flex-none",
+                      query.trim()
+                        ? "bg-brand-600 text-white hover:bg-brand-700"
+                        : "cursor-not-allowed bg-surface-100 text-surface-400"
+                    )}
+                  >
+                    {isPending ? "..." : "Caută"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={close}
+                    className="shrink-0 rounded-xl p-2.5 text-surface-500 transition-colors hover:bg-surface-100 hover:text-surface-800"
+                    aria-label="Închide"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
               </form>
-              <p className="mt-2 text-xs text-surface-500">
+              <p className="mt-2 hidden text-xs text-surface-500 sm:block">
                 Apasă Enter pentru a căuta · Esc pentru a închide
               </p>
             </Container>

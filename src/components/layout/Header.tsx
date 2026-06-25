@@ -35,7 +35,7 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full">
+    <header className="sticky top-0 z-50 w-full min-w-0 max-w-full overflow-x-clip">
       {/* Top bar */}
       <div className="hidden border-b border-brand-800/30 bg-surface-900 text-sm text-surface-300 lg:block">
         <Container>
@@ -68,7 +68,7 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
       {/* Main nav */}
       <div className="border-b border-surface-200 bg-white/95 backdrop-blur-md">
         <Container>
-          <div className="flex h-16 items-center justify-between gap-4 lg:h-20">
+          <div className="flex h-16 min-w-0 items-center justify-between gap-2 sm:gap-4 lg:h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 shrink-0">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-brand shadow-lg shadow-brand-500/25">
@@ -103,7 +103,7 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
             </nav>
 
             {/* Actions */}
-            <div className="flex items-center gap-1 sm:gap-2">
+            <div className="flex shrink-0 items-center gap-0.5 sm:gap-2">
               <HeaderSearch />
               {isLoggedIn ? (
                 <HeaderAccountMenu user={user!} counts={accountCounts} />

@@ -30,13 +30,13 @@ export function SectionHeading({
           {badge}
         </span>
       )}
-      <h2 className="text-3xl font-bold tracking-tight text-surface-900 sm:text-4xl">
+      <h2 className="text-balance break-words text-3xl font-bold tracking-tight text-surface-900 sm:text-4xl">
         {title}
       </h2>
       {subtitle && (
         <p
           className={cn(
-            "max-w-2xl text-base text-surface-600 sm:text-lg",
+            "max-w-2xl break-words text-base text-surface-600 sm:text-lg",
             align === "center" && "mx-auto"
           )}
         >

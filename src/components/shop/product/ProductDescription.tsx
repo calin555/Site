@@ -7,7 +7,7 @@ export function ProductDescription({ description }: ProductDescriptionProps) {
   const blocks = normalized.split(/\n{2,}/).filter(Boolean);
 
   return (
-    <div className="prose prose-surface max-w-none">
+    <div className="break-anywhere max-w-full">
       {blocks.map((block, i) => (
         <div
           key={i}

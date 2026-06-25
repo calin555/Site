@@ -11,7 +11,7 @@ interface FooterProps {
 
 export function Footer({ contact }: FooterProps) {
   return (
-    <footer className="gradient-dark text-surface-300">
+    <footer className="gradient-dark min-w-0 overflow-x-clip text-surface-300">
       <Container className="py-16">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}

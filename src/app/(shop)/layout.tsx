@@ -41,14 +41,14 @@ export default async function ShopLayout({
           buildWebSiteSchema(),
         ]}
       />
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-screen min-w-0 flex-col overflow-x-clip">
         <Header
           cartCount={summary.itemCount}
           contact={contact}
           user={user}
           accountCounts={accountCounts}
         />
-        <main className="flex-1">{children}</main>
+        <main className="min-w-0 flex-1">{children}</main>
         <Footer contact={contact} />
         <WhatsAppFloatingButton phone={contact.phoneOrders} />
       </div>

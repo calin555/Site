@@ -39,12 +39,12 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
       <Container className="relative py-16 sm:py-24 lg:py-32">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <div className="space-y-8">
-            <div className="animate-slide-up inline-flex items-center gap-2 rounded-full border border-brand-500/30 bg-brand-500/10 px-4 py-1.5 text-sm font-medium text-brand-300">
+            <div className="animate-slide-up inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-brand-500/30 bg-brand-500/10 px-4 py-1.5 text-sm font-medium text-brand-300">
               <Zap className="h-4 w-4" />
               Lider în infrastructură EV din România
             </div>
 
-            <h1 className="animate-slide-up stagger-1 text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.5rem] text-balance">
+            <h1 className="animate-slide-up stagger-1 text-balance break-words text-3xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.5rem]">
               Stații încărcare EV{" "}
               <span className="bg-gradient-to-r from-brand-400 via-brand-300 to-accent bg-clip-text text-transparent animate-shimmer">
                 România

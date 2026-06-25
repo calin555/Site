@@ -71,21 +71,21 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
           {/* Contact info */}
           <div className="space-y-4 lg:col-span-2">
             {contactMethods.map(({ icon: Icon, title, value, href }) => (
-              <Card key={title} padding="md" className="flex items-start gap-4">
+              <Card key={title} padding="md" className="flex min-w-0 items-start gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
                   <Icon className="h-5 w-5" />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-surface-500">{title}</p>
                   {href ? (
                     <a
                       href={href}
-                      className="font-semibold text-surface-900 hover:text-brand-600"
+                      className="break-anywhere font-semibold text-surface-900 hover:text-brand-600"
                     >
                       {value}
                     </a>
                   ) : (
-                    <p className="font-semibold text-surface-900">{value}</p>
+                    <p className="break-anywhere font-semibold text-surface-900">{value}</p>
                   )}
                 </div>
               </Card>

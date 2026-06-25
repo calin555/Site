@@ -39,7 +39,7 @@ export function CatalogSearch({ basePath, params }: CatalogSearchProps) {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Caută stații, branduri, accesorii..."
-        className="h-11 w-full rounded-xl border border-surface-200 bg-white pl-10 pr-10 text-sm text-surface-900 placeholder:text-surface-400 transition-colors focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+        className="h-11 w-full max-w-full rounded-xl border border-surface-200 bg-white pl-10 pr-10 text-base text-surface-900 placeholder:text-surface-400 transition-colors focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 sm:text-sm"
         aria-label="Caută produse"
       />
       {query && (

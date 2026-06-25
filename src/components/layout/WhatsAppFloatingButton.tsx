@@ -27,7 +27,7 @@ export function WhatsAppFloatingButton({ phone }: WhatsAppFloatingButtonProps) {
       rel="noopener noreferrer"
       aria-label="Chat pe WhatsApp"
       title="Chat pe WhatsApp"
-      className="fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-[#25D366]/25 transition-all hover:scale-105 hover:bg-[#20BD5A] hover:shadow-xl hover:shadow-[#25D366]/30 sm:bottom-6 sm:right-6 sm:h-14 sm:w-14"
+      className="fixed safe-bottom safe-right z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-[#25D366]/25 transition-all hover:scale-105 hover:bg-[#20BD5A] hover:shadow-xl hover:shadow-[#25D366]/30 sm:h-14 sm:w-14"
     >
       <WhatsAppIcon />
     </a>

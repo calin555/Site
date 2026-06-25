@@ -27,7 +27,7 @@ export function LegalDocument({
         <p className="mb-8 text-sm text-surface-500">
           Ultima actualizare: {updatedAt}
         </p>
-        <article className="prose prose-surface max-w-3xl prose-headings:font-bold prose-headings:text-surface-900 prose-p:text-surface-600 prose-li:text-surface-600 prose-a:text-brand-600">
+        <article className="min-w-0 max-w-3xl break-anywhere">
           {sections.map((section) => (
             <section key={section.title} className="mb-10">
               <h2 className="text-xl font-bold text-surface-900">

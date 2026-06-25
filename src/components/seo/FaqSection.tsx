@@ -51,9 +51,9 @@ export function FaqSection({
                   aria-expanded={isOpen}
                   aria-controls={panelId}
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left font-semibold text-surface-900 transition-colors hover:text-brand-700"
+                  className="flex w-full min-w-0 items-center justify-between gap-3 px-4 py-4 text-left font-semibold text-surface-900 transition-colors hover:text-brand-700 sm:px-5"
                 >
-                  <span>{item.question}</span>
+                  <span className="min-w-0 flex-1 break-words">{item.question}</span>
                   <ChevronDown
                     className={cn(
                       "h-5 w-5 shrink-0 text-surface-400 transition-transform",

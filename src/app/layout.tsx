@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { buildRootMetadata } from "@/lib/seo/metadata";
@@ -11,6 +11,15 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = buildRootMetadata();
+
+/** Explicit viewport for mobile + Facebook/Instagram in-app WebViews (iOS Safari). */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: "#059669",
+};
 
 export default function RootLayout({
   children,

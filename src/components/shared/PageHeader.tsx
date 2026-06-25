@@ -26,12 +26,12 @@ export function PageHeader({
       )}
       {...props}
     >
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div className="space-y-3">
+      <div className="mx-auto w-full min-w-0 max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="min-w-0 space-y-3">
             <h1
               className={cn(
-                "text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl",
+                "text-balance break-words text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl",
                 dark ? "text-white" : "text-surface-900"
               )}
             >
@@ -40,7 +40,7 @@ export function PageHeader({
             {description && (
               <p
                 className={cn(
-                  "max-w-2xl text-base sm:text-lg",
+                  "max-w-2xl break-words text-base sm:text-lg",
                   dark ? "text-surface-200" : "text-surface-600"
                 )}
               >
