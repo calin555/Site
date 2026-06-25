@@ -3,10 +3,6 @@ import {
   buildProductSpecs,
   getApplicableDirectives,
   getApplicableStandards,
-  getIpRating,
-  getProductDimensions,
-  getProductWeight,
-  getWarrantyYears,
 } from "@/lib/catalog/product-specs";
 import {
   BRAND_COLOR,
@@ -93,7 +89,6 @@ export async function generateDatasheetPdf(product: ProductDetail): Promise<Uint
     `Categorie: ${product.category}`,
     `SKU: ${product.sku}`,
     `Putere: ${product.powerKw > 0 ? `${product.powerKw} kW` : "—"}`,
-    `Garanție: ${getWarrantyYears(product)} ani`,
   ];
 
   for (const line of metaLines) {
@@ -290,7 +285,6 @@ export async function generateInstallationManualPdf(
 
   const phasesLabel =
     product.phases === "SINGLE" ? "monofazat 230V AC" : "trifazat 400V AC";
-  const ip = getIpRating(product) ?? "IP54";
 
   const sections: { title: string; paragraphs: string[]; bullets?: string[] }[] = [
     {
@@ -316,9 +310,8 @@ export async function generateInstallationManualPdf(
     {
       title: "3. Date tehnice de instalare",
       paragraphs: [
-        `Putere nominală: ${product.powerKw} kW · Alimentare: ${phasesLabel} · Protecție: ${ip}.`,
-        `Dimensiuni: ${getProductDimensions(product)} · Greutate: ${getProductWeight(product)}.`,
-        `Conectori: ${product.connectorTypes.join(", ") || "conform model"}.`,
+        `Putere nominală: ${product.powerKw} kW · Alimentare: ${phasesLabel}.`,
+        `Conectori: ${product.connectorTypes.join(", ") || "conform model"}. Dimensiuni și greutate: consultați documentația producătorului.`,
       ],
       bullets: [
         "Secțiune cablu recomandată: calculată de electrician conform distanței și curentului (min. 3×6 mm² pentru 7,4 kW monofazat).",

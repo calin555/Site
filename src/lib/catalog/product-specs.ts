@@ -71,34 +71,7 @@ export function buildProductSpecs(product: ProductSpecsSource): ProductSpec[] {
     });
   }
 
-  const ipRating = getIpRating(product);
-  if (ipRating) {
-    specs.push({ label: "Protecție IP", value: ipRating, group: "Construcție" });
-  }
-
-  specs.push(
-    { label: "Dimensiuni (L × l × H)", value: getProductDimensions(product), group: "Construcție" },
-    { label: "Greutate", value: getProductWeight(product), group: "Construcție" },
-    { label: "Material carcasă", value: "Policarbonat / oțel vopsit", group: "Construcție" },
-    { label: "Garanție", value: `${getWarrantyYears(product)} ani`, group: "Construcție" },
-    { label: "Certificare", value: "CE, RoHS", group: "Construcție" },
-    { label: "Temperatură operare", value: "-25°C ~ +50°C", group: "Mediu" },
-    { label: "Umiditate relativă", value: "5% ~ 95% (fără condens)", group: "Mediu" },
-    { label: "Montaj", value: "Perete / stâlp / podea (conform model)", group: "Instalare" }
-  );
-
-  if (product.powerKw >= 11) {
-    specs.push({ label: "Protocol OCPP", value: "1.6J (opțional 2.0.1)", group: "Smart" });
-  }
-
-  if (product.categorySlug !== "accesorii") {
-    specs.push(
-      { label: "Conectivitate", value: "WiFi / Ethernet / 4G (opțional)", group: "Smart" },
-      { label: "Aplicație mobilă", value: "iOS & Android", group: "Smart" },
-      { label: "Protecții", value: "RCD Tip A/A6, protecție supratensiune, supracurent", group: "Smart" }
-    );
-  }
-
+  // Construcție / Mediu / Smart: ascunse până la date reale per produs (admin/DB).
   return specs;
 }
 

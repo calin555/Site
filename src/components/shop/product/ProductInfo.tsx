@@ -99,7 +99,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
-          { icon: Shield, label: `Garanție ${product.warrantyYears} ani` },
+          { icon: Shield, label: "Garanție inclusă" },
           { icon: Truck, label: "Livrare rapidă" },
           { icon: Zap, label: "Suport tehnic RO" },
           ...(product.installationRequired
