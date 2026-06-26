@@ -24,8 +24,9 @@ export function HeaderAccountMenu({ user, counts }: HeaderAccountMenuProps) {
   useEffect(() => {
     if (!open) return;
 
-    function handlePointerDown(event: MouseEvent) {
-      if (!menuRef.current?.contains(event.target as Node)) {
+    function handlePointerDown(event: MouseEvent | TouchEvent) {
+      const target = event.target as Node;
+      if (!menuRef.current?.contains(target)) {
         setOpen(false);
       }
     }
@@ -35,9 +36,11 @@ export function HeaderAccountMenu({ user, counts }: HeaderAccountMenuProps) {
     }
 
     document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("touchstart", handlePointerDown);
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("touchstart", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [open]);
@@ -55,7 +58,7 @@ export function HeaderAccountMenu({ user, counts }: HeaderAccountMenuProps) {
   }
 
   return (
-    <div ref={menuRef} className="relative">
+    <div ref={menuRef} className="relative z-[1]">
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
@@ -63,10 +66,10 @@ export function HeaderAccountMenu({ user, counts }: HeaderAccountMenuProps) {
         aria-expanded={open}
         aria-haspopup="menu"
         className={cn(
-          "flex items-center justify-center transition-colors",
+          "flex items-center justify-center rounded-xl p-2.5 transition-colors",
           user.image
             ? "h-9 w-9 overflow-hidden rounded-full ring-2 ring-brand-300 hover:ring-brand-500"
-            : "rounded-xl bg-brand-50 p-2.5 text-brand-700 ring-2 ring-brand-200 hover:bg-brand-100"
+            : "text-surface-600 hover:bg-surface-100"
         )}
       >
         {user.image ? (
@@ -85,7 +88,7 @@ export function HeaderAccountMenu({ user, counts }: HeaderAccountMenuProps) {
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-56 overflow-hidden rounded-xl border border-surface-200 bg-white py-1.5 shadow-xl shadow-surface-900/10"
+          className="absolute right-0 top-[calc(100%+0.5rem)] z-[300] w-56 overflow-hidden rounded-xl border border-surface-200 bg-white py-1.5 shadow-xl shadow-surface-900/10"
         >
           <div className="border-b border-surface-100 px-3 py-2.5">
             <p className="truncate text-sm font-semibold text-surface-900">

@@ -35,7 +35,7 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
   const pathname = usePathname();
 
   return (
-    <header className="sticky inset-x-0 top-0 z-50 w-full min-w-0 max-w-full overflow-x-hidden">
+    <header className="sticky inset-x-0 top-0 z-50 w-full min-w-0 max-w-full overflow-visible">
       {/* Top bar */}
       <div className="hidden border-b border-brand-800/30 bg-surface-900 text-sm text-surface-300 lg:block">
         <Container>
@@ -103,14 +103,14 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
             </nav>
 
             {/* Actions */}
-            <div className="flex shrink-0 items-center gap-0.5 sm:gap-2">
+            <div className="relative z-[1] flex shrink-0 items-center gap-0.5 sm:gap-2">
               <HeaderSearch />
               {isLoggedIn ? (
                 <HeaderAccountMenu user={user!} counts={accountCounts} />
               ) : (
                 <Link
                   href="/autentificare"
-                  className="flex items-center justify-center rounded-xl p-2.5 text-surface-600 transition-colors hover:bg-surface-100"
+                  className="relative z-[1] flex items-center justify-center rounded-xl p-2.5 text-surface-600 transition-colors hover:bg-surface-100"
                   aria-label="Autentificare"
                   title="Autentificare"
                 >
