@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // www.incarcauto.ro → incarcauto.ro (și la fel pentru incarcareauto.ro)
+  // www → apex (incarcareauto.ro, incarcauto.ro)
   if (host.startsWith("www.")) {
     const apex = host.slice(4);
     if (isSiteDomain(apex)) {
