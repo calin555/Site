@@ -1,4 +1,4 @@
-/** Configurație SEO centralizată — incarcareauto.ro / stații încărcare EV */
+/** Configurație SEO centralizată — incarauto.ro / stații încărcare EV */
 
 export const SEO_KEYWORDS = [
   "stații încărcare EV",
@@ -13,6 +13,7 @@ export const SEO_KEYWORDS = [
   "stație încărcare DC",
   "infrastructură EV",
   "ChargePro",
+  "incarauto.ro",
   "incarcareauto.ro",
 ] as const;
 
