@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { ArrowRight, MapPin, Phone, Zap } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Container } from "@/components/shared/Container";
@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/Card";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { LocalCitiesGrid } from "@/components/seo/LocalCitiesGrid";
+import { CommercialLandingView } from "@/components/seo/CommercialLandingView";
 import {
   buildBreadcrumbSchema,
   buildCityLocalBusinessSchema,
@@ -22,19 +23,39 @@ import {
 } from "@/lib/seo/content-utils";
 import { getCityPageBySlug, getAllCityPages } from "@/lib/seo/local/city-pages";
 import { isLocalCitySlug } from "@/lib/seo/local/types";
+import { isCommercialLandingSlug } from "@/lib/seo/commercial/types";
+import {
+  getCommercialLandingBySlug,
+  getAllCommercialLandings,
+} from "@/lib/seo/commercial/registry";
 
-interface CityLandingPageProps {
+interface SeoLandingPageProps {
   params: Promise<{ cityPage: string }>;
 }
 
 export function generateStaticParams() {
-  return getAllCityPages().map((city) => ({ cityPage: city.slug }));
+  return [
+    ...getAllCityPages().map((city) => ({ cityPage: city.slug })),
+    ...getAllCommercialLandings().map((p) => ({ cityPage: p.slug })),
+  ];
 }
 
 export async function generateMetadata({
   params,
-}: CityLandingPageProps): Promise<Metadata> {
+}: SeoLandingPageProps): Promise<Metadata> {
   const { cityPage } = await params;
+
+  if (isCommercialLandingSlug(cityPage)) {
+    const page = getCommercialLandingBySlug(cityPage);
+    if (!page) return { title: "Pagină negăsită" };
+    return buildPageMetadata({
+      title: page.metaTitle,
+      description: page.metaDescription,
+      path: `/${page.slug}`,
+      keywords: [page.primaryKeyword, ...page.secondaryKeywords],
+    });
+  }
+
   if (!isLocalCitySlug(cityPage)) return { title: "Pagină negăsită" };
   const city = getCityPageBySlug(cityPage);
   if (!city) return { title: "Pagină negăsită" };
@@ -47,8 +68,15 @@ export async function generateMetadata({
   });
 }
 
-export default async function CityLandingPage({ params }: CityLandingPageProps) {
+export default async function SeoLandingPage({ params }: SeoLandingPageProps) {
   const { cityPage } = await params;
+
+  if (isCommercialLandingSlug(cityPage)) {
+    const page = getCommercialLandingBySlug(cityPage);
+    if (!page) notFound();
+    return <CommercialLandingView page={page} />;
+  }
+
   if (!isLocalCitySlug(cityPage)) notFound();
 
   const city = getCityPageBySlug(cityPage);

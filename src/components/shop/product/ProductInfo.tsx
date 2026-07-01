@@ -14,6 +14,7 @@ import { PriceDisplay } from "@/components/shared/PriceDisplay";
 import { ProductActions } from "./ProductActions";
 import { getStockStatusMessage } from "@/lib/catalog/stock-status";
 import type { ProductDetail } from "@/types/product";
+import { buildProductSeoTitle } from "@/lib/seo/product-seo-name";
 
 interface ProductInfoProps {
   product: ProductDetail;
@@ -50,9 +51,10 @@ export function ProductInfo({ product }: ProductInfoProps) {
         {product.isFeatured && <Badge variant="dark">Popular</Badge>}
       </div>
 
-      <h1 className="break-anywhere text-3xl font-bold leading-tight text-surface-900 sm:text-4xl">
-        {product.name}
+      <h1 className="break-anywhere text-2xl font-bold leading-tight text-surface-900 sm:text-3xl">
+        {buildProductSeoTitle(product)}
       </h1>
+      <p className="text-sm text-surface-500">{product.name}</p>
 
       <div className="flex items-center gap-3">
         {product.reviewCount > 0 ? (

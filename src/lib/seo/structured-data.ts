@@ -1,5 +1,6 @@
 import { siteConfig } from "@/config/site";
 import { seoConfig } from "@/config/seo";
+import { buildProductSeoTitle } from "@/lib/seo/product-seo-name";
 import { absoluteUrl } from "@/lib/seo/metadata";
 import type { FaqItem } from "@/lib/seo/faq-content";
 import { getSchemaAvailability } from "@/lib/catalog/stock-status";
@@ -158,7 +159,7 @@ export function buildProductSchema(product: ProductDetail) {
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: product.name,
+    name: buildProductSeoTitle(product),
     description: product.shortDescription,
     image: product.images.map((i) => i.url),
     sku: product.sku,

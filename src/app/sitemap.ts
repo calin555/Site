@@ -6,6 +6,7 @@ import { getPublishedArticles, getBlogCategories, getBlogTags } from "@/lib/serv
 import { brands } from "@/lib/mock-data";
 import { TOOLS } from "@/config/tools";
 import { getAllCityPages } from "@/lib/seo/local/city-pages";
+import { getAllCommercialLandings } from "@/lib/seo/commercial/registry";
 import { legalPaths } from "@/config/legal";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -21,6 +22,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: absoluteUrl("/despre"), lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: absoluteUrl("/contact"), lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: absoluteUrl("/faq"), lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    {
+      url: absoluteUrl("/statii-incarcare"),
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
     { url: absoluteUrl("/ghid"), lastModified: now, changeFrequency: "monthly", priority: 0.85 },
     {
       url: absoluteUrl("/baza-de-cunoastinte"),
@@ -105,6 +112,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ];
 
+  const commercialPages: MetadataRoute.Sitemap = getAllCommercialLandings().map(
+    (p) => ({
+      url: absoluteUrl(`/${p.slug}`),
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })
+  );
+
   const cityPages: MetadataRoute.Sitemap = getAllCityPages().map((city) => ({
     url: absoluteUrl(`/${city.slug}`),
     lastModified: now,
@@ -114,6 +130,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticPages,
+    ...commercialPages,
     ...cityPages,
     ...productPages,
     ...categoryPages,

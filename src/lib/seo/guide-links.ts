@@ -153,6 +153,7 @@ export const GUIDE_SECTIONS: GuideSection[] = [
     title: "Resurse suplimentare",
     description: "FAQ, bază de cunoștințe, contact.",
     links: [
+      { title: "Index stații încărcare (siloz SEO)", href: "/statii-incarcare", type: "page" },
       { title: "Întrebări frecvente", href: "/faq", type: "page" },
       {
         title: "Bază de cunoștințe (100+ Q&A)",

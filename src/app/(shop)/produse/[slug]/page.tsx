@@ -17,6 +17,10 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 import { buildProductSchema } from "@/lib/seo/structured-data";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+import {
+  buildProductSeoTitle,
+  buildProductSeoDescription,
+} from "@/lib/seo/product-seo-name";
 
 interface ProductDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -29,21 +33,21 @@ export async function generateMetadata({
   const product = await getProductDetail(slug);
   if (!product) return { title: "Produs negăsit" };
 
-  const powerLabel = product.powerKw > 0 ? `${product.powerKw} kW` : "";
-  const title = `${product.name}${powerLabel ? ` — ${powerLabel}` : ""}`;
-  const description = `${product.shortDescription} Stație încărcare EV ${product.brand}. Livrare România, consultanță tehnică.`;
+  const seoTitle = buildProductSeoTitle(product);
+  const description = buildProductSeoDescription(product);
 
   return buildPageMetadata({
-    title,
+    title: seoTitle,
     description,
     path: `/produse/${slug}`,
     ogImage: product.image,
     keywords: [
+      "stație încărcare",
       product.name,
-      "stații încărcare EV",
+      `${product.powerKw} kW`,
       product.category,
       product.brand,
-      "încărcare auto electrică",
+      "stații încărcare EV România",
     ],
   });
 }
