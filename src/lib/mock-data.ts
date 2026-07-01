@@ -210,36 +210,7 @@ export const brands: Brand[] = [
   { id: "6", name: "GridFlow", slug: "gridflow", logo: "GF", productCount: 6 },
 ];
 
-export const testimonials: Testimonial[] = [
-  {
-    id: "1",
-    name: "Alexandru Marin",
-    role: "Proprietar Tesla Model 3",
-    content:
-      "Am instalat stația ChargePro Home 7.4 kW în garaj. Echipa a venit în 3 zile, montaj impecabil. Încărcare completă peste noapte, fără griji.",
-    rating: 5,
-    avatar: "AM",
-  },
-  {
-    id: "2",
-    name: "Elena Popescu",
-    role: "Manager Flotă",
-    company: "LogiTrans RO",
-    content:
-      "Am echipat parcarea firmei cu 8 stații 22 kW. Suportul tehnic a fost excepțional — de la dimensionare cablaj până la integrare OCPP.",
-    rating: 5,
-    avatar: "EP",
-  },
-  {
-    id: "3",
-    name: "Mihai Ionescu",
-    role: "Administrator bloc",
-    content:
-      "Soluție perfectă pentru parcarea subterană a blocului. Locatarii sunt mulțumiți, facturarea individuală funcționează fără probleme.",
-    rating: 5,
-    avatar: "MI",
-  },
-];
+export const testimonials: Testimonial[] = [];
 
 export function getProductBySlug(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);

@@ -3,7 +3,6 @@ import type {
   ProductDetail,
   ProductDocument,
   ProductImage,
-  ProductReview,
 } from "@/types/product";
 import {
   getCatalogProductBySlug,
@@ -15,39 +14,7 @@ import {
   getIpRating,
   getWarrantyYears,
 } from "@/lib/catalog/product-specs";
-
-const DEFAULT_REVIEWS: ProductReview[] = [
-  {
-    id: "r1",
-    author: "Alexandru M.",
-    rating: 5,
-    title: "Instalare rapidă, funcționează perfect",
-    content:
-      "Am montat stația în garaj în câteva ore. Aplicația mobilă e intuitivă și îmi arată consumul în timp real. Recomand!",
-    date: "2026-04-12",
-    verified: true,
-  },
-  {
-    id: "r2",
-    author: "Elena P.",
-    rating: 5,
-    title: "Calitate premium",
-    content:
-      "Construcție solidă, design elegant. Suportul tehnic ChargePro m-a ajutat cu dimensionarea cablajului înainte de comandă.",
-    date: "2026-03-28",
-    verified: true,
-  },
-  {
-    id: "r3",
-    author: "Mihai I.",
-    rating: 4,
-    title: "Foarte bun, livrare promptă",
-    content:
-      "Produs conform descrierii. Un singur punct: manualul ar putea fi mai detaliat pentru configurarea WiFi.",
-    date: "2026-02-15",
-    verified: true,
-  },
-];
+import { getApprovedReviewsForProduct } from "@/lib/admin/review-store";
 
 const GALLERY_IMAGES: Record<string, ProductImage[]> = {
   "chargepro-home-7-4kw": [
@@ -150,9 +117,14 @@ function buildDescription(product: CatalogProduct): string {
 }
 
 function enrichProduct(product: CatalogProduct): ProductDetail {
-  const reviews = DEFAULT_REVIEWS;
+  const reviews = getApprovedReviewsForProduct(product.id);
+  const reviewCount = reviews.length;
   const averageRating =
-    reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    reviewCount > 0
+      ? Math.round(
+          (reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount) * 10
+        ) / 10
+      : 0;
 
   return {
     ...product,
@@ -166,8 +138,8 @@ function enrichProduct(product: CatalogProduct): ProductDetail {
     specs: buildProductSpecs(product),
     documents: buildDocuments(product),
     reviews,
-    averageRating: Math.round(averageRating * 10) / 10,
-    reviewCount: reviews.length,
+    averageRating,
+    reviewCount,
   };
 }
 

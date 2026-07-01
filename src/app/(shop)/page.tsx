@@ -58,7 +58,9 @@ export default async function HomePage() {
       <FeaturedProductsSection products={featured} />
       <BrandsSection brands={brands} />
       <BenefitsSection />
-      <TestimonialsSection testimonials={testimonials} />
+      {testimonials.length > 0 && (
+        <TestimonialsSection testimonials={testimonials} />
+      )}
       <BlogSection posts={latestPosts} />
       <Container className="py-16">
         <LocalCitiesGrid />

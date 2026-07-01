@@ -35,7 +35,7 @@ export function TestimonialsSection({
           <SectionHeading
             badge="Recenzii"
             title="Ce spun clienții noștri"
-            subtitle="Peste 2.500 de instalări și o rată de satisfacție de 98%. Iată câteva povești reale."
+            subtitle="Feedback de la clienți care au instalat stații ChargePro."
             align="center"
             className="mb-14"
           />
@@ -68,26 +68,6 @@ export function TestimonialsSection({
             </AnimateIn>
           ))}
         </div>
-
-        {/* Social proof bar */}
-        <AnimateIn delay={450}>
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-8 rounded-2xl bg-surface-50 px-6 py-5">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-surface-900">4.9/5</p>
-              <p className="text-xs text-surface-500">Rating mediu</p>
-            </div>
-            <div className="hidden h-8 w-px bg-surface-200 sm:block" />
-            <div className="text-center">
-              <p className="text-2xl font-bold text-surface-900">320+</p>
-              <p className="text-xs text-surface-500">Recenzii verificate</p>
-            </div>
-            <div className="hidden h-8 w-px bg-surface-200 sm:block" />
-            <div className="text-center">
-              <p className="text-2xl font-bold text-surface-900">98%</p>
-              <p className="text-xs text-surface-500">Recomandă ChargePro</p>
-            </div>
-          </div>
-        </AnimateIn>
       </Container>
     </section>
   );

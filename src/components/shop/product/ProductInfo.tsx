@@ -55,27 +55,42 @@ export function ProductInfo({ product }: ProductInfoProps) {
       </h1>
 
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-1">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star
-              key={i}
-              className={`h-4 w-4 ${
-                i < Math.round(product.averageRating)
-                  ? "fill-amber-400 text-amber-400"
-                  : "fill-surface-200 text-surface-200"
-              }`}
-            />
-          ))}
-        </div>
-        <span className="text-sm font-medium text-surface-700">
-          {product.averageRating}
-        </span>
-        <a
-          href="#recenzii"
-          className="text-sm text-brand-600 hover:text-brand-700 hover:underline"
-        >
-          ({product.reviewCount} recenzii)
-        </a>
+        {product.reviewCount > 0 ? (
+          <>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className={`h-4 w-4 ${
+                    i < Math.round(product.averageRating)
+                      ? "fill-amber-400 text-amber-400"
+                      : "fill-surface-200 text-surface-200"
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-sm font-medium text-surface-700">
+              {product.averageRating}
+            </span>
+            <a
+              href="#recenzii"
+              className="text-sm text-brand-600 hover:text-brand-700 hover:underline"
+            >
+              ({product.reviewCount}{" "}
+              {product.reviewCount === 1 ? "recenzie" : "recenzii"})
+            </a>
+          </>
+        ) : (
+          <span className="text-sm text-surface-500">
+            Nicio recenzie încă.{" "}
+            <a
+              href="#recenzii"
+              className="font-medium text-brand-600 hover:text-brand-700 hover:underline"
+            >
+              Fii primul care evaluează
+            </a>
+          </span>
+        )}
       </div>
 
       <p className="text-lg leading-relaxed text-surface-600">

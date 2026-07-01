@@ -180,14 +180,24 @@ export function buildProductSchema(product: ProductDetail) {
   };
 
   if (product.reviews.length > 0 && product.reviewCount > 0) {
+    const verifiedReviews = product.reviews.filter((r) => r.verified);
+    if (verifiedReviews.length === 0) return schema;
+
+    const verifiedCount = verifiedReviews.length;
+    const verifiedAverage =
+      Math.round(
+        (verifiedReviews.reduce((sum, r) => sum + r.rating, 0) / verifiedCount) *
+          10
+      ) / 10;
+
     schema.aggregateRating = {
       "@type": "AggregateRating",
-      ratingValue: product.averageRating,
-      reviewCount: product.reviewCount,
+      ratingValue: verifiedAverage,
+      reviewCount: verifiedCount,
       bestRating: 5,
       worstRating: 1,
     };
-    schema.review = product.reviews.slice(0, 5).map((review) => ({
+    schema.review = verifiedReviews.slice(0, 5).map((review) => ({
       "@type": "Review",
       author: { "@type": "Person", name: review.author },
       datePublished: review.date,

@@ -55,6 +55,20 @@ export function ProductReviews({
   averageRating,
   reviewCount,
 }: ProductReviewsProps) {
+  if (reviewCount === 0) {
+    return (
+      <div className="rounded-2xl border border-dashed border-surface-200 bg-surface-50 p-10 text-center">
+        <p className="text-lg font-semibold text-surface-900">
+          Niciun review încă
+        </p>
+        <p className="mt-2 text-sm text-surface-600">
+          Acest produs nu are recenzii verificate. După achiziție, recenziile
+          aprobate vor apărea aici.
+        </p>
+      </div>
+    );
+  }
+
   const distribution = [5, 4, 3, 2, 1].map((stars) => ({
     stars,
     count: reviews.filter((r) => r.rating === stars).length,

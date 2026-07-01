@@ -53,7 +53,7 @@ export function ProductTabs({ product }: ProductTabsProps) {
             )}
           >
             {tab.label}
-            {tab.id === "reviews" && (
+            {tab.id === "reviews" && product.reviewCount > 0 && (
               <span className="ml-1.5 rounded-full bg-surface-100 px-2 py-0.5 text-xs font-medium text-surface-600">
                 {product.reviewCount}
               </span>
