@@ -6,6 +6,10 @@ import { PriceDisplay } from "@/components/shared/PriceDisplay";
 import { ProductCardAddButton } from "@/components/shop/ProductCardAddButton";
 import { isExternalImageUrl } from "@/lib/utils";
 import type { CatalogProduct } from "@/types/catalog";
+import {
+  buildProductCardTitle,
+  buildProductSeoTitle,
+} from "@/lib/seo/product-seo-name";
 
 interface ProductCardProps {
   product: CatalogProduct;
@@ -18,7 +22,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="relative aspect-[4/3] overflow-hidden bg-surface-100">
           <Image
             src={product.image}
-            alt={product.name}
+            alt={buildProductSeoTitle(product)}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             unoptimized={isExternalImageUrl(product.image)}
@@ -43,7 +47,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
         <Link href={`/produse/${product.slug}`}>
           <h3 className="font-bold text-surface-900 transition-colors group-hover:text-brand-700 line-clamp-2">
-            {product.name}
+            {buildProductCardTitle(product)}
           </h3>
         </Link>
 

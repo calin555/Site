@@ -11,6 +11,7 @@ import {
   getCommercialLandingsBySilo,
   getAllCommercialLandings,
 } from "@/lib/seo/commercial/registry";
+import { getHighPriorityTargets } from "@/lib/seo/commercial/keyword-strategy";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Stații încărcare EV — AC, DC, wallbox, puteri, mărci auto",
@@ -72,6 +73,29 @@ export default function StatiiIncarcareHubPage() {
 
       <Container className="py-8">
         <Breadcrumbs items={[{ label: "Stații încărcare" }]} className="mb-10" />
+
+        <section className="mb-12">
+          <h2 className="mb-4 text-xl font-bold text-surface-900">
+            Prioritate SEO — intenție comercială
+          </h2>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {getHighPriorityTargets().map((t) => (
+              <li key={t.slug}>
+                <Link
+                  href={t.url}
+                  className="flex h-full flex-col rounded-xl border-2 border-brand-200 bg-white p-4 transition-all hover:border-brand-400 hover:shadow-md"
+                >
+                  <span className="text-xs font-semibold uppercase text-brand-600">
+                    High priority
+                  </span>
+                  <span className="mt-1 font-semibold text-surface-900">
+                    {t.primaryKeyword}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         <div className="mb-12 rounded-2xl border border-brand-200 bg-brand-50 p-6 sm:p-8">
           <h2 className="text-lg font-bold text-surface-900">Structură siloz</h2>

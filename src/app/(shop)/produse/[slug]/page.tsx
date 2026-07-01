@@ -8,6 +8,7 @@ import { ProductGallery } from "@/components/shop/product/ProductGallery";
 import { ProductVideos } from "@/components/shop/product/ProductVideos";
 import { ProductInfo } from "@/components/shop/product/ProductInfo";
 import { ProductTabs } from "@/components/shop/product/ProductTabs";
+import { ProductRelatedLandings } from "@/components/shop/product/ProductRelatedLandings";
 import {
   getProductDetail,
   getRelatedProducts,
@@ -102,6 +103,7 @@ export default async function ProductDetailPage({
           </div>
           <div className="min-w-0">
             <ProductInfo product={product} />
+            <ProductRelatedLandings product={product} />
           </div>
         </div>
       </Container>
