@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { defaultAuthor } from "@/config/author";
 import { notFound } from "next/navigation";
 import { BlogCoverImage } from "@/components/blog/BlogCoverImage";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
@@ -15,6 +16,7 @@ import {
   generateStaticArticleParams,
 } from "@/lib/services/blog.service";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 import { FaqSection } from "@/components/seo/FaqSection";
 import {
   buildArticleJsonLd,
@@ -51,10 +53,30 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     month: "long",
     year: "numeric",
   });
+  const updatedDate =
+    post.updatedAt && post.updatedAt !== post.publishedAt
+      ? new Date(post.updatedAt).toLocaleDateString("ro-RO", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })
+      : null;
+  const authorName = post.author || defaultAuthor.name;
 
   return (
     <>
       <JsonLd data={jsonLd} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Acasă", path: "/" },
+          { name: "Blog", path: "/blog" },
+          {
+            name: post.category.name,
+            path: `/blog/categorie/${post.category.slug}`,
+          },
+          { name: post.title, path: `/blog/${post.slug}` },
+        ]}
+      />
       <Container className="py-8">
         <Breadcrumbs
           items={[
@@ -87,7 +109,20 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <Clock className="h-4 w-4" />
               {post.readTime} min citire
             </span>
-            <span>de {post.author}</span>
+            <span>
+              de{" "}
+              <Link
+                href={`/autor/${defaultAuthor.slug}`}
+                className="font-medium text-brand-600 hover:text-brand-700"
+              >
+                {authorName}
+              </Link>
+            </span>
+            {updatedDate ? (
+              <span className="text-surface-400">
+                · actualizat {updatedDate}
+              </span>
+            ) : null}
           </div>
 
           <div className="mt-4">

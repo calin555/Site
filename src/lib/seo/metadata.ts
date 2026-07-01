@@ -21,6 +21,9 @@ export interface PageSeoInput {
   ogImage?: string;
   ogType?: "website" | "article";
   noIndex?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  authors?: string[];
 }
 
 export function buildPageMetadata(input: PageSeoInput): Metadata {
@@ -32,6 +35,9 @@ export function buildPageMetadata(input: PageSeoInput): Metadata {
     ogImage = seoConfig.defaultOgImage,
     ogType = "website",
     noIndex = false,
+    publishedTime,
+    modifiedTime,
+    authors,
   } = input;
 
   const canonical = absoluteUrl(path);
@@ -51,6 +57,9 @@ export function buildPageMetadata(input: PageSeoInput): Metadata {
       siteName: seoConfig.siteName,
       locale: seoConfig.locale,
       type: ogType,
+      ...(ogType === "article" && publishedTime
+        ? { publishedTime, modifiedTime, authors }
+        : {}),
       images: [
         {
           url: ogImage,

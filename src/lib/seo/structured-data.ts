@@ -2,6 +2,8 @@ import { siteConfig } from "@/config/site";
 import { seoConfig } from "@/config/seo";
 import { absoluteUrl } from "@/lib/seo/metadata";
 import type { FaqItem } from "@/lib/seo/faq-content";
+import { getSchemaAvailability } from "@/lib/catalog/stock-status";
+import type { ProductDetail } from "@/types/product";
 
 export function buildOrganizationSchema() {
   return {
@@ -148,6 +150,58 @@ export function buildBreadcrumbSchema(
       item: item.path ? absoluteUrl(item.path) : undefined,
     })),
   };
+}
+
+export function buildProductSchema(product: ProductDetail) {
+  const productUrl = absoluteUrl(`/produse/${product.slug}`);
+
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.shortDescription,
+    image: product.images.map((i) => i.url),
+    sku: product.sku,
+    url: productUrl,
+    brand: { "@type": "Brand", name: product.brand },
+    offers: {
+      "@type": "Offer",
+      url: productUrl,
+      price: product.price,
+      priceCurrency: "RON",
+      availability: getSchemaAvailability(product.stockStatus, product.stock),
+      itemCondition: "https://schema.org/NewCondition",
+      seller: {
+        "@type": "Organization",
+        name: seoConfig.legalName,
+        url: absoluteUrl(),
+      },
+    },
+  };
+
+  if (product.reviews.length > 0 && product.reviewCount > 0) {
+    schema.aggregateRating = {
+      "@type": "AggregateRating",
+      ratingValue: product.averageRating,
+      reviewCount: product.reviewCount,
+      bestRating: 5,
+      worstRating: 1,
+    };
+    schema.review = product.reviews.slice(0, 5).map((review) => ({
+      "@type": "Review",
+      author: { "@type": "Person", name: review.author },
+      datePublished: review.date,
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: review.rating,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      reviewBody: review.content,
+    }));
+  }
+
+  return schema;
 }
 
 export function buildCityLocalBusinessSchema(city: {

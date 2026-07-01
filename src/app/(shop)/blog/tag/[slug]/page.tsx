@@ -9,6 +9,8 @@ import {
   getArticlesByTag,
 } from "@/lib/services/blog.service";
 import { toLegacyPost } from "@/types/blog";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -18,10 +20,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const tag = getBlogTagBySlug(slug);
   if (!tag) return { title: "Tag negăsit" };
-  return {
-    title: `#${tag.name} — Blog`,
-    description: `Articole despre ${tag.name}`,
-  };
+  return buildPageMetadata({
+    title: `#${tag.name} — Blog EV`,
+    description: `Articole despre ${tag.name} — stații încărcare vehicule electrice.`,
+    path: `/blog/tag/${slug}`,
+    keywords: [tag.name, "blog EV", "stații încărcare"],
+  });
 }
 
 export default async function BlogTagPage({ params }: Props) {
@@ -33,6 +37,13 @@ export default async function BlogTagPage({ params }: Props) {
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Acasă", path: "/" },
+          { name: "Blog", path: "/blog" },
+          { name: `#${tag.name}`, path: `/blog/tag/${slug}` },
+        ]}
+      />
       <PageHeader
         title={`#${tag.name}`}
         description={`Articole etichetate cu „${tag.name}"`}

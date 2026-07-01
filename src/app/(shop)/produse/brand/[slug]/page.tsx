@@ -6,6 +6,7 @@ import { getCatalogProducts } from "@/lib/services/catalog.service";
 import { parseCatalogSearchParams, getCatalogBasePath } from "@/lib/catalog/urls";
 import { brands } from "@/lib/mock-data";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 
 interface BrandCatalogPageProps {
   params: Promise<{ slug: string }>;
@@ -65,6 +66,13 @@ export default async function BrandCatalogPage({
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Acasă", path: "/" },
+          { name: "Produse", path: "/produse" },
+          { name: brand.name, path: `/produse/brand/${slug}` },
+        ]}
+      />
       <PageHeader
         title={`Produse ${brand.name}`}
         description={`Explorează gama completă de stații de încărcare și accesorii ${brand.name}.`}

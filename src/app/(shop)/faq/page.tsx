@@ -51,6 +51,18 @@ export default function FaqPage() {
 
         <FaqSection items={EV_FAQ_ITEMS} id="faq-page" />
 
+        <p className="mx-auto mt-8 max-w-3xl text-center text-surface-600">
+          Cauți mai multe răspunsuri? Explorează{" "}
+          <Link href="/baza-de-cunoastinte" className="font-semibold text-brand-600 hover:text-brand-700">
+            baza de cunoștințe EV (100+ întrebări)
+          </Link>
+          {" "}sau{" "}
+          <Link href="/ghid" className="font-semibold text-brand-600 hover:text-brand-700">
+            indexul de ghiduri
+          </Link>
+          .
+        </p>
+
         <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-brand-200 bg-brand-50 p-8 text-center">
           <h2 className="text-xl font-bold text-surface-900">
             Ai nevoie de o stație de încărcare EV?

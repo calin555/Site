@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        allow: ["/", "/llms.txt"],
         disallow: [
           "/admin/",
           "/api/",
@@ -17,7 +17,11 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: absoluteUrl("/sitemap.xml"),
+    sitemap: [
+      absoluteUrl("/sitemap.xml"),
+      absoluteUrl("/sitemap-products.xml"),
+      absoluteUrl("/sitemap-images.xml"),
+    ],
     host: absoluteUrl(),
   };
 }

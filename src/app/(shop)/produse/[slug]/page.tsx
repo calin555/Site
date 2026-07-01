@@ -13,7 +13,9 @@ import {
   getRelatedProducts,
   getAllProductSlugs,
 } from "@/lib/services/product.service";
-import { getSchemaAvailability } from "@/lib/catalog/stock-status";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
+import { buildProductSchema } from "@/lib/seo/structured-data";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
 interface ProductDetailPageProps {
@@ -60,32 +62,19 @@ export default async function ProductDetailPage({
 
   const related = await getRelatedProducts(slug);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    description: product.shortDescription,
-    image: product.images.map((i) => i.url),
-    sku: product.sku,
-    brand: { "@type": "Brand", name: product.brand },
-    offers: {
-      "@type": "Offer",
-      price: product.price,
-      priceCurrency: "RON",
-      availability: getSchemaAvailability(product.stockStatus, product.stock),
-    },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: product.averageRating,
-      reviewCount: product.reviewCount,
-    },
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd data={buildProductSchema(product)} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Acasă", path: "/" },
+          { name: "Produse", path: "/produse" },
+          {
+            name: product.category,
+            path: `/produse/categorie/${product.categorySlug}`,
+          },
+          { name: product.name, path: `/produse/${product.slug}` },
+        ]}
       />
 
       <Container className="py-6">

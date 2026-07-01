@@ -9,6 +9,8 @@ import {
   getArticlesByCategory,
 } from "@/lib/services/blog.service";
 import { toLegacyPost } from "@/types/blog";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -18,10 +20,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const category = getBlogCategoryBySlug(slug);
   if (!category) return { title: "Categorie negăsită" };
-  return {
-    title: `${category.name} — Blog`,
+  return buildPageMetadata({
+    title: `${category.name} — Blog EV`,
     description: category.description,
-  };
+    path: `/blog/categorie/${slug}`,
+    keywords: [category.name, "blog EV", "stații încărcare"],
+  });
 }
 
 export default async function BlogCategoryPage({ params }: Props) {
@@ -33,6 +37,13 @@ export default async function BlogCategoryPage({ params }: Props) {
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Acasă", path: "/" },
+          { name: "Blog", path: "/blog" },
+          { name: category.name, path: `/blog/categorie/${slug}` },
+        ]}
+      />
       <PageHeader
         title={category.name}
         description={category.description}

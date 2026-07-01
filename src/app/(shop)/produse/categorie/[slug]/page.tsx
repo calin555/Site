@@ -5,7 +5,8 @@ import { ProductCatalog } from "@/components/shop/catalog/ProductCatalog";
 import { getCatalogProducts } from "@/lib/services/catalog.service";
 import { parseCatalogSearchParams, getCatalogBasePath } from "@/lib/catalog/urls";
 import { getCategoryBySlug, getShopCategories } from "@/lib/services/category.service";
-import { siteConfig } from "@/config/site";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 
 interface CategoryCatalogPageProps {
   params: Promise<{ slug: string }>;
@@ -23,14 +24,13 @@ export async function generateMetadata({
   const rawParams = await searchParams;
   const hasExtraFilters = Object.keys(rawParams).length > 0;
 
-  return {
+  return buildPageMetadata({
     title: `${category.name} — Stații de încărcare EV`,
     description: category.description,
-    alternates: {
-      canonical: `${siteConfig.url}/produse/categorie/${slug}`,
-    },
-    robots: hasExtraFilters ? { index: false, follow: true } : undefined,
-  };
+    path: `/produse/categorie/${slug}`,
+    noIndex: hasExtraFilters,
+    keywords: [category.name, "stații încărcare EV", "încărcătoare mașini electrice"],
+  });
 }
 
 export async function generateStaticParams() {
@@ -63,6 +63,13 @@ export default async function CategoryCatalogPage({
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Acasă", path: "/" },
+          { name: "Produse", path: "/produse" },
+          { name: category.name, path: `/produse/categorie/${slug}` },
+        ]}
+      />
       <PageHeader
         title={category.name}
         description={category.description}

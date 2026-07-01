@@ -35,6 +35,8 @@ export const siteConfig = {
       { label: "Stații EV Cluj", href: "/statii-incarcare-cluj-napoca" },
       { label: "Stații EV Timișoara", href: "/statii-incarcare-timisoara" },
       { label: "FAQ încărcare EV", href: "/faq" },
+      { label: "Ghiduri EV", href: "/ghid" },
+      { label: "Baza de cunoștințe", href: "/baza-de-cunoastinte" },
       { label: "Despre noi", href: "/despre" },
       { label: "Instrumente EV", href: "/tools" },
       { label: "Blog", href: "/blog" },

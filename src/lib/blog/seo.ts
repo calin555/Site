@@ -1,6 +1,8 @@
 import type { BlogArticleWithRelations } from "@/types/blog";
 import { siteConfig } from "@/config/site";
+import { defaultAuthor } from "@/config/author";
 import { buildFaqPageSchema } from "@/lib/seo/structured-data";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
 export function buildArticleJsonLd(article: BlogArticleWithRelations) {
   const url = `${siteConfig.url}/blog/${article.slug}`;
@@ -14,13 +16,15 @@ export function buildArticleJsonLd(article: BlogArticleWithRelations) {
       datePublished: article.publishedAt,
       dateModified: article.updatedAt,
       author: {
-        "@type": "Organization",
-        name: article.author,
+        "@type": "Person",
+        name: article.author || defaultAuthor.name,
+        url: `${siteConfig.url}${defaultAuthor.url}`,
       },
       publisher: {
         "@type": "Organization",
         name: siteConfig.name,
         url: siteConfig.url,
+        logo: { "@type": "ImageObject", url: `${siteConfig.url}/icon` },
       },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
       keywords: article.seo.keywords?.join(", "),
@@ -39,27 +43,15 @@ export function buildArticleMetadata(article: BlogArticleWithRelations) {
   const description = article.seo.metaDescription ?? article.excerpt;
   const image = article.seo.ogImage ?? article.coverImage;
 
-  return {
+  return buildPageMetadata({
     title,
     description,
+    path: `/blog/${article.slug}`,
     keywords: article.seo.keywords,
-    openGraph: {
-      title,
-      description,
-      type: "article" as const,
-      publishedTime: article.publishedAt,
-      modifiedTime: article.updatedAt,
-      authors: [article.author],
-      images: [{ url: image, alt: article.title }],
-    },
-    twitter: {
-      card: "summary_large_image" as const,
-      title,
-      description,
-      images: [image],
-    },
-    alternates: {
-      canonical: `/blog/${article.slug}`,
-    },
-  };
+    ogImage: image,
+    ogType: "article",
+    publishedTime: article.publishedAt,
+    modifiedTime: article.updatedAt,
+    authors: [article.author || defaultAuthor.name],
+  });
 }
