@@ -7,6 +7,10 @@ import {
   Building2,
   Users,
   GitCompare,
+  Clock,
+  Coins,
+  Gauge,
+  Briefcase,
   type LucideIcon,
 } from "lucide-react";
 
@@ -28,6 +32,46 @@ export const TOOLS: ToolDefinition[] = [
     description:
       "Compară stații după putere, conector și protocol OCPP pe piața românească — fără brand, prețuri în RON.",
     icon: GitCompare,
+    category: "calculator",
+    featured: true,
+  },
+  {
+    slug: "calculator-timp-incarcare",
+    title: "Calculator timp încărcare EV",
+    shortTitle: "Timp încărcare",
+    description:
+      "Estimează durata încărcării AC în funcție de baterie, SOC și puterea wallbox-ului.",
+    icon: Clock,
+    category: "calculator",
+    featured: true,
+  },
+  {
+    slug: "calculator-cost-incarcare",
+    title: "Calculator cost încărcare EV",
+    shortTitle: "Cost încărcare",
+    description:
+      "Compară costul lunar acasă vs stații publice — vezi economiile cu wallbox propriu.",
+    icon: Coins,
+    category: "calculator",
+    featured: true,
+  },
+  {
+    slug: "calculator-putere-recomandata",
+    title: "Calculator putere recomandată wallbox",
+    shortTitle: "Putere recomandată",
+    description:
+      "Dimensionează stația AC după km zilnici, baterie și tip rețea (monofazat/trifazat).",
+    icon: Gauge,
+    category: "calculator",
+    featured: true,
+  },
+  {
+    slug: "calculator-amortizare-firma",
+    title: "Calculator amortizare investiție firmă",
+    shortTitle: "Amortizare firmă",
+    description:
+      "Calculează payback-ul infrastructurii EV incluzând beneficii angajați și deduceri fiscale.",
+    icon: Briefcase,
     category: "calculator",
     featured: true,
   },

@@ -9,6 +9,10 @@ import { QuoteGenerator } from "@/components/tools/QuoteGenerator";
 import { PdfOfferGenerator } from "@/components/tools/PdfOfferGenerator";
 import { InstallerMarketplace } from "@/components/tools/InstallerMarketplace";
 import { TechnicalCompareWidget } from "@/components/tools/TechnicalCompareWidget";
+import { ChargingTimeCalculator } from "@/components/tools/ChargingTimeCalculator";
+import { ChargingCostCalculator } from "@/components/tools/ChargingCostCalculator";
+import { RecommendedPowerCalculator } from "@/components/tools/RecommendedPowerCalculator";
+import { BusinessAmortizationCalculator } from "@/components/tools/BusinessAmortizationCalculator";
 
 export async function renderTool(slug: string) {
   if (slug === "recomandare-statie") {
@@ -26,6 +30,10 @@ export async function renderTool(slug: string) {
 
   const components: Record<string, ReactNode> = {
     "comparator-tehnic": <TechnicalCompareWidget />,
+    "calculator-timp-incarcare": <ChargingTimeCalculator />,
+    "calculator-cost-incarcare": <ChargingCostCalculator />,
+    "calculator-putere-recomandata": <RecommendedPowerCalculator />,
+    "calculator-amortizare-firma": <BusinessAmortizationCalculator />,
     "calculator-afm": <AfmCalculator />,
     "calculator-electric-up": <ElectricUpCalculator />,
     "calculator-solar-ev": <SolarEvCalculator />,

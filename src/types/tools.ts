@@ -96,6 +96,55 @@ export interface RoiInput {
   maintenanceAnnualRon: number;
 }
 
+export interface ChargingTimeInput {
+  batteryKwh: number;
+  fromSocPercent: number;
+  toSocPercent: number;
+  chargerPowerKw: number;
+  efficiencyPercent: number;
+}
+
+export interface ChargingTimeResult {
+  energyKwh: number;
+  hours: number;
+  hoursFormatted: string;
+  notes: string[];
+}
+
+export interface ChargingCostInput {
+  monthlyKm: number;
+  consumptionKwhPer100: number;
+  homePriceRon: number;
+  publicPriceRon: number;
+  chargerPowerKw: number;
+  chargeAtHomePercent: number;
+}
+
+export interface ChargingCostResult {
+  monthlyKwh: number;
+  monthlyHomeCostRon: number;
+  monthlyPublicCostRon: number;
+  monthlyTotalRon: number;
+  annualTotalRon: number;
+  savingsVsAllPublicRon: number;
+  notes: string[];
+}
+
+export interface RecommendedPowerInput {
+  dailyKm: number;
+  batteryKwh: number;
+  availableHours: number;
+  phases: PhaseType;
+  maxAmps: number;
+}
+
+export interface RecommendedPowerResult {
+  recommendedKw: number;
+  dailyEnergyKwh: number;
+  estimatedHours: number;
+  rationale: string[];
+}
+
 export interface RoiResult {
   totalInvestmentRon: number;
   netInvestmentRon: number;
@@ -105,6 +154,18 @@ export interface RoiResult {
   paybackMonths: number;
   fiveYearRoiPercent: number;
   breakdown: { label: string; value: string }[];
+}
+
+export interface BusinessAmortizationInput extends RoiInput {
+  employeeCount: number;
+  benefitPerEmployeeRon: number;
+  taxDeductionPercent: number;
+}
+
+export interface BusinessAmortizationResult extends RoiResult {
+  annualEmployeeBenefitRon: number;
+  annualTaxSavingRon: number;
+  adjustedPaybackMonths: number;
 }
 
 export interface QuoteLineItem {

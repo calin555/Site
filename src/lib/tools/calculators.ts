@@ -1,4 +1,17 @@
-import type { SolarEvInput, SolarEvResult, RoiInput, RoiResult } from "@/types/tools";
+import type {
+  SolarEvInput,
+  SolarEvResult,
+  RoiInput,
+  RoiResult,
+  ChargingTimeInput,
+  ChargingTimeResult,
+  ChargingCostInput,
+  ChargingCostResult,
+  RecommendedPowerInput,
+  RecommendedPowerResult,
+  BusinessAmortizationInput,
+  BusinessAmortizationResult,
+} from "@/types/tools";
 
 const PANEL_WATT = 450;
 const PANEL_AREA_SQM = 2.1;
@@ -109,5 +122,135 @@ export function calculateRoi(input: RoiInput): RoiResult {
     paybackMonths: paybackMonths === Infinity ? 0 : paybackMonths,
     fiveYearRoiPercent,
     breakdown,
+  };
+}
+
+export function calculateChargingTime(input: ChargingTimeInput): ChargingTimeResult {
+  const socDelta = Math.max(0, input.toSocPercent - input.fromSocPercent);
+  const energyKwh = Math.round((input.batteryKwh * socDelta) / 100 * 10) / 10;
+  const effectivePower = input.chargerPowerKw * (input.efficiencyPercent / 100);
+  const hours = effectivePower > 0 ? energyKwh / effectivePower : 0;
+  const h = Math.floor(hours);
+  const m = Math.round((hours - h) * 60);
+
+  const notes: string[] = [];
+  if (input.chargerPowerKw > 11 && input.batteryKwh <= 30) {
+    notes.push("Vehiculul poate limita puterea AC sub valoarea stației — verificați onboard charger.");
+  }
+  if (input.efficiencyPercent < 95) {
+    notes.push("Pierderi tipice AC: 5–10% (căldură cablu + conversie).");
+  }
+
+  return {
+    energyKwh,
+    hours: Math.round(hours * 100) / 100,
+    hoursFormatted: m > 0 ? `${h} h ${m} min` : `${h} h`,
+    notes,
+  };
+}
+
+export function calculateChargingCost(input: ChargingCostInput): ChargingCostResult {
+  const monthlyKwh = Math.round(
+    ((input.monthlyKm * input.consumptionKwhPer100) / 100) * 10
+  ) / 10;
+  const homeKwh = monthlyKwh * (input.chargeAtHomePercent / 100);
+  const publicKwh = monthlyKwh - homeKwh;
+  const monthlyHomeCostRon = Math.round(homeKwh * input.homePriceRon);
+  const monthlyPublicCostRon = Math.round(publicKwh * input.publicPriceRon);
+  const monthlyTotalRon = monthlyHomeCostRon + monthlyPublicCostRon;
+  const allPublicCost = Math.round(monthlyKwh * input.publicPriceRon);
+
+  const notes: string[] = [];
+  if (input.chargeAtHomePercent >= 80) {
+    notes.push("Încărcare predominant acasă — cost/kWh cu 50–70% sub stațiile publice.");
+  }
+  notes.push(
+    `Stație ${input.chargerPowerKw} kW — încărcare zilnică estimată ~${Math.ceil(monthlyKwh / 30 / input.chargerPowerKw)} h.`
+  );
+
+  return {
+    monthlyKwh,
+    monthlyHomeCostRon,
+    monthlyPublicCostRon,
+    monthlyTotalRon,
+    annualTotalRon: monthlyTotalRon * 12,
+    savingsVsAllPublicRon: allPublicCost - monthlyTotalRon,
+    notes,
+  };
+}
+
+export function calculateRecommendedPower(
+  input: RecommendedPowerInput
+): RecommendedPowerResult {
+  const dailyEnergyKwh =
+    Math.round(((input.dailyKm * 18) / 100) * 10) / 10 || input.batteryKwh * 0.3;
+
+  const maxKwFromAmps =
+    input.phases === "THREE"
+      ? Math.round(((input.maxAmps * 400 * 1.732) / 1000) * 10) / 10
+      : Math.round(((input.maxAmps * 230) / 1000) * 10) / 10;
+
+  const neededKw =
+    input.availableHours > 0
+      ? Math.ceil((dailyEnergyKwh / input.availableHours) * 10) / 10
+      : 7.4;
+
+  let recommendedKw = neededKw <= 7.4 ? 7.4 : neededKw <= 11 ? 11 : 22;
+  recommendedKw = Math.min(recommendedKw, maxKwFromAmps);
+
+  const rationale: string[] = [
+    `Consum zilnic estimat: ${dailyEnergyKwh} kWh (${input.dailyKm} km).`,
+    `Limită rețea: ~${maxKwFromAmps} kW (${input.phases === "THREE" ? "trifazat" : "monofazat"} ${input.maxAmps}A).`,
+  ];
+  if (recommendedKw < neededKw) {
+    rationale.push(
+      "Puterea disponibilă limitează viteza — extindeți timpul de încărcare sau upgrade tablou."
+    );
+  }
+
+  return {
+    recommendedKw,
+    dailyEnergyKwh,
+    estimatedHours:
+      recommendedKw > 0
+        ? Math.round((dailyEnergyKwh / recommendedKw) * 10) / 10
+        : 0,
+    rationale,
+  };
+}
+
+export function calculateBusinessAmortization(
+  input: BusinessAmortizationInput
+): BusinessAmortizationResult {
+  const base = calculateRoi(input);
+  const annualEmployeeBenefitRon =
+    input.employeeCount * input.benefitPerEmployeeRon * 12;
+  const annualTaxSavingRon = Math.round(
+    (base.netInvestmentRon * input.taxDeductionPercent) / 100 / 5
+  );
+  const monthlyExtraBenefit =
+    (annualEmployeeBenefitRon + annualTaxSavingRon) / 12;
+  const adjustedMonthly = base.monthlyNetBenefitRon + monthlyExtraBenefit;
+  const adjustedPaybackMonths =
+    adjustedMonthly > 0
+      ? Math.ceil(base.netInvestmentRon / adjustedMonthly)
+      : 0;
+
+  return {
+    ...base,
+    annualEmployeeBenefitRon,
+    annualTaxSavingRon,
+    adjustedPaybackMonths,
+    breakdown: [
+      ...base.breakdown,
+      {
+        label: "Beneficiu angajați / an",
+        value: `${annualEmployeeBenefitRon.toLocaleString("ro-RO")} RON`,
+      },
+      {
+        label: "Economie fiscală estimată / an",
+        value: `${annualTaxSavingRon.toLocaleString("ro-RO")} RON`,
+      },
+    ],
   };
 }

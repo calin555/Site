@@ -164,6 +164,31 @@ export default function StatiiIncarcareHubPage() {
         <div className="mt-16">
           <LocalCitiesGrid title="Stații încărcare EV pe orașe" />
         </div>
+
+        <section className="mt-16 grid gap-6 md:grid-cols-2">
+          <Link
+            href="/proiecte-realizate"
+            className="group rounded-2xl border border-surface-200 bg-white p-6 transition-shadow hover:shadow-md"
+          >
+            <h2 className="text-lg font-bold text-surface-900 group-hover:text-brand-700">
+              Proiecte realizate
+            </h2>
+            <p className="mt-2 text-sm text-surface-600">
+              Instalări reale — rezidențial, firmă, hotel, bloc.
+            </p>
+          </Link>
+          <Link
+            href="/studii-de-caz"
+            className="group rounded-2xl border border-surface-200 bg-white p-6 transition-shadow hover:shadow-md"
+          >
+            <h2 className="text-lg font-bold text-surface-900 group-hover:text-brand-700">
+              Studii de caz
+            </h2>
+            <p className="mt-2 text-sm text-surface-600">
+              Firme, hoteluri, condominiu — ROI și lecții învățate.
+            </p>
+          </Link>
+        </section>
       </Container>
     </>
   );

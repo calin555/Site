@@ -38,10 +38,7 @@ export function prosConsToHtml(
 }
 
 export function buildCommercialBodyHtml(page: CommercialLandingPageData): string {
-  const parts: string[] = [
-    `<p class="lead">${page.intro}</p>`,
-    sectionsToHtml(page.sections),
-  ];
+  const parts: string[] = [sectionsToHtml(page.sections)];
 
   if (page.comparisonTable) {
     parts.push(`<h2>Tabel comparativ</h2>`);

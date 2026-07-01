@@ -7,6 +7,7 @@ import { brands } from "@/lib/mock-data";
 import { TOOLS } from "@/config/tools";
 import { getAllCityPages } from "@/lib/seo/local/city-pages";
 import { getAllCommercialLandings } from "@/lib/seo/commercial/registry";
+import { CASE_STUDIES } from "@/lib/content/case-studies";
 import { legalPaths } from "@/config/legal";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -28,6 +29,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.95,
     },
+    { url: absoluteUrl("/proiecte-realizate"), lastModified: now, changeFrequency: "monthly", priority: 0.75 },
+    { url: absoluteUrl("/studii-de-caz"), lastModified: now, changeFrequency: "monthly", priority: 0.75 },
     { url: absoluteUrl("/ghid"), lastModified: now, changeFrequency: "monthly", priority: 0.85 },
     {
       url: absoluteUrl("/baza-de-cunoastinte"),
@@ -128,10 +131,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.85,
   }));
 
+  const caseStudyPages: MetadataRoute.Sitemap = CASE_STUDIES.map((s) => ({
+    url: absoluteUrl(`/studii-de-caz/${s.slug}`),
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
   return [
     ...staticPages,
     ...commercialPages,
     ...cityPages,
+    ...caseStudyPages,
     ...productPages,
     ...categoryPages,
     ...brandPages,

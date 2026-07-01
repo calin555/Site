@@ -17,6 +17,7 @@ import {
 import { buildFaqPageSchema } from "@/lib/seo/structured-data";
 import { buildProductSchema } from "@/lib/seo/structured-data";
 import { getProductDetail } from "@/lib/services/product.service";
+import { getLandingConversion } from "@/lib/seo/commercial/landing-conversion";
 
 interface CommercialLandingViewProps {
   page: CommercialLandingPageData;
@@ -29,7 +30,10 @@ export async function CommercialLandingView({ page }: CommercialLandingViewProps
   );
 
   const relatedPages = getRelatedCommercialLandings(page.relatedLandingSlugs);
+  const conversion = getLandingConversion(page.slug);
   const bodyHtml = buildCommercialBodyHtml(page);
+  const ctaPrimary = conversion?.ctaPrimary ?? "Solicită ofertă gratuită";
+  const ctaSecondary = conversion?.ctaSecondary ?? page.catalogCtaLabel;
 
   const productSchemas = productDetails
     .filter((p): p is NonNullable<typeof p> => p !== undefined)
@@ -83,17 +87,35 @@ export async function CommercialLandingView({ page }: CommercialLandingViewProps
                   href="/contact"
                   className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-8 text-base font-semibold text-white shadow-sm shadow-brand-600/20 transition-colors hover:bg-brand-700"
                 >
-                  Solicită ofertă
+                  {ctaPrimary}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   href={page.catalogCtaHref}
                   className="inline-flex h-11 w-full items-center justify-center rounded-xl border-2 border-surface-200 bg-white text-sm font-semibold text-surface-900 transition-colors hover:border-brand-500 hover:text-brand-700"
                 >
-                  {page.catalogCtaLabel}
+                  {ctaSecondary}
                 </Link>
               </div>
             </Card>
+
+            {conversion?.toolLinks && conversion.toolLinks.length > 0 && (
+              <Card padding="md">
+                <h3 className="font-semibold text-surface-900">Instrumente utile</h3>
+                <ul className="mt-3 space-y-2 text-sm">
+                  {conversion.toolLinks.map((tool) => (
+                    <li key={tool.href}>
+                      <Link
+                        href={tool.href}
+                        className="text-brand-600 hover:text-brand-700 hover:underline"
+                      >
+                        {tool.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            )}
 
             {relatedPages.length > 0 && (
               <Card padding="md">

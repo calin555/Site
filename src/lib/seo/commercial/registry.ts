@@ -3,13 +3,14 @@ import { TYPE_STATION_PAGES } from "@/lib/seo/commercial/pages/types-stations";
 import { POWER_PAGES } from "@/lib/seo/commercial/pages/power";
 import { VEHICLE_PAGES } from "@/lib/seo/commercial/pages/vehicles";
 import { USE_CASE_PAGES } from "@/lib/seo/commercial/pages/use-cases";
+import { applyLandingConversion } from "@/lib/seo/commercial/landing-conversion";
 
 export const COMMERCIAL_LANDING_PAGES: CommercialLandingPageData[] = [
   ...TYPE_STATION_PAGES,
   ...POWER_PAGES,
   ...VEHICLE_PAGES,
   ...USE_CASE_PAGES,
-];
+].map(applyLandingConversion);
 
 const PAGE_MAP = new Map(
   COMMERCIAL_LANDING_PAGES.map((p) => [p.slug, p])

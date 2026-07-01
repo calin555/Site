@@ -6,9 +6,10 @@ import { ProductDescription } from "./ProductDescription";
 import { ProductSpecs } from "./ProductSpecs";
 import { ProductDownloads } from "./ProductDownloads";
 import { ProductReviews } from "./ProductReviews";
+import { ProductCommercialPanel } from "./ProductCommercialPanel";
 import type { ProductDetail } from "@/types/product";
 
-type TabId = "description" | "specs" | "downloads" | "reviews";
+type TabId = "description" | "guide" | "specs" | "downloads" | "reviews";
 
 interface ProductTabsProps {
   product: ProductDetail;
@@ -16,6 +17,7 @@ interface ProductTabsProps {
 
 const TABS: { id: TabId; label: string }[] = [
   { id: "description", label: "Descriere" },
+  { id: "guide", label: "Potrivit pentru" },
   { id: "specs", label: "Specificații" },
   { id: "downloads", label: "Documente" },
   { id: "reviews", label: "Recenzii" },
@@ -69,6 +71,11 @@ export function ProductTabs({ product }: ProductTabsProps) {
         {activeTab === "description" && (
           <div role="tabpanel" id="panel-description">
             <ProductDescription description={product.description} />
+          </div>
+        )}
+        {activeTab === "guide" && (
+          <div role="tabpanel" id="panel-guide">
+            <ProductCommercialPanel product={product} />
           </div>
         )}
         {activeTab === "specs" && (

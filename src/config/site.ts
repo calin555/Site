@@ -40,6 +40,8 @@ export const siteConfig = {
       { label: "Ghiduri EV", href: "/ghid" },
       { label: "Baza de cunoștințe", href: "/baza-de-cunoastinte" },
       { label: "Despre noi", href: "/despre" },
+      { label: "Proiecte realizate", href: "/proiecte-realizate" },
+      { label: "Studii de caz", href: "/studii-de-caz" },
       { label: "Instrumente EV", href: "/tools" },
       { label: "Blog", href: "/blog" },
       { label: "Contact", href: "/contact" },
