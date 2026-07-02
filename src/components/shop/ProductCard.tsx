@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { PriceDisplay } from "@/components/shared/PriceDisplay";
 import { ProductCardAddButton } from "@/components/shop/ProductCardAddButton";
 import { isExternalImageUrl } from "@/lib/utils";
+import { isProductPurchasable } from "@/lib/catalog/stock-status";
 import type { CatalogProduct } from "@/types/catalog";
 import {
   buildProductCardTitle,
@@ -16,8 +17,10 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const isReady = isProductPurchasable(product.stockStatus, product.stock);
+
   return (
-    <article className="group card-lift relative flex flex-col overflow-hidden rounded-2xl border border-surface-200/80 bg-white shadow-elev-1 hover:border-brand-300/60">
+    <article className="group card-lift energy-border relative flex flex-col overflow-hidden rounded-2xl border border-surface-200/80 bg-white shadow-elev-1 hover:border-brand-300/60">
       {/* Top gradient hairline — signature detail */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-gradient-to-r from-transparent via-brand-400/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
@@ -45,8 +48,21 @@ export function ProductCard({ product }: ProductCardProps) {
       </Link>
 
       <div className="flex flex-1 flex-col p-5">
-        <div className="mb-2 flex items-center gap-2">
+        <div className="mb-2 flex items-center justify-between gap-2">
           <Badge variant="outline">{product.brand}</Badge>
+          {/* Charging-status LED (derived from existing stock data, display only) */}
+          <span
+            className={`flex items-center gap-1.5 text-[11px] font-medium ${
+              isReady ? "text-brand-600" : "text-surface-400"
+            }`}
+          >
+            <span className={isReady ? "charge-led text-brand-500" : "inline-flex h-1.5 w-1.5 rounded-full bg-surface-300"} />
+            {!isReady
+              ? "Stoc epuizat"
+              : product.stockStatus === "PREORDER"
+                ? "Precomandă"
+                : "Disponibil"}
+          </span>
         </div>
 
         <Link href={`/produse/${product.slug}`}>

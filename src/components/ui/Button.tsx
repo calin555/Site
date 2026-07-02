@@ -12,7 +12,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "gradient-brand text-white ring-highlight btn-ripple shadow-elev-1 hover:shadow-glow-brand focus-visible:ring-brand-500",
+    "gradient-brand text-white ring-highlight btn-ripple btn-sheen shadow-elev-1 hover:shadow-glow-brand focus-visible:ring-brand-500",
   secondary:
     "bg-surface-900 text-white ring-highlight btn-ripple hover:bg-surface-800 shadow-elev-1 focus-visible:ring-surface-800",
   outline:

@@ -54,6 +54,13 @@
   --shadow-glow-brand: 0 0 0 1px rgba(15, 184, 126, 0.12), 0 8px 32px -8px rgba(15, 184, 126, 0.35);
 }
 
+/* Rotating angle for electric border current (interpolable custom property) */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -324,6 +331,162 @@
   .stagger-5 { animation-delay: 0.5s; }
   .stagger-6 { animation-delay: 0.6s; }
 
+  /* ============================================================
+     EV ENERGY ART DIRECTION
+     — electric borders, current flow, spark particles,
+       charge pulses, circuit traces, grid horizon
+     ============================================================ */
+
+  /* Electric border — a current of light orbiting the card on hover */
+  .energy-border {
+    position: relative;
+  }
+
+  .energy-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(
+      from var(--angle),
+      transparent 0deg,
+      transparent 40deg,
+      rgba(15, 184, 126, 0.9) 80deg,
+      rgba(163, 230, 53, 1) 105deg,
+      rgba(56, 189, 248, 0.7) 130deg,
+      transparent 170deg,
+      transparent 360deg
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    animation: spinAngle 2.6s linear infinite;
+    animation-play-state: paused;
+    pointer-events: none;
+  }
+
+  .energy-border:hover::before,
+  .energy-border:focus-within::before {
+    opacity: 1;
+    animation-play-state: running;
+  }
+
+  /* Current flowing along an SVG path (pair with a faint base path) */
+  .energy-flow {
+    stroke-dasharray: 48 640;
+    stroke-linecap: round;
+    animation: energyFlow 4.5s linear infinite;
+  }
+
+  .energy-flow-slow {
+    stroke-dasharray: 32 520;
+    stroke-linecap: round;
+    animation: energyFlow 7s linear infinite;
+  }
+
+  /* Spark particles — GPU drift, three organic variants */
+  .particle {
+    position: absolute;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(163, 230, 53, 0.9) 0%, rgba(15, 184, 126, 0.4) 60%, transparent 100%);
+    filter: blur(0.5px);
+    will-change: transform, opacity;
+    animation: particleDriftA 9s ease-in-out infinite;
+  }
+
+  .particle-b { animation-name: particleDriftB; animation-duration: 12s; }
+  .particle-c { animation-name: particleDriftC; animation-duration: 10s; }
+
+  /* Charging pulse rings — expanding EM waves */
+  .pulse-ring {
+    position: absolute;
+    border: 1px solid rgba(15, 184, 126, 0.45);
+    border-radius: 9999px;
+    will-change: transform, opacity;
+    animation: pulseRing 3.4s cubic-bezier(0.2, 0.6, 0.36, 1) infinite;
+  }
+
+  /* Aurora energy blobs — transform-only drift (composited) */
+  .aurora-blob {
+    will-change: transform;
+    animation: auroraDriftA 16s ease-in-out infinite alternate;
+  }
+
+  .aurora-blob-b { animation-name: auroraDriftB; animation-duration: 20s; }
+  .aurora-blob-c { animation-name: auroraDriftC; animation-duration: 18s; }
+
+  /* Perspective grid floor — smart-grid horizon under the hero */
+  .grid-floor {
+    background-image:
+      linear-gradient(rgba(15, 184, 126, 0.22) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 184, 126, 0.22) 1px, transparent 1px);
+    background-size: 44px 44px;
+    transform: perspective(420px) rotateX(58deg);
+    transform-origin: top center;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), transparent 85%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), transparent 85%);
+  }
+
+  /* Sheen sweep — light passing over primary CTAs */
+  .btn-sheen {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-sheen::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -60%;
+    width: 40%;
+    transform: skewX(-20deg);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transition: transform 0.7s ease;
+    pointer-events: none;
+  }
+
+  .btn-sheen:hover::before {
+    transform: translateX(340%) skewX(-20deg);
+  }
+
+  /* Charging LED indicator */
+  .charge-led {
+    position: relative;
+    display: inline-flex;
+    height: 0.4rem;
+    width: 0.4rem;
+  }
+
+  .charge-led::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: currentColor;
+    animation: ledPing 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .charge-led::after {
+    content: "";
+    position: relative;
+    display: inline-flex;
+    height: 100%;
+    width: 100%;
+    border-radius: 9999px;
+    background: currentColor;
+  }
+
+  /* Text glow for hero display type */
+  .text-glow {
+    text-shadow: 0 0 32px rgba(15, 184, 126, 0.45), 0 0 80px rgba(163, 230, 53, 0.15);
+  }
+
   /* ---------- Layout helpers (unchanged behavior) ---------- */
 
   .break-anywhere {
@@ -403,6 +566,59 @@
   100% { transform: translateX(100%); }
 }
 
+@keyframes spinAngle {
+  to { --angle: 360deg; }
+}
+
+@keyframes energyFlow {
+  to { stroke-dashoffset: -688; }
+}
+
+@keyframes particleDriftA {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.15; }
+  25% { opacity: 0.7; }
+  50% { transform: translate3d(18px, -46px, 0) scale(1.15); opacity: 0.4; }
+  75% { opacity: 0.65; }
+}
+
+@keyframes particleDriftB {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.1; }
+  30% { opacity: 0.55; }
+  60% { transform: translate3d(-24px, -60px, 0) scale(0.85); opacity: 0.35; }
+  85% { opacity: 0.5; }
+}
+
+@keyframes particleDriftC {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.2; }
+  40% { transform: translate3d(12px, -70px, 0) scale(1.25); opacity: 0.6; }
+  70% { opacity: 0.3; }
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(0.55); opacity: 0.65; }
+  100% { transform: scale(1.45); opacity: 0; }
+}
+
+@keyframes auroraDriftA {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(60px, -40px, 0) scale(1.15); }
+}
+
+@keyframes auroraDriftB {
+  from { transform: translate3d(0, 0, 0) scale(1.1); }
+  to { transform: translate3d(-70px, 50px, 0) scale(0.95); }
+}
+
+@keyframes auroraDriftC {
+  from { transform: translate3d(0, 0, 0) scale(0.95); }
+  to { transform: translate3d(40px, 60px, 0) scale(1.1); }
+}
+
+@keyframes ledPing {
+  0% { transform: scale(1); opacity: 0.7; }
+  75%, 100% { transform: scale(2.4); opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in,
   .animate-slide-up,
@@ -424,6 +640,31 @@
 
   .skeleton::after {
     animation: none;
+  }
+
+  .energy-border::before,
+  .energy-flow,
+  .energy-flow-slow,
+  .particle,
+  .pulse-ring,
+  .aurora-blob,
+  .aurora-blob-b,
+  .aurora-blob-c,
+  .charge-led::before {
+    animation: none;
+  }
+
+  .pulse-ring {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+
+  .particle {
+    opacity: 0.3;
+  }
+
+  .btn-sheen::before {
+    display: none;
   }
 
   html {

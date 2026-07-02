@@ -20,7 +20,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
 
   return (
     <div className="space-y-4">
-      <div className="relative aspect-square overflow-hidden rounded-2xl border border-surface-200 bg-surface-100">
+      <div className="energy-border relative aspect-square overflow-hidden rounded-2xl border border-surface-200 bg-surface-100 shadow-elev-1">
         <Image
           src={active.url}
           alt={active.alt || productName}

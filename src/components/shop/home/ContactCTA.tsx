@@ -15,8 +15,14 @@ export function ContactCTA({ contact }: ContactCTAProps) {
       <div className="gradient-brand absolute inset-0" />
       <div className="absolute inset-0 pattern-dots opacity-20" />
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -right-20 top-0 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
-        <div className="absolute -left-20 bottom-0 h-80 w-80 rounded-full bg-white/5 blur-3xl" />
+        <div className="aurora-blob absolute -right-20 top-0 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
+        <div className="aurora-blob-b absolute -left-20 bottom-0 h-80 w-80 rounded-full bg-white/5 blur-3xl" />
+        {/* Charge pulse behind the headline */}
+        <span className="pulse-ring left-[12%] top-[30%] h-40 w-40 border-white/30" />
+        <span
+          className="pulse-ring left-[12%] top-[30%] h-40 w-40 border-white/20"
+          style={{ animationDelay: "1.6s" }}
+        />
       </div>
 
       <Container className="relative">

@@ -12,9 +12,25 @@ interface FooterProps {
 export function Footer({ contact }: FooterProps) {
   return (
     <footer className="gradient-dark relative min-w-0 overflow-x-hidden text-surface-300">
-      {/* Signature gradient hairline */}
+      {/* Signature gradient hairline with flowing current */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-500/60 to-transparent" />
-      <div className="pointer-events-none absolute -left-32 top-0 h-72 w-72 rounded-full bg-brand-500/10 blur-3xl" />
+      <svg
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-1 w-full"
+        viewBox="0 0 1200 4"
+        fill="none"
+        preserveAspectRatio="none"
+      >
+        <path
+          className="energy-flow-slow"
+          d="M0 2 H1200"
+          stroke="#a3e635"
+          strokeWidth="1.5"
+          strokeOpacity="0.7"
+        />
+      </svg>
+      <div className="aurora-blob pointer-events-none absolute -left-32 top-0 h-72 w-72 rounded-full bg-brand-500/10 blur-3xl" />
+      <div className="aurora-blob-c pointer-events-none absolute -right-24 bottom-0 h-64 w-64 rounded-full bg-violet-500/8 blur-3xl" />
       <Container className="relative py-16">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}

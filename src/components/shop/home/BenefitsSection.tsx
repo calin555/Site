@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { AnimateIn } from "@/components/shared/AnimateIn";
 import { Container } from "@/components/shared/Container";
+import { EnergyField } from "@/components/shared/EnergyField";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
 const benefits = [
@@ -65,7 +66,7 @@ export function BenefitsSection() {
   return (
     <section className="gradient-dark relative overflow-hidden py-20 sm:py-24">
       <div className="pointer-events-none absolute inset-0 pattern-grid opacity-50" />
-      <div className="pointer-events-none absolute -left-40 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-brand-500/10 blur-3xl" />
+      <EnergyField variant="dark" particles circuits />
 
       <Container className="relative">
         <AnimateIn>

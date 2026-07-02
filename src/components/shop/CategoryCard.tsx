@@ -11,7 +11,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
   return (
     <Link
       href={`/produse/categorie/${category.slug}`}
-      className="group card-lift relative block overflow-hidden rounded-2xl border border-surface-200/80 bg-white shadow-elev-1 hover:border-brand-300/60"
+      className="group card-lift energy-border relative block overflow-hidden rounded-2xl border border-surface-200/80 bg-white shadow-elev-1 hover:border-brand-300/60"
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-surface-900">
         <CategoryImage

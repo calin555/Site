@@ -17,8 +17,37 @@ export function FeaturedProductsSection({
   return (
     <section className="relative isolate overflow-hidden bg-surface-50 py-20 sm:py-24">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -right-20 top-0 h-96 w-96 rounded-full bg-brand-100/50 blur-3xl" />
+        <div className="aurora-blob absolute -right-20 top-0 h-96 w-96 rounded-full bg-brand-100/50 blur-3xl" />
+        <div className="aurora-blob-b absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-sky-100/40 blur-3xl" />
       </div>
+
+      {/* Energy wave flowing toward the product grid */}
+      <svg
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 w-full opacity-40"
+        viewBox="0 0 1200 96"
+        fill="none"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0 48 Q300 16 600 48 T1200 48"
+          stroke="rgba(15,184,126,0.25)"
+          strokeWidth="1.5"
+        />
+        <path
+          className="energy-flow"
+          d="M0 48 Q300 16 600 48 T1200 48"
+          stroke="url(#waveGrad)"
+          strokeWidth="2"
+        />
+        <defs>
+          <linearGradient id="waveGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#0fb87e" stopOpacity="0" />
+            <stop offset="50%" stopColor="#a3e635" />
+            <stop offset="100%" stopColor="#0fb87e" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+      </svg>
 
       <Container className="relative">
         <AnimateIn>

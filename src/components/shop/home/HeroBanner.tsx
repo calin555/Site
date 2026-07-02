@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/shared/Container";
+import { EnergyField, ChargePulse } from "@/components/shared/EnergyField";
 import { formatPrice, isExternalImageUrl } from "@/lib/utils";
 import type { CatalogProduct } from "@/types/catalog";
 
@@ -27,15 +28,16 @@ interface HeroBannerProps {
 export function HeroBanner({ heroProduct }: HeroBannerProps) {
   return (
     <section className="relative overflow-hidden gradient-dark-grid">
+      {/* Animated energy field: aurora + sparks + circuit traces */}
+      <EnergyField variant="dark" particles circuits />
+
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="animate-float absolute -right-20 top-20 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl" />
-        <div
-          className="animate-float absolute -left-20 bottom-10 h-96 w-96 rounded-full bg-accent/10 blur-3xl"
-          style={{ animationDelay: "2s" }}
-        />
-        {/* Signature light beam */}
+        {/* Signature light beams */}
         <div className="absolute -top-40 left-1/2 h-[32rem] w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-brand-400/40 to-transparent" />
+        <div className="absolute -top-24 left-1/4 h-80 w-px bg-gradient-to-b from-transparent via-sky-400/25 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-br from-brand-600/10 via-transparent to-accent/5" />
+        {/* Smart-grid horizon floor */}
+        <div className="grid-floor absolute inset-x-[-20%] bottom-0 h-56" />
       </div>
 
       <Container className="relative py-16 sm:py-24 lg:py-32">
@@ -51,7 +53,7 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
 
             <h1 className="animate-slide-up stagger-1 font-display text-balance break-words text-4xl font-bold leading-[1.06] tracking-tight text-white sm:text-5xl lg:text-6xl">
               Stații încărcare EV{" "}
-              <span className="text-gradient-brand">România</span>
+              <span className="text-gradient-brand text-glow">România</span>
               {" "}— AC & DC rapid
             </h1>
 
@@ -122,6 +124,35 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
           </div>
 
           <div className="relative hidden lg:block">
+            {/* Charge-pulse rings radiating from the station */}
+            <ChargePulse className="scale-125" />
+
+            {/* Energy conduit flowing toward the product */}
+            <svg
+              aria-hidden="true"
+              className="pointer-events-none absolute -left-24 top-1/2 h-24 w-32 -translate-y-1/2"
+              viewBox="0 0 128 96"
+              fill="none"
+            >
+              <path
+                d="M0 48 H60 q12 0 12 -12 V20 q0 -12 12 -12 H128"
+                stroke="rgba(15,184,126,0.15)"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M0 48 H60 q12 0 12 12 V76 q0 12 12 12 H128"
+                stroke="rgba(56,189,248,0.12)"
+                strokeWidth="1.5"
+              />
+              <path
+                className="energy-flow-slow"
+                d="M0 48 H60 q12 0 12 -12 V20 q0 -12 12 -12 H128"
+                stroke="#a3e635"
+                strokeWidth="2"
+                strokeOpacity="0.7"
+              />
+            </svg>
+
             <div className="animate-fade-in stagger-3 relative">
               <div className="animate-glow relative aspect-[4/3] overflow-hidden rounded-[1.75rem] border border-white/10 shadow-elev-3">
                 {heroProduct?.image ? (
@@ -168,7 +199,8 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
                       />
                     </div>
                     <div className="flex-1">
-                      <p className="text-xs font-medium text-brand-400">
+                      <p className="flex items-center gap-1.5 text-xs font-medium text-brand-400">
+                        <span className="charge-led text-accent" />
                         Bestseller
                       </p>
                       <p className="text-sm font-bold text-white line-clamp-1">
