@@ -7,6 +7,7 @@ import { brands } from "@/lib/mock-data";
 import { TOOLS } from "@/config/tools";
 import { getAllCityPages } from "@/lib/seo/local/city-pages";
 import { getAllCommercialLandings } from "@/lib/seo/commercial/registry";
+import { getAllVehicles } from "@/lib/compatibility/vehicles";
 import { CASE_STUDIES } from "@/lib/content/case-studies";
 import { legalPaths } from "@/config/legal";
 
@@ -28,6 +29,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.95,
+    },
+    {
+      url: absoluteUrl("/compatibilitate"),
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.92,
     },
     { url: absoluteUrl("/proiecte-realizate"), lastModified: now, changeFrequency: "monthly", priority: 0.75 },
     { url: absoluteUrl("/studii-de-caz"), lastModified: now, changeFrequency: "monthly", priority: 0.75 },
@@ -138,10 +145,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  const compatibilityPages: MetadataRoute.Sitemap = getAllVehicles().map(
+    (vehicle) => ({
+      url: absoluteUrl(`/compatibilitate/${vehicle.slug}`),
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.88,
+    })
+  );
+
   return [
     ...staticPages,
     ...commercialPages,
     ...cityPages,
+    ...compatibilityPages,
     ...caseStudyPages,
     ...productPages,
     ...categoryPages,

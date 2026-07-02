@@ -18,6 +18,7 @@ export const siteConfig = {
     { label: "Produse", href: "/produse" },
     { label: "Categorii", href: "/categorii" },
     { label: "Stații încărcare", href: "/statii-incarcare" },
+    { label: "Compatibilitate EV", href: "/compatibilitate" },
     { label: "Instrumente", href: "/tools" },
     { label: "Blog", href: "/blog" },
     { label: "FAQ", href: "/faq" },
@@ -32,6 +33,7 @@ export const siteConfig = {
       { label: "Accesorii", href: "/categorii/accesorii" },
     ],
     company: [
+      { label: "Compatibilitate EV", href: "/compatibilitate" },
       { label: "Stații încărcare EV", href: "/statii-incarcare" },
       { label: "Stații EV București", href: "/statii-incarcare-bucuresti" },
       { label: "Stații EV Cluj", href: "/statii-incarcare-cluj-napoca" },

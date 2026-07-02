@@ -713,6 +713,55 @@
   to { background-position: -220% 0; }
 }
 
+/* ---------- EV Compatibility Finder ---------- */
+
+@keyframes compatSearchGlow {
+  0%, 100% { box-shadow: 0 4px 24px -4px rgba(15, 184, 126, 0.15); }
+  50% { box-shadow: 0 8px 32px -4px rgba(15, 184, 126, 0.35); }
+}
+
+@keyframes chargingBarFill {
+  0% { width: 12%; opacity: 0.6; }
+  50% { width: 88%; opacity: 1; }
+  100% { width: 12%; opacity: 0.6; }
+}
+
+@keyframes connectorPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+
+@keyframes vehicleWheelSpin {
+  from { transform: rotate(0deg); transform-origin: center; }
+  to { transform: rotate(360deg); transform-origin: center; }
+}
+
+@keyframes cableFlow {
+  0%, 100% { stroke-dashoffset: 20; opacity: 0.5; }
+  50% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+.compat-search-glow {
+  animation: compatSearchGlow 3s ease-in-out infinite;
+}
+
+.charging-bar-fill {
+  animation: chargingBarFill 2.8s ease-in-out infinite;
+}
+
+.connector-pulse-dot {
+  animation: connectorPulse 1.6s ease-in-out infinite;
+}
+
+.vehicle-silhouette-wheel {
+  animation: vehicleWheelSpin 8s linear infinite;
+}
+
+.charging-cable {
+  stroke-dasharray: 20;
+  animation: cableFlow 2s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in,
   .animate-slide-up,
@@ -748,7 +797,12 @@
   .charge-led::before,
   .logo-glow,
   .logo-bolt,
-  .logo-electric::after {
+  .logo-electric::after,
+  .compat-search-glow,
+  .charging-bar-fill,
+  .connector-pulse-dot,
+  .vehicle-silhouette-wheel,
+  .charging-cable {
     animation: none;
   }
 
