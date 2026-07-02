@@ -51,7 +51,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
         {product.isFeatured && <Badge variant="dark">Popular</Badge>}
       </div>
 
-      <h1 className="break-anywhere text-2xl font-bold leading-tight text-surface-900 sm:text-3xl">
+      <h1 className="font-display break-anywhere text-2xl font-bold leading-tight tracking-tight text-surface-900 sm:text-3xl">
         {buildProductSeoTitle(product)}
       </h1>
       <p className="text-sm text-surface-500">{product.name}</p>
@@ -125,7 +125,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
         ].map(({ icon: Icon, label }) => (
           <div
             key={label}
-            className="min-w-0 rounded-xl border border-surface-200 bg-surface-50 p-2.5 text-center sm:p-3"
+            className="min-w-0 rounded-xl border border-surface-200/80 bg-gradient-to-b from-surface-50 to-white p-2.5 text-center shadow-elev-1 transition-shadow duration-200 hover:shadow-elev-2 sm:p-3"
           >
             <Icon className="mx-auto h-5 w-5 text-brand-600" />
             <p className="mt-1.5 break-words text-[10px] font-medium leading-tight text-surface-600 sm:text-[11px]">

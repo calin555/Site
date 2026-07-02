@@ -61,7 +61,7 @@ export function ProductTabs({ product }: ProductTabsProps) {
               </span>
             )}
             {activeTab === tab.id && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-600" />
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-gradient-to-r from-brand-500 to-accent" />
             )}
           </button>
         ))}

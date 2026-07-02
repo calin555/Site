@@ -11,18 +11,18 @@ export function CategoryCard({ category }: CategoryCardProps) {
   return (
     <Link
       href={`/produse/categorie/${category.slug}`}
-      className="group relative overflow-hidden rounded-2xl border border-surface-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-500/5"
+      className="group card-lift relative block overflow-hidden rounded-2xl border border-surface-200/80 bg-white shadow-elev-1 hover:border-brand-300/60"
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-surface-900">
         <CategoryImage
           src={category.image}
           alt={category.name}
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-surface-900/80 via-surface-900/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-surface-950/85 via-surface-950/25 to-transparent" />
       </div>
       <div className="absolute bottom-0 left-0 right-0 p-5">
-        <h3 className="text-lg font-bold text-white">{category.name}</h3>
+        <h3 className="font-display text-lg font-bold tracking-tight text-white">{category.name}</h3>
         <p className="mt-1 text-sm text-surface-300 line-clamp-2">
           {category.description}
         </p>

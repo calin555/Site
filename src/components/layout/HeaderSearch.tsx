@@ -68,11 +68,11 @@ export function HeaderSearch() {
           <button
             type="button"
             aria-label="Închide căutarea"
-            className="absolute inset-0 bg-surface-900/60"
+            className="animate-fade-in absolute inset-0 bg-surface-950/60 backdrop-blur-sm"
             onClick={close}
           />
 
-          <div className="relative w-full border-b border-surface-200 bg-white shadow-lg">
+          <div className="animate-slide-up relative w-full border-b border-surface-200/70 bg-white/95 shadow-elev-3 backdrop-blur-xl" style={{ animationDuration: "0.35s" }}>
             <div className="mx-auto w-full max-w-3xl px-4 py-4 sm:px-6">
               <form onSubmit={submit} className="flex items-center gap-2">
                 <div className="relative min-w-0 flex-1">
@@ -103,9 +103,9 @@ export function HeaderSearch() {
                   type="submit"
                   disabled={!query.trim() || isPending}
                   className={cn(
-                    "inline-flex h-11 shrink-0 items-center justify-center rounded-xl px-4 text-sm font-semibold transition-colors",
+                    "inline-flex h-11 shrink-0 items-center justify-center rounded-full px-5 text-sm font-semibold transition-all duration-200",
                     query.trim()
-                      ? "bg-brand-600 text-white hover:bg-brand-700"
+                      ? "gradient-brand text-white ring-highlight hover:shadow-glow-brand"
                       : "cursor-not-allowed bg-surface-100 text-surface-400"
                   )}
                 >

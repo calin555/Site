@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { buildRootMetadata } from "@/lib/seo/metadata";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
@@ -8,6 +8,12 @@ import { MobileWebViewFix } from "@/components/layout/MobileWebViewFix";
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 
@@ -35,7 +41,7 @@ export default function RootLayout({
         <MobileWebViewFix />
       </head>
       <body
-        className={`${inter.variable} w-full max-w-full overflow-x-hidden font-sans antialiased`}
+        className={`${inter.variable} ${spaceGrotesk.variable} w-full max-w-full overflow-x-hidden font-sans antialiased`}
       >
         {children}
       </body>

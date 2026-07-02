@@ -85,14 +85,14 @@ export async function CommercialLandingView({ page }: CommercialLandingViewProps
               <div className="mt-6 space-y-3">
                 <Link
                   href="/contact"
-                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-8 text-base font-semibold text-white shadow-sm shadow-brand-600/20 transition-colors hover:bg-brand-700"
+                  className="gradient-brand ring-highlight btn-ripple inline-flex h-12 w-full items-center justify-center gap-2 rounded-full px-8 text-base font-semibold text-white shadow-elev-1 transition-all duration-300 hover:shadow-glow-brand"
                 >
                   {ctaPrimary}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   href={page.catalogCtaHref}
-                  className="inline-flex h-11 w-full items-center justify-center rounded-xl border-2 border-surface-200 bg-white text-sm font-semibold text-surface-900 transition-colors hover:border-brand-500 hover:text-brand-700"
+                  className="inline-flex h-11 w-full items-center justify-center rounded-full border border-surface-300 bg-white text-sm font-semibold text-surface-900 transition-all duration-200 hover:border-brand-500 hover:text-brand-700 hover:shadow-elev-1"
                 >
                   {ctaSecondary}
                 </Link>

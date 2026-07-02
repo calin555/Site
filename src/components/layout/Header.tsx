@@ -37,7 +37,7 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
   return (
     <header className="sticky inset-x-0 top-0 z-50 w-full min-w-0 max-w-full overflow-visible">
       {/* Top bar */}
-      <div className="hidden border-b border-brand-800/30 bg-surface-900 text-sm text-surface-300 lg:block">
+      <div className="gradient-dark hidden border-b border-white/5 text-sm text-surface-300 lg:block">
         <Container>
           <div className="flex h-10 items-center justify-between">
             <div className="flex items-center gap-6">
@@ -66,16 +66,16 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
       </div>
 
       {/* Main nav */}
-      <div className="border-b border-surface-200 bg-white/95 backdrop-blur-md">
+      <div className="glass border-b border-surface-200/70">
         <Container>
           <div className="flex h-16 min-w-0 items-center justify-between gap-2 sm:gap-4 lg:h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 shrink-0">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-brand shadow-lg shadow-brand-500/25">
+            <Link href="/" className="group flex items-center gap-2.5 shrink-0">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-brand ring-highlight shadow-elev-1 transition-shadow duration-300 group-hover:shadow-glow-brand">
                 <Zap className="h-5 w-5 text-white" />
               </div>
               <div className="hidden sm:block">
-                <span className="text-lg font-bold text-surface-900">
+                <span className="font-display text-lg font-bold tracking-tight text-surface-900">
                   {siteConfig.name}
                 </span>
                 <span className="block text-[10px] font-medium uppercase tracking-widest text-brand-600">
@@ -85,16 +85,17 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
             </Link>
 
             {/* Desktop nav */}
-            <nav className="hidden items-center gap-1 lg:flex">
+            <nav className="hidden items-center gap-0.5 lg:flex">
               {siteConfig.nav.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
+                  data-active={pathname === item.href}
                   className={cn(
-                    "rounded-lg px-3.5 py-2 text-sm font-medium transition-colors",
+                    "nav-link rounded-lg px-3.5 py-2 text-sm font-medium transition-colors duration-200",
                     pathname === item.href
-                      ? "bg-brand-50 text-brand-700"
-                      : "text-surface-600 hover:bg-surface-50 hover:text-surface-900"
+                      ? "text-brand-700"
+                      : "text-surface-600 hover:text-surface-900"
                   )}
                 >
                   {item.label}
@@ -119,12 +120,12 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
               )}
               <Link
                 href="/cos"
-                className="relative rounded-xl p-2.5 text-surface-600 transition-colors hover:bg-surface-100"
+                className="relative rounded-full p-2.5 text-surface-600 transition-all duration-200 hover:bg-surface-100 hover:text-surface-900"
                 aria-label="Coș"
               >
                 <ShoppingCart className="h-5 w-5" />
                 {cartCount > 0 && (
-                  <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-brand-600 text-[10px] font-bold text-white">
+                  <span className="animate-scale-in absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full gradient-brand text-[10px] font-bold text-white shadow-elev-1">
                     {cartCount > 9 ? "9+" : cartCount}
                   </span>
                 )}
@@ -147,7 +148,7 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
 
         {/* Mobile nav */}
         {mobileOpen && (
-          <div className="border-t border-surface-200 bg-white lg:hidden">
+          <div className="animate-fade-in border-t border-surface-200/70 bg-white/95 backdrop-blur-lg lg:hidden">
             <Container className="py-4">
               <nav className="flex flex-col gap-1">
                 {siteConfig.nav.map((item) => (

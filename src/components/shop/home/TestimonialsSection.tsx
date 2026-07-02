@@ -44,7 +44,7 @@ export function TestimonialsSection({
         <div className="grid gap-6 md:grid-cols-3">
           {testimonials.map((item, i) => (
             <AnimateIn key={item.id} delay={i * 150}>
-              <article className="relative flex h-full flex-col rounded-2xl border border-surface-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-500/5">
+              <article className="card-lift relative flex h-full flex-col rounded-2xl border border-surface-200/80 bg-white p-6 shadow-elev-1 hover:border-brand-300/60">
                 <Quote className="absolute right-5 top-5 h-8 w-8 text-brand-100" />
                 <StarRating rating={item.rating} />
                 <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-surface-600">

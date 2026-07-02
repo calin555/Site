@@ -15,8 +15,14 @@ const columnClasses = {
 export function ProductGrid({ products, columns = 3 }: ProductGridProps) {
   if (products.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-surface-300 bg-surface-50 py-16 text-center">
-        <p className="text-surface-500">Nu am găsit produse în această categorie.</p>
+      <div className="relative overflow-hidden rounded-2xl border border-dashed border-surface-300 bg-surface-50 py-16 text-center">
+        <div className="pointer-events-none absolute -top-16 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full bg-brand-200/40 blur-3xl" />
+        <p className="relative font-medium text-surface-600">
+          Nu am găsit produse în această categorie.
+        </p>
+        <p className="relative mt-1 text-sm text-surface-500">
+          Încearcă alte filtre sau revino la catalogul complet.
+        </p>
       </div>
     );
   }

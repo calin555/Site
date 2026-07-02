@@ -26,11 +26,12 @@ export function SectionHeading({
       {...props}
     >
       {badge && (
-        <span className="inline-block rounded-full bg-brand-100 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-700">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-700 ring-1 ring-inset ring-brand-200/70">
+          <span className="h-1 w-1 rounded-full bg-brand-500" />
           {badge}
         </span>
       )}
-      <h2 className="text-balance break-words text-3xl font-bold tracking-tight text-surface-900 sm:text-4xl">
+      <h2 className="font-display text-balance break-words text-3xl font-bold tracking-tight text-surface-900 sm:text-4xl">
         {title}
       </h2>
       {subtitle && (

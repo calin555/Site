@@ -28,28 +28,31 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
   return (
     <section className="relative overflow-hidden gradient-dark-grid">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="animate-float absolute -right-20 top-20 h-72 w-72 rounded-full bg-brand-500/15 blur-3xl" />
+        <div className="animate-float absolute -right-20 top-20 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl" />
         <div
           className="animate-float absolute -left-20 bottom-10 h-96 w-96 rounded-full bg-accent/10 blur-3xl"
           style={{ animationDelay: "2s" }}
         />
+        {/* Signature light beam */}
+        <div className="absolute -top-40 left-1/2 h-[32rem] w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-brand-400/40 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-br from-brand-600/10 via-transparent to-accent/5" />
       </div>
 
       <Container className="relative py-16 sm:py-24 lg:py-32">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <div className="space-y-8">
-            <div className="animate-slide-up inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-brand-500/30 bg-brand-500/10 px-4 py-1.5 text-sm font-medium text-brand-300">
-              <Zap className="h-4 w-4" />
+            <div className="animate-slide-up glass-dark inline-flex max-w-full flex-wrap items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium text-brand-300">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+              </span>
               Lider în infrastructură EV din România
             </div>
 
-            <h1 className="animate-slide-up stagger-1 text-balance break-words text-3xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.5rem]">
+            <h1 className="animate-slide-up stagger-1 font-display text-balance break-words text-4xl font-bold leading-[1.06] tracking-tight text-white sm:text-5xl lg:text-6xl">
               Stații încărcare EV{" "}
-              <span className="bg-gradient-to-r from-brand-400 via-brand-300 to-accent bg-clip-text text-transparent animate-shimmer">
-                România
-              </span>
-              — AC & DC rapid
+              <span className="text-gradient-brand">România</span>
+              {" "}— AC & DC rapid
             </h1>
 
             <p className="animate-slide-up stagger-2 max-w-lg text-lg leading-relaxed text-surface-300">
@@ -104,10 +107,10 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
               </div>
             </div>
 
-            <div className="animate-slide-up stagger-5 grid grid-cols-3 gap-4 border-t border-surface-700/50 pt-8">
+            <div className="animate-slide-up stagger-5 grid grid-cols-3 gap-4 border-t border-white/10 pt-8">
               {stats.map(({ value, label }) => (
                 <div key={label}>
-                  <p className="text-2xl font-bold text-white sm:text-3xl">
+                  <p className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl">
                     {value}
                   </p>
                   <p className="mt-0.5 text-xs text-surface-400 sm:text-sm">
@@ -120,7 +123,7 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
 
           <div className="relative hidden lg:block">
             <div className="animate-fade-in stagger-3 relative">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-surface-700/50 shadow-2xl shadow-brand-500/10">
+              <div className="animate-glow relative aspect-[4/3] overflow-hidden rounded-[1.75rem] border border-white/10 shadow-elev-3">
                 {heroProduct?.image ? (
                   <Image
                     src={heroProduct.image}
@@ -149,7 +152,7 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
               </div>
 
               {heroProduct ? (
-                <div className="animate-float absolute -bottom-6 -left-6 w-64 rounded-2xl border border-white/10 bg-surface-900/90 p-4 shadow-2xl backdrop-blur-md">
+                <div className="animate-float glass-dark absolute -bottom-6 -left-6 w-64 rounded-2xl p-4 shadow-elev-3">
                   <div className="flex items-center gap-3">
                     <div className="relative h-14 w-14 overflow-hidden rounded-xl">
                       <Image
@@ -183,7 +186,7 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
                   </div>
                 </div>
               ) : (
-                <div className="animate-float absolute -bottom-6 -left-6 w-64 rounded-2xl border border-white/10 bg-surface-900/90 p-4 shadow-2xl backdrop-blur-md">
+                <div className="animate-float glass-dark absolute -bottom-6 -left-6 w-64 rounded-2xl p-4 shadow-elev-3">
                   <p className="text-sm font-medium text-white">
                     Catalog în pregătire
                   </p>
@@ -197,9 +200,9 @@ export function HeroBanner({ heroProduct }: HeroBannerProps) {
                   </Link>
                 </div>
               )}
-              <div className="animate-pulse-soft absolute -right-4 top-8 rounded-2xl border border-brand-500/30 bg-brand-500/20 px-4 py-3 backdrop-blur-md">
-                <p className="text-2xl font-bold text-white">-12%</p>
-                <p className="text-xs text-brand-200">Ofertă limitată</p>
+              <div className="animate-pulse-soft absolute -right-4 top-8 rounded-2xl border border-accent/30 bg-accent/15 px-4 py-3 backdrop-blur-md">
+                <p className="font-display text-2xl font-bold text-white">-12%</p>
+                <p className="text-xs text-lime-200">Ofertă limitată</p>
               </div>
             </div>
           </div>

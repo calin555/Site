@@ -81,13 +81,14 @@ export function BenefitsSection() {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((benefit, i) => (
             <AnimateIn key={benefit.title} delay={i * 100}>
-              <div className="group h-full rounded-2xl border border-surface-700/50 bg-surface-800/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-brand-500/40 hover:bg-surface-800/80">
-                <div className="flex items-start justify-between">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/15 text-brand-400 transition-colors group-hover:bg-brand-500 group-hover:text-white">
+              <div className="group glass-dark relative h-full overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-500/40">
+                <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-brand-500/10 blur-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="relative flex items-start justify-between">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/15 text-brand-400 ring-1 ring-inset ring-brand-500/20 transition-colors duration-300 group-hover:bg-brand-500 group-hover:text-white">
                     <benefit.icon className="h-6 w-6" />
                   </div>
                   <div className="text-right">
-                    <p className="text-xl font-bold text-brand-400">
+                    <p className="font-display text-xl font-bold tracking-tight text-brand-400">
                       {benefit.stat}
                     </p>
                     <p className="text-[10px] uppercase tracking-wider text-surface-500">
@@ -95,10 +96,10 @@ export function BenefitsSection() {
                     </p>
                   </div>
                 </div>
-                <h3 className="mt-4 text-lg font-bold text-white">
+                <h3 className="font-display relative mt-4 text-lg font-bold tracking-tight text-white">
                   {benefit.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-surface-400">
+                <p className="relative mt-2 text-sm leading-relaxed text-surface-400">
                   {benefit.description}
                 </p>
               </div>

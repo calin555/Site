@@ -116,7 +116,7 @@ export default async function CaseStudyDetailPage({ params }: CaseStudyPageProps
 
             <Link
               href={study.relatedLanding}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-700"
+              className="gradient-brand ring-highlight btn-ripple inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white shadow-elev-1 transition-all duration-300 hover:shadow-glow-brand"
             >
               Soluție similară
               <ArrowRight className="h-4 w-4" />

@@ -26,7 +26,7 @@ export function ContactCTA({ contact }: ContactCTAProps) {
               <span className="inline-block rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur-sm">
                 Consultanță gratuită
               </span>
-              <h2 className="mt-5 text-3xl font-bold text-white sm:text-4xl lg:text-5xl text-balance">
+              <h2 className="font-display mt-5 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl text-balance">
                 Pregătit să treci la electric?
               </h2>
               <p className="mt-4 max-w-lg text-lg text-brand-100">

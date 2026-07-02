@@ -11,16 +11,19 @@ interface FooterProps {
 
 export function Footer({ contact }: FooterProps) {
   return (
-    <footer className="gradient-dark min-w-0 overflow-x-hidden text-surface-300">
-      <Container className="py-16">
+    <footer className="gradient-dark relative min-w-0 overflow-x-hidden text-surface-300">
+      {/* Signature gradient hairline */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-500/60 to-transparent" />
+      <div className="pointer-events-none absolute -left-32 top-0 h-72 w-72 rounded-full bg-brand-500/10 blur-3xl" />
+      <Container className="relative py-16">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="space-y-4 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-brand">
+            <Link href="/" className="group flex items-center gap-2.5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-brand ring-highlight transition-shadow duration-300 group-hover:shadow-glow-brand">
                 <Zap className="h-5 w-5 text-white" />
               </div>
-              <span className="text-lg font-bold text-white">
+              <span className="font-display text-lg font-bold tracking-tight text-white">
                 {siteConfig.name}
               </span>
             </Link>
@@ -32,7 +35,7 @@ export function Footer({ contact }: FooterProps) {
                 <a
                   key={i}
                   href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-800 text-surface-400 transition-colors hover:bg-brand-600 hover:text-white"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-surface-400 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-500/50 hover:bg-brand-600 hover:text-white"
                   aria-label="Social media"
                 >
                   <Icon className="h-4 w-4" />

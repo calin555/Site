@@ -18,16 +18,19 @@ interface CartViewProps {
 export function CartView({ summary, totals }: CartViewProps) {
   if (summary.items.length === 0) {
     return (
-      <div className="py-20 text-center">
-        <ShoppingBag className="mx-auto h-16 w-16 text-surface-300" />
-        <h2 className="mt-4 text-xl font-bold text-surface-900">
+      <div className="animate-fade-in relative overflow-hidden py-20 text-center">
+        <div className="pointer-events-none absolute left-1/2 top-8 h-48 w-48 -translate-x-1/2 rounded-full bg-brand-100/60 blur-3xl" />
+        <div className="relative mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-surface-50 ring-1 ring-inset ring-surface-200">
+          <ShoppingBag className="h-9 w-9 text-surface-400" />
+        </div>
+        <h2 className="font-display relative mt-5 text-xl font-bold tracking-tight text-surface-900">
           Coșul tău este gol
         </h2>
-        <p className="mt-2 text-surface-500">
+        <p className="relative mt-2 text-surface-500">
           Explorează catalogul și adaugă produse.
         </p>
-        <Link href="/produse" className="mt-6 inline-block">
-          <Button>Vezi produsele</Button>
+        <Link href="/produse" className="relative mt-6 inline-block">
+          <Button size="lg">Vezi produsele</Button>
         </Link>
       </div>
     );

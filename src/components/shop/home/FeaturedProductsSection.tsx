@@ -67,7 +67,7 @@ export function FeaturedProductsSection({
         </div>
         {/* Conversion nudge */}
         <AnimateIn delay={400}>
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 px-6 py-5 text-center sm:flex-row sm:text-left">
+          <div className="relative mt-10 flex flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-brand-200/70 bg-gradient-to-r from-brand-50 via-white to-brand-50 px-6 py-5 text-center shadow-elev-1 sm:flex-row sm:text-left">
             <p className="text-sm text-surface-700">
               <span className="font-semibold text-surface-900">
                 Transport gratuit

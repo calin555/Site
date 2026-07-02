@@ -8,11 +8,11 @@ interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 const variants: Record<BadgeVariant, string> = {
-  default: "bg-surface-100 text-surface-700",
-  brand: "bg-brand-100 text-brand-800",
-  accent: "bg-cyan-100 text-cyan-800",
+  default: "bg-surface-100 text-surface-700 ring-1 ring-inset ring-surface-200/60",
+  brand: "bg-brand-50 text-brand-800 ring-1 ring-inset ring-brand-200/70",
+  accent: "bg-lime-50 text-lime-800 ring-1 ring-inset ring-lime-200/70",
   outline: "border border-surface-200 bg-white text-surface-600",
-  dark: "bg-surface-900 text-white",
+  dark: "bg-surface-900 text-white ring-highlight",
 };
 
 export function Badge({
