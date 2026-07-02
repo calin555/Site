@@ -1,6 +1,6 @@
 import type { CatalogProduct } from "@/types/catalog";
 import type { ProductDetail } from "@/types/product";
-import { productSupportsOcpp } from "@/lib/catalog/ocpp-support";
+import { productSupportsOcpp, isChargingStationProduct } from "@/lib/catalog/ocpp-support";
 
 type ProductSeoSource = Pick<
   CatalogProduct,
@@ -20,15 +20,17 @@ const DEFAULT_VEHICLES = ["Tesla", "BMW", "Dacia Spring", "VW ID"];
 
 /** Titlu SEO comercial — vizibil în meta, schema și H1 produs. */
 export function buildProductSeoTitle(product: ProductSeoSource): string {
-  const type =
-    product.categorySlug === "statii-dc"
-      ? "DC rapidă"
-      : product.categorySlug === "accesorii"
-        ? "Accesoriu EV"
-        : "AC";
+  if (!isChargingStationProduct(product)) {
+    if (product.categorySlug === "accesorii") {
+      return `Accesoriu încărcare EV ${product.name}`;
+    }
+    return product.name;
+  }
 
-  const power =
-    product.powerKw > 0 ? `${product.powerKw} kW` : "";
+  const type =
+    product.categorySlug === "statii-dc" ? "DC rapidă" : "AC";
+
+  const power = product.powerKw > 0 ? `${product.powerKw} kW` : "";
 
   const vehicles =
     VEHICLE_TAGS[product.brandSlug]?.slice(0, 3) ?? DEFAULT_VEHICLES;
@@ -43,7 +45,9 @@ export function buildProductSeoTitle(product: ProductSeoSource): string {
 
 /** Nume scurt pentru carduri — păstrează lizibilitatea UI. */
 export function buildProductCardTitle(product: ProductSeoSource): string {
-  if (product.powerKw <= 0) return product.name;
+  if (!isChargingStationProduct(product) || product.powerKw <= 0) {
+    return product.name;
+  }
   const type = product.categorySlug === "statii-dc" ? "DC" : "AC";
   return `${product.name} — ${type} ${product.powerKw} kW`;
 }
