@@ -13,6 +13,14 @@ import {
 import type { CatalogProduct } from "@/types/catalog";
 import { buildProductCardTitle } from "@/lib/seo/product-seo-name";
 
+const PLACEHOLDER_SVG =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f0f4f2' width='400' height='300'/%3E%3Cpath d='M120 180h160l30-45H150l-30 45z' fill='%230fb87e' opacity='0.35'/%3E%3C/svg%3E";
+
+function productImageSrc(url: string | undefined): string {
+  const trimmed = url?.trim();
+  return trimmed || PLACEHOLDER_SVG;
+}
+
 const BADGE_VARIANTS: Record<
   CompatibilityBadge,
   "brand" | "accent" | "default" | "outline" | "dark"
@@ -38,11 +46,13 @@ export function CompatibilityProductCard({
       <Link href={`/produse/${product.slug}`} className="relative">
         <div className="relative aspect-[4/3] overflow-hidden bg-surface-100">
           <Image
-            src={product.image}
+            src={productImageSrc(product.image)}
             alt={buildProductCardTitle(product)}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            unoptimized={isExternalImageUrl(product.image)}
+            unoptimized={
+              isExternalImageUrl(product.image) || !product.image?.trim()
+            }
           />
           <div className="absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] flex-wrap gap-1.5">
             {match.badges.map((badge) => (

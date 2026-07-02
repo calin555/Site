@@ -104,6 +104,7 @@ export default async function CompatibilityVehiclePage({
             vehicle={vehicle}
             chargingTimeHome={match.chargingTimeHome}
             chargingTimeFast={match.chargingTimeFast}
+            stations={stations}
           />
         </div>
 

@@ -1,21 +1,23 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Battery, Plug, Zap, Gauge } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
-import { isExternalImageUrl } from "@/lib/utils";
-import type { EvVehicle } from "@/lib/compatibility/types";
+import type { EvVehicle, MatchedProduct } from "@/lib/compatibility/types";
+import type { CatalogProduct } from "@/types/catalog";
+import { CompatibleStationsPreview } from "@/components/compatibility/CompatibleStationsPreview";
 import { VehicleSilhouette } from "@/components/compatibility/VehicleSilhouette";
 
 interface VehicleHeroProps {
   vehicle: EvVehicle;
   chargingTimeHome: string;
   chargingTimeFast: string;
+  stations: Array<CatalogProduct & { match: MatchedProduct }>;
 }
 
 export function VehicleHero({
   vehicle,
   chargingTimeHome,
   chargingTimeFast,
+  stations,
 }: VehicleHeroProps) {
   const yearLabel = vehicle.yearTo
     ? `${vehicle.yearFrom}–${vehicle.yearTo}`
@@ -23,7 +25,7 @@ export function VehicleHero({
 
   return (
     <section className="relative overflow-hidden rounded-3xl border border-surface-200/80 bg-gradient-to-br from-white via-brand-50/30 to-surface-50 p-6 sm:p-10">
-      <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
         <div className="space-y-6">
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="brand">{vehicle.brand}</Badge>
@@ -41,6 +43,10 @@ export function VehicleHero({
               Stații de încărcare verificate compatibile cu {vehicle.brand}{" "}
               {vehicle.model} — filtrate automat din catalogul ChargePro.
             </p>
+          </div>
+
+          <div className="connector-animation hidden rounded-2xl border border-brand-200/40 bg-white/60 p-4 sm:block lg:hidden">
+            <VehicleSilhouette className="mx-auto h-16 w-56 text-brand-400" />
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -84,38 +90,11 @@ export function VehicleHero({
           </div>
         </div>
 
-        <div className="relative">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-surface-200 bg-surface-900">
-            <Image
-              src={vehicle.image}
-              alt={`${vehicle.brand} ${vehicle.model} — încărcare electrică`}
-              fill
-              className="object-cover opacity-90"
-              unoptimized={isExternalImageUrl(vehicle.image)}
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-surface-950/80 via-surface-950/20 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
-              <p className="text-sm font-medium text-brand-200">
-                Estimări încărcare
-              </p>
-              <div className="mt-2 grid grid-cols-2 gap-3">
-                <div className="rounded-xl bg-white/10 p-3 backdrop-blur-sm">
-                  <p className="text-xs text-surface-300">Acasă 20→80%</p>
-                  <p className="font-display text-lg font-bold">{chargingTimeHome}</p>
-                </div>
-                <div className="rounded-xl bg-white/10 p-3 backdrop-blur-sm">
-                  <p className="text-xs text-surface-300">Rapid DC 10→80%</p>
-                  <p className="font-display text-lg font-bold">{chargingTimeFast}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="connector-animation mt-4 hidden rounded-2xl border border-brand-200/60 bg-brand-50/50 p-4 sm:block">
-            <VehicleSilhouette className="mx-auto h-20 w-64 text-brand-400" />
-          </div>
-        </div>
+        <CompatibleStationsPreview
+          stations={stations}
+          chargingTimeHome={chargingTimeHome}
+          chargingTimeFast={chargingTimeFast}
+        />
       </div>
     </section>
   );

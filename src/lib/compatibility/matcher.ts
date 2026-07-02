@@ -19,11 +19,22 @@ function connectorMatch(product: CatalogProduct, connector: string): boolean {
 }
 
 function isAcStation(product: CatalogProduct): boolean {
+  if (product.categorySlug === "statii-dc" || product.categorySlug === "accesorii") {
+    return false;
+  }
+  if (product.categorySlug === "statii-ac") return true;
+  if (
+    product.categorySlug === "smart-ocpp" &&
+    product.powerKw > 0 &&
+    connectorMatch(product, "Type 2")
+  ) {
+    return true;
+  }
+  // Produse cu putere + Type 2 chiar dacă categoria e atipică în DB
   return (
-    product.categorySlug === "statii-ac" ||
-    (product.categorySlug === "smart-ocpp" &&
-      product.powerKw > 0 &&
-      connectorMatch(product, "Type 2"))
+    product.powerKw > 0 &&
+    product.powerKw <= 22 &&
+    connectorMatch(product, "Type 2")
   );
 }
 
