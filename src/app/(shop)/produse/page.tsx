@@ -4,6 +4,7 @@ import { ProductCatalog } from "@/components/shop/catalog/ProductCatalog";
 import { getCatalogProducts } from "@/lib/services/catalog.service";
 import { parseCatalogSearchParams, getCatalogBasePath } from "@/lib/catalog/urls";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+import { getProduseOgImageUrl } from "@/lib/seo/og-image";
 
 interface ProductsPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -37,6 +38,7 @@ export async function generateMetadata({
     description:
       "Catalog complet stații încărcare mașini electrice: wallbox AC, stații rapide DC, încărcătoare EV și accesorii. Livrare în România.",
     path: "/produse",
+    ogImage: getProduseOgImageUrl(),
     keywords: [
       "stații încărcare EV",
       "încărcătoare EV România",

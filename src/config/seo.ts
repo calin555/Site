@@ -20,8 +20,7 @@ export const SEO_KEYWORDS = [
 export const seoConfig = {
   siteName: "IncarcAuto.ro",
   legalName: "ChargePro",
-  defaultOgImage:
-    "https://images.unsplash.com/photo-1593941707882-a5bba14938ca?w=1200&h=630&fit=crop&q=80",
+  defaultOgImage: "/opengraph-image",
   locale: "ro_RO",
   googleSiteVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   /** Google Analytics 4 — fallback la ID-ul contului dacă env lipsește pe Vercel */

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { getSiteBaseUrl } from "@/lib/site-url";
 import { defaultKeywords, seoConfig } from "@/config/seo";
+import { getSiteOgImageUrl, resolveOgImageUrl } from "@/lib/seo/og-image";
 
 function baseUrl(): string {
   return getSiteBaseUrl().replace(/\/$/, "");
@@ -44,6 +45,7 @@ export function buildPageMetadata(input: PageSeoInput): Metadata {
   const fullTitle = title.includes(seoConfig.siteName)
     ? title
     : `${title} | ${seoConfig.siteName}`;
+  const imageUrl = resolveOgImageUrl(ogImage);
 
   return {
     title: fullTitle,
@@ -62,7 +64,7 @@ export function buildPageMetadata(input: PageSeoInput): Metadata {
         : {}),
       images: [
         {
-          url: ogImage,
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: title,
@@ -73,7 +75,7 @@ export function buildPageMetadata(input: PageSeoInput): Metadata {
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: [ogImage],
+      images: [imageUrl],
     },
     robots: noIndex
       ? { index: false, follow: true }
@@ -105,7 +107,7 @@ export function buildRootMetadata(): Metadata {
       description: siteConfig.description,
       images: [
         {
-          url: seoConfig.defaultOgImage,
+          url: getSiteOgImageUrl(),
           width: 1200,
           height: 630,
           alt: "Stații de încărcare vehicule electrice România",
@@ -116,7 +118,7 @@ export function buildRootMetadata(): Metadata {
       card: "summary_large_image",
       title: `Stații încărcare EV | ${seoConfig.siteName}`,
       description: siteConfig.description,
-      images: [seoConfig.defaultOgImage],
+      images: [getSiteOgImageUrl()],
     },
     robots: {
       index: true,
