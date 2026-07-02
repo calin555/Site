@@ -4,7 +4,7 @@ export const siteConfig = {
   name: "ChargePro",
   tagline: "Soluții premium de încărcare electrică",
   description:
-    "Stații de încărcare EV pentru acasă și afaceri. Consultanță tehnică, instalare și suport dedicat în România.",
+    "Stație încărcare mașini electrice pentru acasă și afaceri — wallbox AC, stații DC și consultanță tehnică în România.",
   url: getSiteBaseUrl(),
   contact: {
     phone: "0773 985 486",

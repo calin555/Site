@@ -1,6 +1,8 @@
 /** Configurație SEO centralizată — incarcareauto.ro / stații încărcare EV */
 
 export const SEO_KEYWORDS = [
+  "statie incarcare masini electrice",
+  "stație încărcare mașini electrice",
   "stații încărcare EV",
   "stații încărcare mașini electrice",
   "încărcare auto electrică",

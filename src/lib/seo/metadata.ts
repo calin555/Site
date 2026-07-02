@@ -88,11 +88,11 @@ export function buildRootMetadata(): Metadata {
   return {
     metadataBase: new URL(BASE_URL),
     title: {
-      default: `Stații încărcare EV România | AC & DC | ${seoConfig.siteName}`,
+      default: `Stație încărcare mașini electrice România | AC & DC | ${seoConfig.siteName}`,
       template: `%s | ${seoConfig.siteName}`,
     },
     description:
-      "Magazin online de stații încărcare mașini electrice — AC, DC rapid, wallbox și accesorii. Livrare în România, instalare ANRE, consultanță tehnică gratuită.",
+      "Stație încărcare mașini electrice — wallbox AC, stații DC rapide și accesorii EV. Livrare în România, instalare ANRE, consultanță tehnică gratuită.",
     keywords: defaultKeywords.join(", "),
     authors: [{ name: seoConfig.legalName, url: BASE_URL }],
     creator: seoConfig.legalName,
@@ -103,7 +103,7 @@ export function buildRootMetadata(): Metadata {
       locale: seoConfig.locale,
       url: BASE_URL,
       siteName: seoConfig.siteName,
-      title: `Stații încărcare EV România | ${seoConfig.siteName}`,
+      title: `Stație încărcare mașini electrice | ${seoConfig.siteName}`,
       description: siteConfig.description,
       images: [
         {
@@ -116,7 +116,7 @@ export function buildRootMetadata(): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title: `Stații încărcare EV | ${seoConfig.siteName}`,
+      title: `Stație încărcare mașini electrice | ${seoConfig.siteName}`,
       description: siteConfig.description,
       images: [getSiteOgImageUrl()],
     },

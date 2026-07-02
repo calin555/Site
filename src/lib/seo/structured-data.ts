@@ -1,7 +1,9 @@
 import { siteConfig } from "@/config/site";
 import { seoConfig } from "@/config/seo";
+import { PRIMARY_EV_CHARGING_KEYWORD_RO } from "@/lib/seo/commercial/keyword-strategy";
 import { buildProductSeoTitle } from "@/lib/seo/product-seo-name";
 import { absoluteUrl } from "@/lib/seo/metadata";
+import { getSiteOgImageUrl } from "@/lib/seo/og-image";
 import type { FaqItem } from "@/lib/seo/faq-content";
 import { getSchemaAvailability } from "@/lib/catalog/stock-status";
 import type { ProductDetail } from "@/types/product";
@@ -15,6 +17,13 @@ export function buildOrganizationSchema() {
     url: absoluteUrl(),
     logo: absoluteUrl("/icon"),
     description: siteConfig.description,
+    knowsAbout: [
+      PRIMARY_EV_CHARGING_KEYWORD_RO,
+      "Stații încărcare vehicule electrice",
+      "Wallbox AC",
+      "Stații rapide DC",
+      "Instalare ANRE",
+    ],
     email: siteConfig.contact.email,
     telephone: siteConfig.contact.phone,
     address: {
@@ -50,9 +59,9 @@ export function buildLocalBusinessSchema() {
     name: seoConfig.legalName,
     alternateName: seoConfig.siteName,
     url: absoluteUrl(),
-    image: seoConfig.defaultOgImage,
+    image: getSiteOgImageUrl(),
     description:
-      "Furnizor de stații încărcare EV, wallbox AC, stații rapide DC și servicii de instalare în România.",
+      "Furnizor de stații încărcare mașini electrice, wallbox AC, stații rapide DC și servicii de instalare în România.",
     telephone: siteConfig.contact.phone,
     email: siteConfig.contact.email,
     address: {
@@ -81,22 +90,32 @@ export function buildLocalBusinessSchema() {
     },
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "Stații încărcare vehicule electrice",
+      name: PRIMARY_EV_CHARGING_KEYWORD_RO,
       itemListElement: [
         {
           "@type": "OfferCatalog",
           name: "Stații AC — încărcare auto electrică acasă",
+          url: absoluteUrl("/statie-incarcare-ac"),
         },
         {
           "@type": "OfferCatalog",
           name: "Stații DC rapide — încărcătoare EV comerciale",
+          url: absoluteUrl("/statie-incarcare-dc"),
         },
         {
           "@type": "OfferCatalog",
-          name: "Accesorii și rețea încărcare electrică",
+          name: "Ghid stații încărcare — index comercial",
+          url: absoluteUrl("/statii-incarcare"),
         },
       ],
     },
+    knowsAbout: [
+      PRIMARY_EV_CHARGING_KEYWORD_RO,
+      "Wallbox",
+      "OCPP",
+      "Type 2",
+      "CCS2",
+    ],
   };
 }
 
@@ -121,8 +140,10 @@ export function buildWebSiteSchema() {
     "@type": "WebSite",
     name: seoConfig.siteName,
     url: absoluteUrl(),
-    description: siteConfig.description,
+    description:
+      "Stație încărcare mașini electrice — catalog AC, DC, wallbox și ghiduri instalare în România.",
     inLanguage: "ro-RO",
+    keywords: PRIMARY_EV_CHARGING_KEYWORD_RO,
     publisher: {
       "@type": "Organization",
       name: seoConfig.legalName,
@@ -134,6 +155,58 @@ export function buildWebSiteSchema() {
         urlTemplate: `${absoluteUrl("/produse")}?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+export function buildHomePageSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${absoluteUrl("/")}#webpage`,
+    url: absoluteUrl("/"),
+    name: `Stație încărcare mașini electrice — ${seoConfig.siteName}`,
+    description:
+      "Stație încărcare mașini electrice: wallbox AC, stații DC rapide, catalog produse și ghid instalare ANRE în România.",
+    inLanguage: "ro-RO",
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": absoluteUrl(),
+      name: seoConfig.siteName,
+    },
+    about: {
+      "@type": "Thing",
+      name: PRIMARY_EV_CHARGING_KEYWORD_RO,
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      name: "Ghid stații încărcare mașini electrice",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Index stații încărcare",
+          url: absoluteUrl("/statii-incarcare"),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Stații încărcare AC",
+          url: absoluteUrl("/statie-incarcare-ac"),
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "Stații încărcare DC",
+          url: absoluteUrl("/statie-incarcare-dc"),
+        },
+        {
+          "@type": "ListItem",
+          position: 4,
+          name: "Catalog produse EV",
+          url: absoluteUrl("/produse"),
+        },
+      ],
     },
   };
 }

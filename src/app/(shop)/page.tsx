@@ -7,6 +7,7 @@ import {
   testimonials,
 } from "@/lib/mock-data";
 import { HeroBanner } from "@/components/shop/home/HeroBanner";
+import { HomeSeoIntro } from "@/components/shop/home/HomeSeoIntro";
 import { CategoriesSection } from "@/components/shop/home/CategoriesSection";
 import { FeaturedProductsSection } from "@/components/shop/home/FeaturedProductsSection";
 import { BrandsSection } from "@/components/shop/home/BrandsSection";
@@ -19,24 +20,24 @@ import { FaqSection } from "@/components/seo/FaqSection";
 import { Container } from "@/components/shared/Container";
 import { EV_FAQ_ITEMS } from "@/lib/seo/faq-content";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { buildFaqPageSchema } from "@/lib/seo/structured-data";
+import { buildFaqPageSchema, buildHomePageSchema } from "@/lib/seo/structured-data";
 import { getSiteContactSettings } from "@/lib/services/site-contact.service";
 
 import type { Metadata } from "next";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Stații încărcare EV România — AC, DC rapid & wallbox",
+  title: "Stație încărcare mașini electrice — AC, DC & wallbox România",
   description:
-    "Magazin online stații încărcare mașini electrice: AC wallbox, stații rapide DC, încărcătoare EV și accesorii. Livrare România, instalare ANRE, rețea încărcare electrică pentru flote.",
+    "Stație încărcare mașini electrice: wallbox AC, stații rapide DC și încărcătoare EV. Livrare România, instalare ANRE, consultanță gratuită și ghid complet stații încărcare.",
   path: "/",
   keywords: [
+    "statie incarcare masini electrice",
+    "stație încărcare mașini electrice",
     "stații încărcare EV",
-    "stații încărcare mașini electrice",
-    "încărcare auto electrică",
-    "stații rapide DC",
-    "încărcătoare EV România",
-    "rețea încărcare electrică",
+    "stație încărcare AC",
+    "stație încărcare DC",
+    "wallbox România",
   ],
 });
 
@@ -52,8 +53,11 @@ export default async function HomePage() {
 
   return (
     <>
-      <JsonLd data={buildFaqPageSchema(EV_FAQ_ITEMS.slice(0, 4))} />
+      <JsonLd
+        data={[buildFaqPageSchema(EV_FAQ_ITEMS.slice(0, 4)), buildHomePageSchema()]}
+      />
       <HeroBanner heroProducts={heroProducts} />
+      <HomeSeoIntro />
       <CategoriesSection categories={categories} />
       <FeaturedProductsSection products={featured} />
       <BrandsSection brands={brands} />

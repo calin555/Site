@@ -14,8 +14,23 @@ export interface KeywordTarget {
   notes?: string;
 }
 
+/** Keyword comercial generic — canonical hub /statii-incarcare (fără landing duplicat). */
+export const PRIMARY_EV_CHARGING_KEYWORD = "statie incarcare masini electrice";
+export const PRIMARY_EV_CHARGING_KEYWORD_RO =
+  "stație încărcare mașini electrice";
+
 /** Matrice keyword → URL — aliniată la intenții comerciale, fără branduri fără produse în catalog. */
 export const KEYWORD_TARGETS: KeywordTarget[] = [
+  {
+    primaryKeyword: PRIMARY_EV_CHARGING_KEYWORD,
+    slug: "statii-incarcare",
+    url: "/statii-incarcare",
+    intent: "commercial",
+    difficulty: "High",
+    priority: "High",
+    notes:
+      "Keyword generic RO — hub SEO /statii-incarcare; homepage + siloz AC/DC/putere",
+  },
   {
     primaryKeyword: "stație încărcare AC",
     slug: "statie-incarcare-ac",
@@ -308,7 +323,7 @@ export function getInternalLinksForLanding(
 
   links.push(
     { href: page.catalogCtaHref, label: page.catalogCtaLabel },
-    { href: "/statii-incarcare", label: "Index stații încărcare" },
+    { href: "/statii-incarcare", label: "Stație încărcare mașini electrice" },
     { href: "/produse", label: "Catalog produse EV" },
     { href: "/contact", label: "Solicită ofertă" }
   );

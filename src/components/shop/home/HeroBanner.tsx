@@ -51,14 +51,13 @@ export function HeroBanner({ heroProducts = [] }: HeroBannerProps) {
             </div>
 
             <h1 className="animate-slide-up stagger-1 font-display text-balance break-words text-4xl font-bold leading-[1.06] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] sm:text-5xl lg:text-6xl">
-              Stații încărcare EV{" "}
-              <span className="text-gradient-brand text-glow">România</span>
-              {" "}— AC & DC rapid
+              Stație încărcare mașini electrice{" "}
+              <span className="text-gradient-brand text-glow">în România</span>
             </h1>
 
             <p className="animate-slide-up stagger-2 max-w-lg text-lg leading-relaxed text-surface-200">
-              Încărcătoare EV, stații rapide DC și wallbox AC pentru încărcare auto
-              electrică acasă, afaceri și flote. Consultanță gratuită, instalare ANRE.
+              Wallbox AC, stații rapide DC și încărcătoare EV pentru acasă, afaceri
+              și flote. Consultanță gratuită, instalare ANRE și livrare din stoc.
             </p>
 
             <div className="animate-slide-up stagger-3 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -66,6 +65,15 @@ export function HeroBanner({ heroProducts = [] }: HeroBannerProps) {
                 <Button size="lg" className="w-full shadow-lg shadow-brand-600/30">
                   Vezi produsele
                   <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/statii-incarcare" className="w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full border-white/25 bg-white/5 text-white backdrop-blur-sm hover:border-brand-400 hover:bg-brand-500/10 hover:text-white"
+                >
+                  Ghid stații încărcare
                 </Button>
               </Link>
               <Link href="/contact" className="w-full sm:w-auto">

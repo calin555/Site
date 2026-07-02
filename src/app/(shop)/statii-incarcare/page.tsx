@@ -14,16 +14,17 @@ import {
 import { getHighPriorityTargets } from "@/lib/seo/commercial/keyword-strategy";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Stații încărcare EV — AC, DC, wallbox, puteri, mărci auto",
+  title: "Stație încărcare mașini electrice — ghid AC, DC, wallbox",
   description:
-    "Ghid complet stații încărcare vehicule electrice România: AC, DC rapid, 7–120 kW, Tesla, Dacia Spring, firmă, hotel, flotă. Catalog, instalare ANRE, oferte ChargePro.",
+    "Ghid complet stație încărcare mașini electrice în România: AC wallbox, DC rapid, 7–120 kW, Tesla, Dacia Spring, firmă, hotel, flotă. Catalog, instalare ANRE, oferte ChargePro.",
   path: "/statii-incarcare",
   keywords: [
+    "statie incarcare masini electrice",
+    "stație încărcare mașini electrice",
     "stații încărcare EV",
     "stație încărcare AC",
     "stație încărcare DC",
     "wallbox România",
-    "stație încărcare Tesla",
   ],
 });
 
@@ -67,8 +68,8 @@ export default function StatiiIncarcareHubPage() {
       />
 
       <PageHeader
-        title="Stații de încărcare vehicule electrice"
-        description={`Arhitectură SEO completă — ${total} landing pages comerciale pentru AC, DC, puteri kW, mărci auto și aplicații. Fiecare pagină răspunde unei căutări Google specifice.`}
+        title="Stație încărcare mașini electrice — ghid complet"
+        description={`Alege stația potrivită pentru mașina ta electrică: ${total} pagini comerciale pentru AC, DC, puteri kW, mărci auto și aplicații. Fiecare secțiune răspunde unei căutări specifice.`}
       />
 
       <Container className="py-8">
