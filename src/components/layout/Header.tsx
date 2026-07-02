@@ -69,10 +69,10 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
       <div className="glass border-b border-surface-200/70">
         <Container>
           <div className="flex h-16 min-w-0 items-center justify-between gap-2 sm:gap-4 lg:h-20">
-            {/* Logo */}
-            <Link href="/" className="group flex items-center gap-2.5 shrink-0">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-brand ring-highlight shadow-elev-1 transition-shadow duration-300 group-hover:shadow-glow-brand">
-                <Zap className="h-5 w-5 text-white" />
+            {/* Logo — living electric identity */}
+            <Link href="/" className="logo-electric group flex items-center gap-2.5 shrink-0">
+              <div className="logo-glow flex h-10 w-10 items-center justify-center rounded-xl gradient-brand ring-highlight transition-shadow duration-300 group-hover:shadow-glow-brand">
+                <Zap className="logo-bolt h-5 w-5 text-white" />
               </div>
               <div className="hidden sm:block">
                 <span className="font-display text-lg font-bold tracking-tight text-surface-900">

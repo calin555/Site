@@ -47,13 +47,13 @@ export default async function HomePage() {
     getSiteContactSettings(),
   ]);
   const featured = allProducts.filter((p) => p.isFeatured);
-  const heroProduct = featured[0] ?? allProducts[0];
+  const heroProducts = (featured.length > 0 ? featured : allProducts).slice(0, 5);
   const latestPosts = getFeaturedPosts(3).map(toLegacyPost);
 
   return (
     <>
       <JsonLd data={buildFaqPageSchema(EV_FAQ_ITEMS.slice(0, 4))} />
-      <HeroBanner heroProduct={heroProduct} />
+      <HeroBanner heroProducts={heroProducts} />
       <CategoriesSection categories={categories} />
       <FeaturedProductsSection products={featured} />
       <BrandsSection brands={brands} />

@@ -487,6 +487,71 @@
     text-shadow: 0 0 32px rgba(15, 184, 126, 0.45), 0 0 80px rgba(163, 230, 53, 0.15);
   }
 
+  /* Always-on electric border — continuous orbiting current */
+  .energy-border-live {
+    position: relative;
+  }
+
+  .energy-border-live::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(
+      from var(--angle),
+      transparent 0deg,
+      transparent 60deg,
+      rgba(15, 184, 126, 0.8) 100deg,
+      rgba(163, 230, 53, 0.95) 120deg,
+      rgba(56, 189, 248, 0.5) 140deg,
+      transparent 180deg,
+      transparent 360deg
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: spinAngle 4s linear infinite;
+    pointer-events: none;
+  }
+
+  /* Living logo — soft glow pulse + electric current underline */
+  .logo-glow {
+    animation: logoGlow 4s ease-in-out infinite;
+  }
+
+  .logo-bolt {
+    animation: boltFlicker 4.5s ease-in-out infinite;
+  }
+
+  .logo-electric {
+    position: relative;
+  }
+
+  .logo-electric::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    bottom: -4px;
+    height: 1.5px;
+    border-radius: 999px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(15, 184, 126, 0.7) 35%,
+      rgba(163, 230, 53, 0.95) 50%,
+      rgba(15, 184, 126, 0.7) 65%,
+      transparent 100%
+    );
+    background-size: 220% 100%;
+    animation: logoCurrent 3.8s linear infinite;
+    opacity: 0.75;
+    pointer-events: none;
+  }
+
   /* ---------- Layout helpers (unchanged behavior) ---------- */
 
   .break-anywhere {
@@ -619,6 +684,35 @@
   75%, 100% { transform: scale(2.4); opacity: 0; }
 }
 
+@keyframes logoGlow {
+  0%, 100% {
+    box-shadow: 0 1px 2px rgba(17, 23, 20, 0.05), 0 0 12px -2px rgba(15, 184, 126, 0.3);
+  }
+  50% {
+    box-shadow: 0 1px 2px rgba(17, 23, 20, 0.05), 0 0 22px -2px rgba(15, 184, 126, 0.6);
+  }
+}
+
+@keyframes boltFlicker {
+  0%, 44%, 56%, 100% {
+    filter: drop-shadow(0 0 0 rgba(163, 230, 53, 0));
+    transform: scale(1);
+  }
+  48% {
+    filter: drop-shadow(0 0 5px rgba(163, 230, 53, 0.9));
+    transform: scale(1.1);
+  }
+  52% {
+    filter: drop-shadow(0 0 2px rgba(163, 230, 53, 0.4));
+    transform: scale(1.02);
+  }
+}
+
+@keyframes logoCurrent {
+  from { background-position: 220% 0; }
+  to { background-position: -220% 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in,
   .animate-slide-up,
@@ -643,6 +737,7 @@
   }
 
   .energy-border::before,
+  .energy-border-live::after,
   .energy-flow,
   .energy-flow-slow,
   .particle,
@@ -650,7 +745,10 @@
   .aurora-blob,
   .aurora-blob-b,
   .aurora-blob-c,
-  .charge-led::before {
+  .charge-led::before,
+  .logo-glow,
+  .logo-bolt,
+  .logo-electric::after {
     animation: none;
   }
 
