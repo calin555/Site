@@ -14,6 +14,10 @@ import {
   getIpRating,
   getWarrantyYears,
 } from "@/lib/catalog/product-specs";
+import {
+  appendOcppToDescription,
+  appendOcppToShortDescription,
+} from "@/lib/catalog/ocpp-support";
 import { getApprovedReviewsForProduct } from "@/lib/admin/review-store";
 
 const GALLERY_IMAGES: Record<string, ProductImage[]> = {
@@ -129,7 +133,8 @@ function enrichProduct(product: CatalogProduct): ProductDetail {
   return {
     ...product,
     sku: `CP-${product.id.padStart(4, "0")}`,
-    description: buildDescription(product),
+    shortDescription: appendOcppToShortDescription(product.shortDescription, product),
+    description: appendOcppToDescription(buildDescription(product), product),
     images: buildImages(product),
     videos: product.videoUrls ?? [],
     warrantyYears: getWarrantyYears(product),

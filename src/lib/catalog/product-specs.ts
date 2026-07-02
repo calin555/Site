@@ -1,5 +1,9 @@
 import type { CatalogProduct } from "@/types/catalog";
 import type { ProductSpec } from "@/types/product";
+import {
+  OCPP_PROTOCOLS_LABEL,
+  productSupportsOcpp,
+} from "@/lib/catalog/ocpp-support";
 
 export type ProductSpecsSource = Pick<
   CatalogProduct,
@@ -69,6 +73,21 @@ export function buildProductSpecs(product: ProductSpecsSource): ProductSpec[] {
       value: product.connectorTypes.join(", "),
       group: "Performanță",
     });
+  }
+
+  if (productSupportsOcpp(product)) {
+    specs.push(
+      {
+        label: "Protocol management",
+        value: OCPP_PROTOCOLS_LABEL,
+        group: "Conectivitate",
+      },
+      {
+        label: "Integrare CSMS",
+        value: "Da — monitorizare remote, tarifare, RFID",
+        group: "Conectivitate",
+      }
+    );
   }
 
   // Construcție / Mediu / Smart: ascunse până la date reale per produs (admin/DB).

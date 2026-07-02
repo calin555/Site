@@ -1,5 +1,6 @@
 import type { CatalogProduct } from "@/types/catalog";
 import type { ProductDetail } from "@/types/product";
+import { productSupportsOcpp } from "@/lib/catalog/ocpp-support";
 
 type ProductSeoSource = Pick<
   CatalogProduct,
@@ -49,5 +50,8 @@ export function buildProductCardTitle(product: ProductSeoSource): string {
 
 export function buildProductSeoDescription(product: ProductSeoSource): string {
   const seoTitle = buildProductSeoTitle(product);
-  return `${seoTitle}. ${product.shortDescription} Livrare România, instalare ANRE, consultanță ChargePro.`;
+  const ocppNote = productSupportsOcpp(product)
+    ? ` Suportă OCPP 1.6J și OCPP 2.0.1.`
+    : "";
+  return `${seoTitle}. ${product.shortDescription}${ocppNote} Livrare România, instalare ANRE, consultanță ChargePro.`;
 }

@@ -15,6 +15,10 @@ import { ProductActions } from "./ProductActions";
 import { getStockStatusMessage } from "@/lib/catalog/stock-status";
 import type { ProductDetail } from "@/types/product";
 import { buildProductSeoTitle } from "@/lib/seo/product-seo-name";
+import {
+  OCPP_PROTOCOLS_LABEL,
+  productSupportsOcpp,
+} from "@/lib/catalog/ocpp-support";
 
 interface ProductInfoProps {
   product: ProductDetail;
@@ -49,6 +53,9 @@ export function ProductInfo({ product }: ProductInfoProps) {
         </Link>
         {product.isNew && <Badge variant="accent">Nou</Badge>}
         {product.isFeatured && <Badge variant="dark">Popular</Badge>}
+        {productSupportsOcpp(product) && (
+          <Badge variant="brand">{OCPP_PROTOCOLS_LABEL}</Badge>
+        )}
       </div>
 
       <h1 className="font-display break-anywhere text-2xl font-bold leading-tight tracking-tight text-surface-900 sm:text-3xl">
