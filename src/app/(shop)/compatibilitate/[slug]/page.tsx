@@ -95,7 +95,7 @@ export default async function CompatibilityVehiclePage({
           ]}
         />
 
-        <div className="mt-6 max-w-xl">
+        <div className="relative z-20 mt-6 max-w-xl">
           <CompatibilitySearch />
         </div>
 

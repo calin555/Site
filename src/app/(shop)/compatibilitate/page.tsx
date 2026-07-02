@@ -39,16 +39,12 @@ export default function CompatibilityHubPage() {
         ]}
       />
 
-      <div className="relative overflow-hidden">
+      <div className="relative">
         <EnergyField variant="light" particles circuits />
         <PageHeader
           title="Compatibilitate EV"
           description="Selectează vehiculul tău electric și vezi doar stațiile de încărcare compatibile din magazinul nostru — filtrate automat după conector, putere și fază."
-        >
-          <div className="mt-6 w-full max-w-2xl">
-            <CompatibilitySearch autoFocus size="large" />
-          </div>
-        </PageHeader>
+        />
       </div>
 
       <Container className="py-12">
@@ -58,6 +54,10 @@ export default function CompatibilityHubPage() {
             { label: "Compatibilitate EV", href: "/compatibilitate" },
           ]}
         />
+
+        <div className="relative z-20 mt-6 max-w-2xl">
+          <CompatibilitySearch autoFocus size="large" />
+        </div>
 
         <section className="mt-10">
           <div className="connector-animation mx-auto max-w-md rounded-3xl border border-brand-200/50 bg-gradient-to-b from-brand-50/80 to-white p-8">
