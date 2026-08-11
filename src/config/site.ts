@@ -7,7 +7,7 @@ export const siteConfig = {
     "Stație încărcare mașini electrice pentru acasă și afaceri — wallbox AC, stații DC și consultanță tehnică în România.",
   url: getSiteBaseUrl(),
   contact: {
-    phone: "0773 985 486",
+    phone: "+40 774 542 015",
     phoneTechnical: "0759 046 201",
     email: "contact@chargepro.ro",
     hours: "Luni – Vineri: 08:30 – 17:00",
