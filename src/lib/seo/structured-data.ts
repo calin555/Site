@@ -8,10 +8,15 @@ import type { FaqItem } from "@/lib/seo/faq-content";
 import { getSchemaAvailability } from "@/lib/catalog/stock-status";
 import type { ProductDetail } from "@/types/product";
 
+export function organizationId(): string {
+  return `${absoluteUrl()}#organization`;
+}
+
 export function buildOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": organizationId(),
     name: seoConfig.legalName,
     alternateName: seoConfig.siteName,
     url: absoluteUrl(),
@@ -288,45 +293,31 @@ export function buildProductSchema(product: ProductDetail) {
   return schema;
 }
 
-export function buildCityLocalBusinessSchema(city: {
+/**
+ * Pagini de oraș: NU declarăm un LocalBusiness separat (nu există sediu în
+ * fiecare oraș). Folosim Service + areaServed (City), cu provider = organizația
+ * principală (referință prin @id la schema Organization din layout).
+ */
+export function buildCityServiceSchema(city: {
   cityName: string;
   county: string;
   slug: string;
-  latitude: number;
-  longitude: number;
   metaDescription: string;
 }) {
   return {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "@id": `${absoluteUrl(`/${city.slug}`)}#localbusiness`,
-    name: `${seoConfig.siteName} — Stații încărcare EV ${city.cityName}`,
-    alternateName: seoConfig.legalName,
+    "@type": "Service",
+    "@id": `${absoluteUrl(`/${city.slug}`)}#service`,
+    name: `Stații încărcare EV și instalare — ${city.cityName}`,
+    serviceType: "Vânzare și instalare stații de încărcare pentru vehicule electrice",
     url: absoluteUrl(`/${city.slug}`),
-    image: seoConfig.defaultOgImage,
     description: city.metaDescription,
-    telephone: siteConfig.contact.phone,
-    email: siteConfig.contact.email,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: city.cityName,
-      addressRegion: city.county,
-      addressCountry: "RO",
+    provider: {
+      "@type": "Organization",
+      "@id": organizationId(),
+      name: seoConfig.legalName,
+      url: absoluteUrl(),
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: city.latitude,
-      longitude: city.longitude,
-    },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "08:30",
-        closes: "17:00",
-      },
-    ],
-    priceRange: "$$",
     areaServed: {
       "@type": "City",
       name: city.cityName,
@@ -335,11 +326,5 @@ export function buildCityLocalBusinessSchema(city: {
         name: city.county,
       },
     },
-    knowsAbout: [
-      "Stații încărcare vehicule electrice",
-      "Wallbox AC",
-      "Stații rapide DC",
-      "Instalare ANRE",
-    ],
   };
 }
