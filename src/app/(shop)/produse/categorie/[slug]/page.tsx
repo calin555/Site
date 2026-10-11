@@ -19,16 +19,19 @@ export async function generateMetadata({
 }: CategoryCatalogPageProps): Promise<Metadata> {
   const { slug } = await params;
   const category = await getCategoryBySlug(slug);
-  if (!category) return { title: "Categorie negăsită" };
+  // 404 real (nu soft 404 cu status 200) pentru produse/pagini șterse.
+  if (!category) notFound();
 
   const rawParams = await searchParams;
   const hasExtraFilters = Object.keys(rawParams).length > 0;
+  // Categorii fără produse publicate = conținut subțire → noindex,follow.
+  const isEmpty = category.productCount === 0;
 
   return buildPageMetadata({
     title: `${category.name} — Stații de încărcare EV`,
     description: category.description,
     path: `/produse/categorie/${slug}`,
-    noIndex: hasExtraFilters,
+    noIndex: hasExtraFilters || isEmpty,
     keywords: [category.name, "stații încărcare EV", "încărcătoare mașini electrice"],
   });
 }
