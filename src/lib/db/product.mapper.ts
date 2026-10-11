@@ -77,6 +77,7 @@ export function productFromDb(row: ProductWithRelations): CatalogProduct {
     stockStatus: normalizeStockStatus(smart?.stockStatus),
     videoUrls: normalizeVideoUrls(smart?.videoUrls),
     createdAt,
+    updatedAt: row.updatedAt ? toDate(row.updatedAt).toISOString() : undefined,
     catalogPdfUrl: smart?.catalogPdfUrl,
   };
 }

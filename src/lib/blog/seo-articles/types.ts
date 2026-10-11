@@ -10,6 +10,8 @@ export interface SeoArticleSeed {
   tagIds: string[];
   author: string;
   publishedAt: string;
+  /** Data ultimei revizii reale a conținutului (opțional). */
+  updatedAt?: string;
   seo: {
     metaTitle: string;
     metaDescription: string;

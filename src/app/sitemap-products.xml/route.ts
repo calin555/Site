@@ -12,12 +12,21 @@ function escapeXml(value: string): string {
 
 export async function GET() {
   const products = await getAllCatalogProducts();
-  const now = new Date().toISOString();
+
+  // lastmod = data reală a ultimei modificări din DB (nu ora cererii).
+  const lastmodFor = (updatedAt?: string, createdAt?: string): string => {
+    const raw = updatedAt ?? createdAt;
+    if (!raw) return "";
+    const d = new Date(raw);
+    return Number.isNaN(d.getTime())
+      ? ""
+      : `<lastmod>${d.toISOString()}</lastmod>`;
+  };
 
   const urls = products
     .map(
       (p) =>
-        `  <url><loc>${escapeXml(absoluteUrl(`/produse/${p.slug}`))}</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>`
+        `  <url><loc>${escapeXml(absoluteUrl(`/produse/${p.slug}`))}</loc>${lastmodFor(p.updatedAt, p.createdAt)}<changefreq>weekly</changefreq><priority>0.8</priority></url>`
     )
     .join("\n");
 

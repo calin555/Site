@@ -34,6 +34,8 @@ export interface CatalogProduct {
   stockStatus: StockStatus;
   videoUrls?: string[];
   createdAt: string;
+  /** ISO timestamp — ultima modificare reală a produsului (DB `updatedAt`). */
+  updatedAt?: string;
   catalogPdfUrl?: string;
   galleryImages?: string[];
 }

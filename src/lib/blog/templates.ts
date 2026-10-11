@@ -318,7 +318,6 @@ const TEMPLATES: ArticleTemplate[] = [
 ];
 
 export function buildInitialArticles() {
-  const now = new Date().toISOString();
   const templateSlugs = new Set(TEMPLATES.map((t) => t.slug));
 
   const fromTemplates = TEMPLATES.map((t) => {
@@ -334,7 +333,8 @@ export function buildInitialArticles() {
     tagIds: t.tagIds,
     author: t.author,
     publishedAt: t.publishedAt,
-    updatedAt: now,
+    // Data reală a conținutului (nu momentul pornirii serverului).
+    updatedAt: t.publishedAt,
     readTime: estimateReadTime(t.content),
     isPublished: true,
     seo: {
@@ -359,7 +359,7 @@ export function buildInitialArticles() {
     tagIds: a.tagIds,
     author: a.author,
     publishedAt: a.publishedAt,
-    updatedAt: now,
+    updatedAt: a.updatedAt ?? a.publishedAt,
     readTime: estimateReadTime(a.content),
     isPublished: true,
     seo: {
