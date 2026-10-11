@@ -44,9 +44,9 @@ const values = [
 ];
 
 const stats = [
-  { value: "2.500+", label: "Stații instalate" },
+  { value: "AC & DC", label: "Wallbox și stații rapide" },
   { value: "8+", label: "Ani experiență" },
-  { value: "98%", label: "Clienți mulțumiți" },
+  { value: "ANRE", label: "Instalare autorizată" },
   { value: "24h", label: "Timp răspuns tehnic" },
 ];
 

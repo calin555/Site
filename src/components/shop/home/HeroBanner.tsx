@@ -5,7 +5,6 @@ import {
   Shield,
   Truck,
   Headphones,
-  Star,
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -15,8 +14,8 @@ import { HeroProductShowcase } from "@/components/shop/home/HeroProductShowcase"
 import type { CatalogProduct } from "@/types/catalog";
 
 const stats = [
-  { value: "2.500+", label: "Stații instalate" },
-  { value: "98%", label: "Clienți mulțumiți" },
+  { value: "AC & DC", label: "Wallbox și stații rapide" },
+  { value: "ANRE", label: "Instalare autorizată" },
   { value: "24h", label: "Livrare din stoc" },
 ];
 
@@ -47,7 +46,7 @@ export function HeroBanner({ heroProducts = [] }: HeroBannerProps) {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
               </span>
-              Lider în infrastructură EV din România
+              Stații de încărcare EV pentru acasă și afaceri
             </div>
 
             <h1 className="animate-slide-up stagger-1 font-display text-balance break-words text-4xl font-bold leading-[1.06] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] sm:text-5xl lg:text-6xl">
@@ -101,19 +100,6 @@ export function HeroBanner({ heroProducts = [] }: HeroBannerProps) {
                   {label}
                 </div>
               ))}
-              <div className="flex items-center gap-1 text-sm text-surface-300">
-                <div className="flex">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-3.5 w-3.5 fill-amber-400 text-amber-400"
-                    />
-                  ))}
-                </div>
-                <span className="ml-1 font-medium text-surface-200">
-                  4.9/5 din 320+ recenzii
-                </span>
-              </div>
             </div>
 
             <div className="animate-slide-up stagger-5 grid grid-cols-3 gap-4 border-t border-white/10 pt-8">

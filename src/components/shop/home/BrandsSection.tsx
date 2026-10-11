@@ -15,9 +15,9 @@ export function BrandsSection({ brands }: BrandsSectionProps) {
       <Container>
         <AnimateIn>
           <SectionHeading
-            badge="Parteneri"
-            title="Branduri de top"
-            subtitle="Distribuim exclusiv mărci verificate, cu suport local și garanție în România."
+            badge="Branduri"
+            title="Branduri din catalog"
+            subtitle="Mărcile pentru care avem în prezent produse în catalog."
             align="center"
             className="mb-12"
           />
@@ -37,7 +37,9 @@ export function BrandsSection({ brands }: BrandsSectionProps) {
                   {brand.name}
                 </p>
                 <p className="mt-0.5 text-xs text-surface-400">
-                  {brand.productCount} produse
+                  {brand.productCount === 1
+                    ? "1 produs"
+                    : `${brand.productCount} produse`}
                 </p>
               </Link>
             </AnimateIn>

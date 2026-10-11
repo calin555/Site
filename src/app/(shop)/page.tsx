@@ -2,10 +2,8 @@ import { getFeaturedPosts } from "@/lib/services/blog.service";
 import { toLegacyPost } from "@/types/blog";
 import { getAllCatalogProducts } from "@/lib/services/catalog.service";
 import { getShopCategories } from "@/lib/services/category.service";
-import {
-  brands,
-  testimonials,
-} from "@/lib/mock-data";
+import { testimonials } from "@/lib/mock-data";
+import { getShopBrandsWithProducts } from "@/lib/services/brand.service";
 import { HeroBanner } from "@/components/shop/home/HeroBanner";
 import { HomeSeoIntro } from "@/components/shop/home/HomeSeoIntro";
 import { CategoriesSection } from "@/components/shop/home/CategoriesSection";
@@ -42,10 +40,11 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default async function HomePage() {
-  const [allProducts, categories, contact] = await Promise.all([
+  const [allProducts, categories, contact, brands] = await Promise.all([
     getAllCatalogProducts(),
     getShopCategories(),
     getSiteContactSettings(),
+    getShopBrandsWithProducts(),
   ]);
   const featured = allProducts.filter((p) => p.isFeatured);
   const heroProducts = (featured.length > 0 ? featured : allProducts).slice(0, 5);
@@ -60,7 +59,7 @@ export default async function HomePage() {
       <HomeSeoIntro />
       <CategoriesSection categories={categories} />
       <FeaturedProductsSection products={featured} />
-      <BrandsSection brands={brands} />
+      {brands.length > 0 && <BrandsSection brands={brands} />}
       <BenefitsSection />
       {testimonials.length > 0 && (
         <TestimonialsSection testimonials={testimonials} />
