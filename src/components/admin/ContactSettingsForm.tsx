@@ -97,7 +97,7 @@ export function ContactSettingsForm({ settings }: ContactSettingsFormProps) {
           value={form.email}
           onChange={(e) => updateField("email", e.target.value)}
           error={errors.email}
-          placeholder="contact@chargepro.ro"
+          placeholder="contact@incarcareauto.ro"
         />
         <Input
           label="Adresă / locație"
