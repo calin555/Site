@@ -25,7 +25,7 @@ export function FaqSection({
   return (
     <section id={id} className={cn("scroll-mt-24", className)} aria-labelledby={`${id}-title`}>
       <div className="mb-8 text-center">
-        <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-brand-600">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-brand-700">
           FAQ
         </p>
         <h2 id={`${id}-title`} className="text-2xl font-bold text-surface-900 sm:text-3xl">

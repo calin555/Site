@@ -36,6 +36,8 @@ export async function updateProductAction(
   });
   revalidateAdmin();
   revalidatePath("/produse");
+  // Paginile publice sunt ISR — preț/stoc/featured apar pe home, categorii, fișe.
+  revalidatePath("/", "layout");
   return { success: !!result };
 }
 
@@ -58,6 +60,7 @@ export async function updateBrandAction(
   await requirePermission(PERMISSIONS.PRODUCTS_WRITE);
   updateAdminBrand(id, data);
   revalidateAdmin();
+  revalidatePath("/", "layout"); // pagini publice ISR (fișe produs, branduri)
   return { success: true };
 }
 
@@ -75,6 +78,7 @@ export async function moderateReviewAction(id: string, status: ReviewStatus) {
   await requirePermission(PERMISSIONS.REVIEWS_MODERATE);
   moderateReview(id, status);
   revalidateAdmin();
+  revalidatePath("/", "layout"); // pagini publice ISR (fișe produs, branduri)
   return { success: true };
 }
 
@@ -82,6 +86,7 @@ export async function deleteReviewAction(id: string) {
   await requirePermission(PERMISSIONS.REVIEWS_MODERATE);
   removeReview(id);
   revalidateAdmin();
+  revalidatePath("/", "layout"); // pagini publice ISR (fișe produs, branduri)
   return { success: true };
 }
 

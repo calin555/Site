@@ -32,7 +32,7 @@ export function PriceDisplay({
       {hasDiscount && (
         <span
           className={cn(
-            "text-surface-400 line-through",
+            "text-surface-500 line-through",
             sizes[size].compare
           )}
         >

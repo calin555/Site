@@ -19,17 +19,15 @@ import { Container } from "@/components/shared/Container";
 import { HeaderSearch } from "@/components/layout/HeaderSearch";
 import { HeaderAccountMenu } from "@/components/layout/HeaderAccountMenu";
 import { phoneToTel, type SiteContactSettings } from "@/types/site-contact";
-import type { PublicUser } from "@/types/user";
-import type { AccountNavCounts } from "@/config/account-nav";
+import { useHeaderState } from "@/lib/header-state/client";
 
 interface HeaderProps {
-  cartCount?: number;
   contact: SiteContactSettings;
-  user?: PublicUser | null;
-  accountCounts?: AccountNavCounts;
 }
 
-export function Header({ cartCount = 0, contact, user = null, accountCounts }: HeaderProps) {
+export function Header({ contact }: HeaderProps) {
+  // Coșul și sesiunea vin de pe client, ca paginile publice să poată fi statice (ISR).
+  const { cartCount, user, accountCounts } = useHeaderState();
   const isLoggedIn = Boolean(user);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -70,7 +68,11 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
         <Container>
           <div className="flex h-16 min-w-0 items-center justify-between gap-2 sm:gap-4 lg:h-20">
             {/* Logo — living electric identity */}
-            <Link href="/" className="logo-electric group flex items-center gap-2.5 shrink-0">
+            <Link
+              href="/"
+              aria-label={`${siteConfig.name} – Acasă`}
+              className="logo-electric group flex items-center gap-2.5 shrink-0"
+            >
               <div className="logo-glow flex h-10 w-10 items-center justify-center rounded-xl gradient-brand ring-highlight transition-shadow duration-300 group-hover:shadow-glow-brand">
                 <Zap className="logo-bolt h-5 w-5 text-white" />
               </div>
@@ -78,7 +80,7 @@ export function Header({ cartCount = 0, contact, user = null, accountCounts }: H
                 <span className="font-display text-lg font-bold tracking-tight text-surface-900">
                   {siteConfig.name}
                 </span>
-                <span className="block text-[10px] font-medium uppercase tracking-widest text-brand-600">
+                <span className="block text-[10px] font-medium uppercase tracking-widest text-brand-700">
                   EV Charging
                 </span>
               </div>

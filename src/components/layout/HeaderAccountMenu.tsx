@@ -8,6 +8,7 @@ import { ACCOUNT_NAV_ITEMS, type AccountNavCounts } from "@/config/account-nav";
 import { logoutAction } from "@/lib/actions/auth.actions";
 import { cn } from "@/lib/utils";
 import type { PublicUser } from "@/types/user";
+import { refreshHeaderState } from "@/lib/header-state/client";
 
 interface HeaderAccountMenuProps {
   user: PublicUser;
@@ -54,6 +55,7 @@ export function HeaderAccountMenu({ user, counts }: HeaderAccountMenuProps) {
       await logoutAction();
       setOpen(false);
       router.refresh();
+      refreshHeaderState();
     });
   }
 

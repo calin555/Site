@@ -115,6 +115,8 @@ export async function saveProductAction(
     revalidatePath("/produse");
     revalidatePath("/admin/produse");
     revalidatePath(`/produse/${product.slug}`);
+    // Paginile publice sunt ISR: produsul apare și pe home, categorii, branduri, landing-uri.
+    revalidatePath("/", "layout");
     return { success: true, id: product.id };
   } catch (err) {
     return {
@@ -129,6 +131,7 @@ export async function deleteProductAction(id: string) {
   await deleteProduct(id);
   revalidatePath("/produse");
   revalidatePath("/admin/produse");
+  revalidatePath("/", "layout");
   return { success: true };
 }
 
@@ -137,5 +140,6 @@ export async function deleteAllProductsAction() {
   const count = await deleteAllProducts();
   revalidatePath("/produse");
   revalidatePath("/admin/produse");
+  revalidatePath("/", "layout");
   return { success: true, count };
 }

@@ -26,8 +26,10 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
           alt={active.alt || productName}
           fill
           className="object-cover transition-opacity duration-300"
-          priority
-          sizes="(max-width: 1024px) 100vw, 50vw"
+          // Imaginea principală e LCP pe fișa de produs.
+          priority={activeIndex === 0}
+          fetchPriority={activeIndex === 0 ? "high" : "auto"}
+          sizes="(max-width: 1024px) calc(100vw - 2rem), 600px"
           unoptimized={shouldSkipImageOptimization(active.url)}
         />
         {uniqueImages.length > 1 && (

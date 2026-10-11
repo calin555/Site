@@ -12,6 +12,7 @@ import { siteConfig } from "@/config/site";
 import { registerAction } from "@/lib/actions/auth.actions";
 import { AuthDivider, SocialAuthSection } from "@/components/account/SocialAuthSection";
 import { LegalConsentCheckbox } from "@/components/legal/LegalConsentCheckbox";
+import { refreshHeaderState } from "@/lib/header-state/client";
 
 const CONSENT_ERROR =
   "Acceptă termenii, politica de confidențialitate și informarea GDPR pentru a continua.";
@@ -34,6 +35,7 @@ export function RegisterForm({ googleEnabled }: RegisterFormProps) {
     if (!authSuccess) return;
     router.replace("/");
     router.refresh();
+    refreshHeaderState();
   }, [authSuccess, router]);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -62,6 +64,7 @@ export function RegisterForm({ googleEnabled }: RegisterFormProps) {
       }
       router.push("/cont");
       router.refresh();
+      refreshHeaderState();
     });
   }
 

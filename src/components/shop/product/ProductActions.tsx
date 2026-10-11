@@ -10,6 +10,7 @@ import {
   isProductPurchasable,
 } from "@/lib/catalog/stock-status";
 import type { ProductDetail } from "@/types/product";
+import { refreshHeaderState } from "@/lib/header-state/client";
 
 interface ProductActionsProps {
   product: Pick<
@@ -38,6 +39,7 @@ export function ProductActions({ product }: ProductActionsProps) {
     setError(null);
     startTransition(async () => {
       const result = await addToCartAction(product.id, quantity);
+      refreshHeaderState();
       if (result.success) {
         setAdded(true);
         setTimeout(() => setAdded(false), 2500);
@@ -112,7 +114,7 @@ export function ProductActions({ product }: ProductActionsProps) {
         </Button>
       </Link>
 
-      <p className="text-center text-xs text-surface-400">
+      <p className="text-center text-xs text-surface-500">
         SKU: {product.sku} · Consultanță tehnică gratuită
       </p>
     </div>

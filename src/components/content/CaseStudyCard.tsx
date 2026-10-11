@@ -43,7 +43,7 @@ export function CaseStudyCard({ study }: CaseStudyCardProps) {
       </div>
       <Link
         href={`/studii-de-caz/${study.slug}`}
-        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700"
+        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:text-brand-800"
       >
         Citește studiul de caz
         <ArrowRight className="h-4 w-4" />

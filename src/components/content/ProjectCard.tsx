@@ -45,7 +45,7 @@ export function ProjectCard({ project, compact }: ProjectCardProps) {
         {project.relatedLanding && (
           <Link
             href={project.relatedLanding}
-            className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700"
+            className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:text-brand-800"
           >
             Soluție similară
             <ArrowRight className="h-4 w-4" />

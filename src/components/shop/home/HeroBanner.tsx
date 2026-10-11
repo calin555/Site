@@ -41,7 +41,7 @@ export function HeroBanner({ heroProducts = [] }: HeroBannerProps) {
       <Container className="relative py-16 sm:py-24 lg:py-32">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <div className="space-y-8">
-            <div className="animate-slide-up glass-dark inline-flex max-w-full flex-wrap items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold text-brand-200">
+            <div className="animate-rise glass-dark inline-flex max-w-full flex-wrap items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold text-brand-200">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
@@ -49,12 +49,12 @@ export function HeroBanner({ heroProducts = [] }: HeroBannerProps) {
               Stații de încărcare EV pentru acasă și afaceri
             </div>
 
-            <h1 className="animate-slide-up stagger-1 font-display text-balance break-words text-4xl font-bold leading-[1.06] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] sm:text-5xl lg:text-6xl">
+            <h1 className="animate-rise font-display text-balance break-words text-4xl font-bold leading-[1.06] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] sm:text-5xl lg:text-6xl">
               Stație încărcare mașini electrice{" "}
               <span className="text-gradient-brand text-glow">în România</span>
             </h1>
 
-            <p className="animate-slide-up stagger-2 max-w-lg text-lg leading-relaxed text-surface-200">
+            <p className="animate-rise max-w-lg text-lg leading-relaxed text-surface-200">
               Wallbox AC, stații rapide DC și încărcătoare EV pentru acasă, afaceri
               și flote. Consultanță gratuită, instalare ANRE și livrare din stoc.
             </p>
@@ -146,7 +146,7 @@ export function HeroBanner({ heroProducts = [] }: HeroBannerProps) {
               />
             </svg>
 
-            <div className="animate-fade-in stagger-3 relative">
+            <div className="animate-rise relative">
               {heroProducts.length > 0 ? (
                 <HeroProductShowcase products={heroProducts} />
               ) : (

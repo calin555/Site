@@ -25,8 +25,8 @@ interface ProductInfoProps {
 }
 
 const TONE_STYLES = {
-  success: "text-brand-600",
-  warning: "text-amber-600",
+  success: "text-brand-700",
+  warning: "text-amber-700",
   info: "text-blue-600",
   error: "text-red-600",
 } as const;
@@ -83,7 +83,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
             </span>
             <a
               href="#recenzii"
-              className="text-sm text-brand-600 hover:text-brand-700 hover:underline"
+              className="text-sm text-brand-700 hover:text-brand-800 hover:underline"
             >
               ({product.reviewCount}{" "}
               {product.reviewCount === 1 ? "recenzie" : "recenzii"})
@@ -94,7 +94,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
             Nicio recenzie încă.{" "}
             <a
               href="#recenzii"
-              className="font-medium text-brand-600 hover:text-brand-700 hover:underline"
+              className="font-medium text-brand-700 hover:text-brand-800 hover:underline"
             >
               Fii primul care evaluează
             </a>

@@ -8,6 +8,7 @@ import {
   isProductPurchasable,
   type StockStatus,
 } from "@/lib/catalog/stock-status";
+import { refreshHeaderState } from "@/lib/header-state/client";
 
 interface ProductCardAddButtonProps {
   productId: string;
@@ -35,6 +36,7 @@ export function ProductCardAddButton({
     setError(null);
     startTransition(async () => {
       const result = await addToCartAction(productId, 1);
+      refreshHeaderState();
       if (result.success) {
         setAdded(true);
         setTimeout(() => setAdded(false), 2000);

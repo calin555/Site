@@ -37,13 +37,13 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <head>
-        <GoogleAnalytics />
         <MobileWebViewFix />
       </head>
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} w-full max-w-full overflow-x-hidden font-sans antialiased`}
       >
         {children}
+        <GoogleAnalytics />
       </body>
     </html>
   );
