@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Home } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/ui/Button";
+
+export const metadata: Metadata = {
+  title: "Pagina nu a fost găsită",
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (

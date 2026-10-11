@@ -32,7 +32,8 @@ export async function generateMetadata({
 }: ProductDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductDetail(slug);
-  if (!product) return { title: "Produs negăsit" };
+  // 404 real (nu soft 404 cu status 200) pentru produse/pagini șterse.
+  if (!product) notFound();
 
   const seoTitle = buildProductSeoTitle(product);
   const description = buildProductSeoDescription(product);
