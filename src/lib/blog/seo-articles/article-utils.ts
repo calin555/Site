@@ -1,6 +1,5 @@
 import type { FaqItem } from "@/lib/seo/faq-content";
 import {
-  faqToHtml,
   internalLinksBlock,
   sectionsToHtml,
   type ContentSection,
@@ -63,9 +62,10 @@ export function createSeoArticle(params: CreateSeoArticleParams): SeoArticleSeed
     ...(params.extraLinks ?? []),
   ];
 
+  // FAQ-ul NU se mai include în HTML: pagina articolului îl randează o singură
+  // dată prin <FaqSection> (+ FAQPage schema) din `faq` — evităm blocul dublu.
   const content = [
     sectionsToHtml(params.sections),
-    faqToHtml(params.faq),
     internalLinksBlock(links),
   ].join("\n\n");
 
