@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Zap } from "lucide-react";
-import { cn, formatPrice, isExternalImageUrl } from "@/lib/utils";
+import { cn, formatPrice, shouldSkipImageOptimization } from "@/lib/utils";
 import type { CatalogProduct } from "@/types/catalog";
 
 const ROTATE_MS = 4200;
@@ -90,7 +90,7 @@ export function HeroProductShowcase({ products }: HeroProductShowcaseProps) {
             className="object-cover"
             priority={i === 0}
             sizes="(max-width: 1024px) 100vw, 50vw"
-            unoptimized={isExternalImageUrl(product.image)}
+            unoptimized={shouldSkipImageOptimization(product.image)}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-surface-950/85 via-surface-950/20 to-transparent" />
         </div>

@@ -3,15 +3,21 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Zap } from "lucide-react";
-import { isExternalImageUrl } from "@/lib/utils";
+import { shouldSkipImageOptimization } from "@/lib/utils";
 
 interface CategoryImageProps {
   src?: string;
   alt: string;
   className?: string;
+  sizes?: string;
 }
 
-export function CategoryImage({ src, alt, className }: CategoryImageProps) {
+export function CategoryImage({
+  src,
+  alt,
+  className,
+  sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw",
+}: CategoryImageProps) {
   const [failed, setFailed] = useState(false);
   const showImage = Boolean(src?.trim()) && !failed;
 
@@ -29,7 +35,8 @@ export function CategoryImage({ src, alt, className }: CategoryImageProps) {
       alt={alt}
       fill
       className={className}
-      unoptimized={isExternalImageUrl(src!)}
+      sizes={sizes}
+      unoptimized={shouldSkipImageOptimization(src)}
       onError={() => setFailed(true)}
     />
   );
