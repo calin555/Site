@@ -88,8 +88,10 @@ export function HeroProductShowcase({ products }: HeroProductShowcaseProps) {
             alt={`Stație încărcare EV ${product.name} — ${product.powerKw} kW`}
             fill
             className="object-cover"
+            // Doar primul slide e candidat LCP: preload + fetchPriority high.
             priority={i === 0}
-            sizes="(max-width: 1024px) 100vw, 50vw"
+            fetchPriority={i === 0 ? "high" : "low"}
+            sizes="(max-width: 1024px) calc(100vw - 2rem), 560px"
             unoptimized={shouldSkipImageOptimization(product.image)}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-surface-950/85 via-surface-950/20 to-transparent" />
@@ -135,7 +137,7 @@ export function HeroProductShowcase({ products }: HeroProductShowcaseProps) {
             <p className="font-display text-lg font-bold tracking-tight text-brand-300">
               {formatPrice(active.price)}
               {active.compareAtPrice && active.compareAtPrice > active.price && (
-                <span className="ml-2 text-xs font-medium text-surface-400 line-through">
+                <span className="ml-2 text-xs font-medium text-surface-300 line-through">
                   {formatPrice(active.compareAtPrice)}
                 </span>
               )}
@@ -153,7 +155,7 @@ export function HeroProductShowcase({ products }: HeroProductShowcaseProps) {
 
       {/* Manual dots */}
       {products.length > 1 && (
-        <div className="absolute left-1/2 top-4 z-[2] flex -translate-x-1/2 items-center gap-2">
+        <div className="absolute left-1/2 top-1 z-[2] flex -translate-x-1/2 items-center">
           {products.map((product, i) => (
             <button
               key={product.id}
@@ -161,13 +163,19 @@ export function HeroProductShowcase({ products }: HeroProductShowcaseProps) {
               aria-label={`Arată ${product.name}`}
               aria-current={i === index}
               onClick={() => setIndex(i)}
-              className={cn(
-                "h-1.5 rounded-full transition-all duration-300",
-                i === index
-                  ? "w-6 bg-accent shadow-[0_0_8px_rgba(163,230,53,0.7)]"
-                  : "w-1.5 bg-white/40 hover:bg-white/70"
-              )}
-            />
+              // Zonă de atingere ≥ 24×24 px; punctul vizibil rămâne mic.
+              className="group/dot flex h-8 min-w-8 items-center justify-center px-1"
+            >
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "block h-1.5 rounded-full transition-all duration-300",
+                  i === index
+                    ? "w-6 bg-accent shadow-[0_0_8px_rgba(163,230,53,0.7)]"
+                    : "w-1.5 bg-white/40 group-hover/dot:bg-white/70"
+                )}
+              />
+            </button>
           ))}
         </div>
       )}

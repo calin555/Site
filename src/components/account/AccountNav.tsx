@@ -11,6 +11,7 @@ import { ACCOUNT_NAV_ITEMS, type AccountNavCounts } from "@/config/account-nav";
 import { logoutAction } from "@/lib/actions/auth.actions";
 import type { PublicUser } from "@/types/user";
 import { User } from "lucide-react";
+import { refreshHeaderState } from "@/lib/header-state/client";
 
 interface AccountNavProps {
   user: PublicUser;
@@ -26,6 +27,7 @@ export function AccountNav({ user, counts }: AccountNavProps) {
     startTransition(async () => {
       await logoutAction();
       router.refresh();
+      refreshHeaderState();
     });
   }
 

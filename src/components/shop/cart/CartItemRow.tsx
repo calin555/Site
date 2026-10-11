@@ -13,6 +13,7 @@ import {
 } from "@/lib/actions/cart.actions";
 import { getMaxOrderQuantity } from "@/lib/catalog/stock-status";
 import type { CartLineItem } from "@/types/cart";
+import { refreshHeaderState } from "@/lib/header-state/client";
 
 interface CartItemRowProps {
   item: CartLineItem;
@@ -25,12 +26,14 @@ export function CartItemRow({ item }: CartItemRowProps) {
   function updateQty(qty: number) {
     startTransition(async () => {
       await updateQuantityAction(item.productId, qty);
+      refreshHeaderState();
     });
   }
 
   function remove() {
     startTransition(async () => {
       await removeItemAction(item.productId);
+      refreshHeaderState();
     });
   }
 

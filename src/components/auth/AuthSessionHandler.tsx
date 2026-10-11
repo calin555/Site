@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { refreshHeaderState } from "@/lib/header-state/client";
 
 /** Strips ?auth=success from the URL and refreshes server components (session in header). */
 export function AuthSessionHandler() {
@@ -17,6 +18,7 @@ export function AuthSessionHandler() {
 
     router.replace(clean || "/");
     router.refresh();
+    refreshHeaderState();
   }, [searchParams, router]);
 
   return null;

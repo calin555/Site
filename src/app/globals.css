@@ -324,6 +324,14 @@
     animation: glowPulse 4s ease-in-out infinite;
   }
 
+  /* Intrare doar prin transform (fără opacity: 0): textul LCP e vizibil de la primul paint.
+     Animația rulează doar dacă utilizatorul nu a cerut reducerea mișcării (motion-safe). */
+  @media (prefers-reduced-motion: no-preference) {
+    .animate-rise {
+      animation: rise 0.6s cubic-bezier(0.21, 0.68, 0.19, 1) both;
+    }
+  }
+
   .stagger-1 { animation-delay: 0.1s; }
   .stagger-2 { animation-delay: 0.2s; }
   .stagger-3 { animation-delay: 0.3s; }
@@ -594,6 +602,11 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes rise {
+  from { transform: translateY(16px); }
+  to { transform: translateY(0); }
 }
 
 @keyframes scaleIn {

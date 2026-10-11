@@ -93,14 +93,14 @@ export default function StatiiIncarcareHubPage() {
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/produse"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-700"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 hover:text-brand-800"
             >
               Catalog produse
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/ghid"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-700"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 hover:text-brand-800"
             >
               Ghiduri tehnice
               <ArrowRight className="h-4 w-4" />

@@ -146,7 +146,7 @@ export async function CommercialLandingView({ page }: CommercialLandingViewProps
             <div className="mt-6 text-center">
               <Link
                 href={page.catalogCtaHref}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-700"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 hover:text-brand-800"
               >
                 {page.catalogCtaLabel}
                 <ArrowRight className="h-4 w-4" />

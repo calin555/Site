@@ -9,25 +9,22 @@ import {
   buildOrganizationSchema,
   buildWebSiteSchema,
 } from "@/lib/seo/structured-data";
-import { getCurrentUser } from "@/lib/auth/get-user";
-import { getAccountNavCounts } from "@/lib/account/get-account-data";
-import { getCartSummary } from "@/lib/services/cart.service";
 import { getSiteContactSettings } from "@/lib/services/site-contact.service";
+
+/**
+ * ISR: paginile publice sunt regenerate cel mult o dată la 5 minute (și imediat la
+ * revalidatePath din admin). Layout-ul NU citește cookie-uri — coșul și utilizatorul
+ * sunt încărcate în Header din /api/header-state. Paginile care chiar au nevoie de
+ * date per utilizator (coș, checkout, cont) citesc ele cookie-urile și rămân dinamice.
+ */
+export const revalidate = 300;
 
 export default async function ShopLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [summary, contact, user] = await Promise.all([
-    getCartSummary(),
-    getSiteContactSettings(),
-    getCurrentUser(),
-  ]);
-
-  const accountCounts = user
-    ? await getAccountNavCounts(user.id, user.email)
-    : undefined;
+  const contact = await getSiteContactSettings();
 
   return (
     <>
@@ -42,12 +39,7 @@ export default async function ShopLayout({
         ]}
       />
       <div className="site-shell flex min-h-screen min-w-0 flex-col overflow-x-hidden">
-        <Header
-          cartCount={summary.itemCount}
-          contact={contact}
-          user={user}
-          accountCounts={accountCounts}
-        />
+        <Header contact={contact} />
         <main className="min-w-0 flex-1">{children}</main>
         <Footer contact={contact} />
         <WhatsAppFloatingButton phone={contact.phoneOrders} />

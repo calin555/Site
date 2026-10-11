@@ -29,7 +29,7 @@ export function ProductRelatedLandings({ product }: ProductRelatedLandingsProps)
       </ul>
       <Link
         href="/statii-incarcare"
-        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700"
+        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:text-brand-800"
       >
         Toate ghidurile comerciale
         <ArrowRight className="h-3.5 w-3.5" />
