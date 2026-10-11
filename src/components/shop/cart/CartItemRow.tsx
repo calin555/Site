@@ -6,7 +6,7 @@ import { useTransition } from "react";
 import { Minus, Plus, Trash2, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { PriceDisplay } from "@/components/shared/PriceDisplay";
-import { formatPrice, isExternalImageUrl } from "@/lib/utils";
+import { formatPrice, shouldSkipImageOptimization } from "@/lib/utils";
 import {
   updateQuantityAction,
   removeItemAction,
@@ -48,7 +48,8 @@ export function CartItemRow({ item }: CartItemRowProps) {
           alt={item.name}
           fill
           className="object-cover"
-          unoptimized={isExternalImageUrl(item.image)}
+          sizes="96px"
+          unoptimized={shouldSkipImageOptimization(item.image)}
         />
       </Link>
 

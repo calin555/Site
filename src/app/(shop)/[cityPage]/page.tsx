@@ -12,12 +12,11 @@ import { LocalCitiesGrid } from "@/components/seo/LocalCitiesGrid";
 import { CommercialLandingView } from "@/components/seo/CommercialLandingView";
 import {
   buildBreadcrumbSchema,
-  buildCityLocalBusinessSchema,
+  buildCityServiceSchema,
   buildFaqPageSchema,
 } from "@/lib/seo/structured-data";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
-  faqToHtml,
   internalLinksBlock,
   sectionsToHtml,
 } from "@/lib/seo/content-utils";
@@ -94,18 +93,18 @@ export default async function SeoLandingPage({ params }: SeoLandingPageProps) {
       { href: "/contact", label: "Solicită ofertă personalizată" },
       { href: "/tools/recomandare-statie", label: "Calculator recomandare stație EV" },
     ]),
-    faqToHtml(city.faq),
+    // FAQ-ul e randat o singură dată mai jos, prin <FaqSection>.
   ].join("\n\n");
 
   return (
     <>
       <JsonLd
         data={[
-          buildCityLocalBusinessSchema(city),
+          buildCityServiceSchema(city),
           buildFaqPageSchema(city.faq),
           buildBreadcrumbSchema([
             { name: "Acasă", path: "/" },
-            { name: "Stații încărcare local", path: "/statii-incarcare-bucuresti" },
+            { name: "Stații încărcare", path: "/statii-incarcare" },
             { name: city.cityName, path: `/${city.slug}` },
           ]),
         ]}
@@ -117,8 +116,8 @@ export default async function SeoLandingPage({ params }: SeoLandingPageProps) {
       <Container className="py-8">
         <Breadcrumbs
           items={[
-            { label: "Acasă", href: "/" },
-            { label: `Stații încărcare ${city.cityName}` },
+            { label: "Stații încărcare", href: "/statii-incarcare" },
+            { label: city.cityName },
           ]}
           className="mb-8"
         />

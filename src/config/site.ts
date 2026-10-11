@@ -9,7 +9,7 @@ export const siteConfig = {
   contact: {
     phone: "+40 774 542 015",
     phoneTechnical: "0759 046 201",
-    email: "contact@chargepro.ro",
+    email: "contact@incarcareauto.ro",
     hours: "Luni – Vineri: 08:30 – 17:00",
     address: "București, România",
   },
@@ -28,9 +28,9 @@ export const siteConfig = {
   footerLinks: {
     shop: [
       { label: "Toate produsele", href: "/produse" },
-      { label: "Stații AC", href: "/categorii/statii-ac" },
-      { label: "Stații DC", href: "/categorii/statii-dc" },
-      { label: "Accesorii", href: "/categorii/accesorii" },
+      { label: "Stații AC", href: "/produse/categorie/statii-ac" },
+      { label: "Stații DC", href: "/produse/categorie/statii-dc" },
+      { label: "Accesorii", href: "/produse/categorie/accesorii" },
     ],
     company: [
       { label: "Compatibilitate EV", href: "/compatibilitate" },

@@ -42,3 +42,23 @@ export function isUsableRemoteImage(url: string | undefined): boolean {
     return false;
   }
 }
+
+/**
+ * Verifică dacă imaginea remote chiar există și e o imagine (evită ca o
+ * imagine ștearsă/404 să strice generarea OG la build).
+ */
+export async function resolveOgBackgroundImage(
+  url: string | undefined
+): Promise<string | null> {
+  if (!isUsableRemoteImage(url)) return null;
+  try {
+    const res = await fetch(url!.trim(), {
+      method: "HEAD",
+      signal: AbortSignal.timeout(5000),
+    });
+    const type = res.headers.get("content-type") ?? "";
+    return res.ok && /^image\//i.test(type) ? url!.trim() : null;
+  } catch {
+    return null;
+  }
+}

@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
-import { formatPrice, isExternalImageUrl } from "@/lib/utils";
+import { formatPrice, shouldSkipImageOptimization } from "@/lib/utils";
 import {
   BADGE_LABELS,
   type MatchedProduct,
@@ -55,10 +55,8 @@ export function CompatibleStationsPreview({
                     alt={product.name}
                     fill
                     className="object-cover"
-                    unoptimized={
-                      isExternalImageUrl(product.image) ||
-                      !product.image?.trim()
-                    }
+                    sizes="80px"
+                    unoptimized={shouldSkipImageOptimization(product.image)}
                   />
                 </div>
                 <div className="min-w-0 flex-1">

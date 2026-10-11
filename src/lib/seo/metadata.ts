@@ -48,7 +48,9 @@ export function buildPageMetadata(input: PageSeoInput): Metadata {
   const imageUrl = resolveOgImageUrl(ogImage);
 
   return {
-    title: fullTitle,
+    // `absolute` evită aplicarea încă o dată a template-ului din root layout
+    // (altfel rezulta „| IncarcAuto.ro | IncarcAuto.ro”).
+    title: { absolute: fullTitle },
     description,
     keywords: keywords.join(", "),
     alternates: { canonical },

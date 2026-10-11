@@ -4,7 +4,7 @@ import { Zap } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { PriceDisplay } from "@/components/shared/PriceDisplay";
 import { ProductCardAddButton } from "@/components/shop/ProductCardAddButton";
-import { isExternalImageUrl } from "@/lib/utils";
+import { shouldSkipImageOptimization } from "@/lib/utils";
 import {
   BADGE_LABELS,
   type CompatibilityBadge,
@@ -50,9 +50,8 @@ export function CompatibilityProductCard({
             alt={buildProductCardTitle(product)}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            unoptimized={
-              isExternalImageUrl(product.image) || !product.image?.trim()
-            }
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            unoptimized={shouldSkipImageOptimization(product.image)}
           />
           <div className="absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] flex-wrap gap-1.5">
             {match.badges.map((badge) => (

@@ -1,7 +1,6 @@
 import type { CommercialLandingPageData } from "@/lib/seo/commercial/types";
 import {
   sectionsToHtml,
-  faqToHtml,
   internalLinksBlock,
   countWords,
 } from "@/lib/seo/content-utils";
@@ -53,7 +52,7 @@ export function buildCommercialBodyHtml(page: CommercialLandingPageData): string
     internalLinksBlock(getInternalLinksForLanding(page.slug, page))
   );
 
-  parts.push(faqToHtml(page.faq));
+  // FAQ-ul e randat o singură dată de <FaqSection> în CommercialLandingView.
 
   return parts.join("\n\n");
 }

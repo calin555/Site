@@ -1,3 +1,4 @@
+import { PRIMARY_DOMAIN } from "@/config/domains";
 import { siteConfig } from "@/config/site";
 
 export interface OfferSource {
@@ -26,7 +27,7 @@ export function resolveOfferSource(
     if (sourceUrl.startsWith("/")) {
       const base = siteConfig.url.replace(/\/$/, "");
       return {
-        site: hostnameFromUrl(base) ?? "chargepro.ro",
+        site: hostnameFromUrl(base) ?? PRIMARY_DOMAIN,
         url: `${base}${sourceUrl}`,
       };
     }
@@ -35,7 +36,7 @@ export function resolveOfferSource(
   if (sourceType === "INTERNAL") {
     const base = siteConfig.url.replace(/\/$/, "");
     return {
-      site: hostnameFromUrl(base) ?? "chargepro.ro",
+      site: hostnameFromUrl(base) ?? PRIMARY_DOMAIN,
       url: `${base}/produse`,
     };
   }

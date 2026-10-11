@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import {
   getFeaturedAcStationProduct,
-  isUsableRemoteImage,
+  resolveOgBackgroundImage,
 } from "@/lib/seo/og-image";
 
 export const alt = "Stații încărcare EV România — IncarcAuto.ro";
@@ -10,9 +10,7 @@ export const contentType = "image/png";
 
 export default async function Image() {
   const product = await getFeaturedAcStationProduct();
-  const productImage = isUsableRemoteImage(product?.image)
-    ? product!.image
-    : null;
+  const productImage = await resolveOgBackgroundImage(product?.image);
 
   return new ImageResponse(
     (

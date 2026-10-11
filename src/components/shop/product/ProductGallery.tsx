@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { cn, isExternalImageUrl } from "@/lib/utils";
+import { cn, shouldSkipImageOptimization } from "@/lib/utils";
 import { dedupeProductImages } from "@/lib/product-images";
 import type { ProductImage } from "@/types/product";
 
@@ -28,7 +28,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
           className="object-cover transition-opacity duration-300"
           priority
           sizes="(max-width: 1024px) 100vw, 50vw"
-          unoptimized={isExternalImageUrl(active.url)}
+          unoptimized={shouldSkipImageOptimization(active.url)}
         />
         {uniqueImages.length > 1 && (
           <div className="absolute bottom-4 right-4 rounded-full bg-surface-900/70 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
@@ -59,7 +59,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 fill
                 className="object-cover"
                 sizes="80px"
-                unoptimized={isExternalImageUrl(img.url)}
+                unoptimized={shouldSkipImageOptimization(img.url)}
               />
             </button>
           ))}

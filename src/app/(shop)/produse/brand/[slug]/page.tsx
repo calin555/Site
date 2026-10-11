@@ -5,6 +5,7 @@ import { ProductCatalog } from "@/components/shop/catalog/ProductCatalog";
 import { getCatalogProducts } from "@/lib/services/catalog.service";
 import { parseCatalogSearchParams, getCatalogBasePath } from "@/lib/catalog/urls";
 import { brands } from "@/lib/mock-data";
+import { getShopBrandBySlug } from "@/lib/services/brand.service";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 
@@ -13,26 +14,25 @@ interface BrandCatalogPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-function getBrandBySlug(slug: string) {
-  return brands.find((b) => b.slug === slug);
-}
-
 export async function generateMetadata({
   params,
   searchParams,
 }: BrandCatalogPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const brand = getBrandBySlug(slug);
-  if (!brand) return { title: "Brand negăsit" };
+  const brand = await getShopBrandBySlug(slug);
+  // 404 real (nu soft 404 cu status 200) pentru produse/pagini șterse.
+  if (!brand) notFound();
 
   const rawParams = await searchParams;
   const hasExtraFilters = Object.keys(rawParams).length > 0;
+  // Pagini de brand fără produse = conținut subțire → noindex,follow (audit SEO).
+  const isEmpty = brand.productCount === 0;
 
   return buildPageMetadata({
     title: `${brand.name} — stații încărcare EV România`,
     description: `Produse ${brand.name}: stații încărcare mașini electrice, wallbox AC și stații DC. Livrare România.`,
     path: `/produse/brand/${slug}`,
-    noIndex: hasExtraFilters,
+    noIndex: hasExtraFilters || isEmpty,
     keywords: [brand.name, "stații încărcare EV", "încărcătoare EV România"],
   });
 }
@@ -46,7 +46,7 @@ export default async function BrandCatalogPage({
   searchParams,
 }: BrandCatalogPageProps) {
   const { slug } = await params;
-  const brand = getBrandBySlug(slug);
+  const brand = await getShopBrandBySlug(slug);
   if (!brand) notFound();
 
   const rawParams = await searchParams;

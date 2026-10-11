@@ -9,7 +9,6 @@ import { LocalCitiesGrid } from "@/components/seo/LocalCitiesGrid";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
   getCommercialLandingsBySilo,
-  getAllCommercialLandings,
 } from "@/lib/seo/commercial/registry";
 import { getHighPriorityTargets } from "@/lib/seo/commercial/keyword-strategy";
 
@@ -56,8 +55,6 @@ const SILO_CONFIG = [
 ];
 
 export default function StatiiIncarcareHubPage() {
-  const total = getAllCommercialLandings().length;
-
   return (
     <>
       <BreadcrumbJsonLd
@@ -69,7 +66,7 @@ export default function StatiiIncarcareHubPage() {
 
       <PageHeader
         title="Stație încărcare mașini electrice — ghid complet"
-        description={`Alege stația potrivită pentru mașina ta electrică: ${total} pagini comerciale pentru AC, DC, puteri kW, mărci auto și aplicații. Fiecare secțiune răspunde unei căutări specifice.`}
+        description="Alege stația potrivită pentru mașina ta electrică: AC sau DC, puterea în kW, compatibilitatea cu marca auto și tipul de utilizare — acasă, la firmă, hotel sau flotă."
       />
 
       <Container className="py-8">
@@ -77,7 +74,7 @@ export default function StatiiIncarcareHubPage() {
 
         <section className="mb-12">
           <h2 className="mb-4 text-xl font-bold text-surface-900">
-            Prioritate SEO — intenție comercială
+            Cele mai căutate soluții
           </h2>
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {getHighPriorityTargets().map((t) => (
@@ -86,29 +83,14 @@ export default function StatiiIncarcareHubPage() {
                   href={t.url}
                   className="flex h-full flex-col rounded-xl border-2 border-brand-200 bg-white p-4 transition-all hover:border-brand-400 hover:shadow-md"
                 >
-                  <span className="text-xs font-semibold uppercase text-brand-600">
-                    High priority
-                  </span>
-                  <span className="mt-1 font-semibold text-surface-900">
+                  <span className="font-semibold text-surface-900">
                     {t.primaryKeyword}
                   </span>
                 </Link>
               </li>
             ))}
           </ul>
-        </section>
-
-        <div className="mb-12 rounded-2xl border border-brand-200 bg-brand-50 p-6 sm:p-8">
-          <h2 className="text-lg font-bold text-surface-900">Structură siloz</h2>
-          <pre className="mt-4 overflow-x-auto text-xs leading-relaxed text-surface-700 sm:text-sm">
-{`Stații încărcare
-├── Stații AC (7–22 kW)
-├── Stații DC (30–120 kW)
-├── După marcă (Tesla, Dacia, BMW…)
-├── După utilizare (acasă, firmă, hotel…)
-└── Ghiduri → /ghid`}
-          </pre>
-          <div className="mt-4 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/produse"
               className="inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-700"
@@ -124,7 +106,7 @@ export default function StatiiIncarcareHubPage() {
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-        </div>
+        </section>
 
         <div className="space-y-14">
           {SILO_CONFIG.map(({ id, title, icon: Icon, description }) => {

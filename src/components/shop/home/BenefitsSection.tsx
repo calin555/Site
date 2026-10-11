@@ -25,8 +25,8 @@ const benefits = [
     title: "Instalare autorizată ANRE",
     description:
       "Echipă certificată pentru montaj sigur. Proiect tehnic și punere în funcțiune incluse.",
-    stat: "500+",
-    statLabel: "instalări/an",
+    stat: "ANRE",
+    statLabel: "instalare autorizată",
   },
   {
     icon: Truck,

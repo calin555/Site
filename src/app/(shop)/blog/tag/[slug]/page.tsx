@@ -24,6 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `#${tag.name} — Blog EV`,
     description: `Articole despre ${tag.name} — stații încărcare vehicule electrice.`,
     path: `/blog/tag/${slug}`,
+    // Pagini de tag = conținut subțire/duplicat → noindex,follow (audit SEO).
+    noIndex: true,
     keywords: [tag.name, "blog EV", "stații încărcare"],
   });
 }

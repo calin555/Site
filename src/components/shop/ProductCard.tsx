@@ -4,7 +4,7 @@ import { Zap } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { PriceDisplay } from "@/components/shared/PriceDisplay";
 import { ProductCardAddButton } from "@/components/shop/ProductCardAddButton";
-import { isExternalImageUrl } from "@/lib/utils";
+import { shouldSkipImageOptimization } from "@/lib/utils";
 import { isProductPurchasable } from "@/lib/catalog/stock-status";
 import type { CatalogProduct } from "@/types/catalog";
 import {
@@ -31,7 +31,8 @@ export function ProductCard({ product }: ProductCardProps) {
             alt={buildProductSeoTitle(product)}
             fill
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-            unoptimized={isExternalImageUrl(product.image)}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            unoptimized={shouldSkipImageOptimization(product.image)}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-surface-950/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <div className="absolute left-3 top-3 flex flex-col gap-1.5">

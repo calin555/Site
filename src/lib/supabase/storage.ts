@@ -19,11 +19,15 @@ export async function uploadFileToStorage(params: {
 }): Promise<string> {
   const supabase = getSupabase();
   const objectPath = `${params.folder}/${params.filename}`;
+  // Numele fișierelor sunt unice (timestamp) → imaginile/video-urile pot fi
+  // cache-uite 1 an în browser/CDN. Restul (ex. PDF-uri) rămân la 1 oră.
+  const isImmutableMedia = /^(image|video)\//.test(params.contentType);
 
   const { error } = await supabase.storage
     .from(BUCKET)
     .upload(objectPath, params.bytes, {
       contentType: params.contentType,
+      cacheControl: isImmutableMedia ? "31536000" : "3600",
       upsert: true,
     });
 
